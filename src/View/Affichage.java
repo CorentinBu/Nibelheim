@@ -1,29 +1,37 @@
 package View;
 import javax.swing.*;
 import java.awt.*;
-import Controler.Character;
+import Model.Tir;
 
 public class Affichage extends JPanel{
+
+    // Instances de classes utiles
+    private Tir tir;
+
+    // Constantes
     public static final int X = 1920;
     public static final int Y = 1080;
 
-    public static final Image characterSprite = new ImageIcon("src/Images/character.png").getImage().getScaledInstance(25, 50, Image.SCALE_DEFAULT);
-
-    Character c;
-
-    public Affichage(Character c){
+    // constructeur pour la classe
+    public Affichage(Tir tir){
+        this.tir = tir;
         setPreferredSize(new Dimension(X, Y));
-        this.c = c;
     }
 
-    //Override de la méthode paint qui va afficher l'image "character.png" au centre de l'écran
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics g){
         super.paint(g);
-        ImageIcon character = new ImageIcon("src/Images/character.png");
-        g.drawImage(characterSprite, c.current_x, c.current_y, null);
-        g.drawOval(810,500,100,100);
-        System.out.println("Paint");
+        g.setColor(Color.BLACK);
+        // Carré Noir au centre de la fenetre comme point de départ du tir
+        g.setColor(Color.BLACK);
+        g.fillRect(X/2, Y/2, 10, 10);
+
+        // Recuperer la liste des tirs et les afficher sachant x et y c'est leur position par rapport au centre de la fenetre
+        if (tir != null && tir.getTirs().size() > 0){
+            for (int j = 0; j < tir.getTirs().size(); j++){
+                g.setColor(Color.RED);
+                g.fillOval(tir.getTirs().get(j).x, tir.getTirs().get(j).y, 10, 10);
+            }
+        }
     }
-    
 }

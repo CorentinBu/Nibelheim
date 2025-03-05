@@ -1,29 +1,32 @@
 import javax.swing.*;
 import View.*;
-import Controler.Character;
-import View.Redessine;
-import Controler.Inputs;
+import Control.*;
+import Model.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        
-        System.out.println("Hello, World!");
-        JFrame f = new JFrame("Test Windows");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.add(new JLabel("Hello World!"));
+        // instances de classe utiles
+        Tir t = new Tir();
+        Affichage a = new Affichage(t);
+        ReactionClic r = new ReactionClic(a, t);
+        Avancer_tir avancer_tir = new Avancer_tir(t);
+        Redessine redessine = new Redessine(a);
 
-        Inputs inputs = new Inputs();
-        f.addKeyListener(inputs);
+        // Ajout du listener
+        a.addMouseListener(r);
 
-        Character c = new Character(inputs);
+        // Mise en marche des Threads
+        avancer_tir.start();
+        redessine.start();
 
-        Affichage a = new Affichage(c);
+        // Creation de la fenetre principale
+        JFrame f = new JFrame("Nibelheim game");
+
+        // Ajout du panel et parametrage + affichage de la fenetre
         f.add(a);
         f.pack();
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
-
-        Redessine r = new Redessine(a);
-        r.start();
-        c.run();
+        
     }
 }
