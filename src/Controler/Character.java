@@ -9,21 +9,22 @@ import View.Affichage;
 //Il a une barre de vie qui diminue lorsqu'il est touché par un ennemi.
 //Il peut ramasser des bonus pour augmenter sa vie ou sa puissance de tir.
 
-public class Character extends Thread{
+public class Character extends Thread {
 
-    //Attributs
+    // Attributs
     public int current_x = 820;
     public int current_y = 540;
     private int speed = 50;
 
     private Inputs inputs;
 
-    //Constructeur
+    // Constructeur
     public Character(Inputs i) {
-        inputs = i;  
+        inputs = i;
     }
 
-    //Thread qui va regarder les valeurs booléennes dans la classe Input pour appeler ou non les fonctions de déplacement
+    // Thread qui va regarder les valeurs booléennes dans la classe Input pour
+    // appeler ou non les fonctions de déplacement
     public void run() {
         while (true) {
             if (inputs.up) {
@@ -46,10 +47,10 @@ public class Character extends Thread{
         }
     }
 
-    //Méthodes
+    // Méthodes
     public void moveUp() {
         this.current_y -= speed;
-        System.out.println(current_y);
+        // System.out.println(current_y);
     }
 
     public void moveDown() {
@@ -62,6 +63,6 @@ public class Character extends Thread{
 
     public void moveRight() {
         this.current_x += speed;
-    } 
+    }
 
 }

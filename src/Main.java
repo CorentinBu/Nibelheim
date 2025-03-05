@@ -6,11 +6,9 @@ import Controler.Inputs;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        
-        System.out.println("Hello, World!");
-        JFrame f = new JFrame("Test Windows");
+
+        JFrame f = new JFrame("Nibelheim");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.add(new JLabel("Hello World!"));
 
         Inputs inputs = new Inputs();
         f.addKeyListener(inputs);
