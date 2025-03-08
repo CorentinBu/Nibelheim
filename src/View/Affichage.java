@@ -2,23 +2,32 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+
 import Controler.Character;
 import Model.Tir;
+import Model.Araignee;
+import Model.Position;
 
 public class Affichage extends JPanel {
     public static final int X = 1920;
     public static final int Y = 1080;
 
-    public static final Image characterSprite = new ImageIcon("src/Images/character.png").getImage()
-            .getScaledInstance(100, 100, Image.SCALE_DEFAULT);
 
     Character c;
     private Tir tir;
 
-    public Affichage(Character c, Tir t) {
+    Position position;
+    private Araignee a = new Araignee(position,c);
+
+    
+
+    public Affichage(Character c, Tir t,Araignee a, Position position) {
         setPreferredSize(new Dimension(X, Y));
         this.c = c;
         this.tir = t;
+        this.a=a;
+        this.position=position;
     }
 
     // Override de la méthode paint qui va afficher l'image "character.png" au
@@ -26,7 +35,7 @@ public class Affichage extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.drawImage(characterSprite, c.current_x, c.current_y, null);
+        g.drawImage(Character.characterSprite, c.current_x, c.current_y, null);
 
         g.setColor(Color.BLACK);
         // Carré Noir au centre de la fenetre comme point de départ du tir
@@ -41,6 +50,17 @@ public class Affichage extends JPanel {
                 g.fillOval(tir.getTirs().get(j).x, tir.getTirs().get(j).y, 10, 10);
             }
         }
+        /*afficher les araignées */
+        drawAraignee(g);
+       
     }
 
+    /*dessiner les araignées */
+    public void drawAraignee(Graphics g){
+        ArrayList<Point> araignee = a.getPosition();
+        for(Point araigneP : araignee){
+            g.fillOval(araigneP.x, araigneP.y, position.LARGEUR_A, position.HAUTEUR_A);
+        }
+    }
+    
 }

@@ -1,6 +1,9 @@
 package Controler;
 
-import View.Affichage;
+import javax.swing.ImageIcon;
+import java.awt.Image;
+
+
 
 //Classe du personnage principal du jeu. Celui contrôlé par le joueur.
 //Le joueur utilise les touches Z,Q,S,D pour se déplacer.
@@ -22,6 +25,13 @@ public class Character extends Thread {
     public Character(Inputs i) {
         inputs = i;
     }
+
+    /*image character */
+    public static final int WIDTH = 100;
+    public static final int HEIGHT = 100;
+    public static final Image characterSprite = new ImageIcon("src/Images/character.png").getImage()
+            .getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
+
 
     // Thread qui va regarder les valeurs booléennes dans la classe Input pour
     // appeler ou non les fonctions de déplacement
