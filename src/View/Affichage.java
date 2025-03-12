@@ -41,7 +41,6 @@ public class Affichage extends JPanel {
         // Carré Noir au centre de la fenetre comme point de départ du tir
         g.setColor(Color.BLACK);
         g.fillRect(X / 2, Y / 2, 10, 10);
-
         // Recuperer la liste des tirs et les afficher sachant x et y c'est leur
         // position par rapport au centre de la fenetre
         if (tir != null && tir.getTirs().size() > 0) {
