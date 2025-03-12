@@ -17,7 +17,7 @@ public class Main {
         Tir t = new Tir(c);
 
         Position position = new Position();
-        Araignee araignee = new Araignee(position,c);
+        Araignee araignee = new Araignee(position,c, t);
         
 
         Affichage a = new Affichage(c, t, araignee, position);
@@ -25,20 +25,22 @@ public class Main {
         f.pack();
         f.setVisible(true);
 
-        ReactionClic m = new ReactionClic(a, t);
+        ReactionClic m = new ReactionClic(t);
         PositionSouris ps = new PositionSouris(m);
-        a.addMouseListener(m);
+        a.addMouseListener(m); 
         Avancer_tir avancer_tir = new Avancer_tir(t);
         Redessine r = new Redessine(a);
 
+
         /*Modifier la position des araignées */
         MouvementAraignee mvtA = new MouvementAraignee(position);
+        Collision col = new Collision(c, t, araignee, a);
+        col.start();
         mvtA.start();
-
         avancer_tir.start();
         ps.start();
         r.start();
-        c.run();
-        m.run();
+        c.start();
+
     }
 }

@@ -12,6 +12,7 @@ public class MouvementAraignee extends Thread {
     @Override
     public void run() {
         while (true){
+            
             p.setVitesseAraignee(p.getVitesseAraignee());
 
             try { Thread.sleep(DELAY); }

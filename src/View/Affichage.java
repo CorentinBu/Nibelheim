@@ -18,7 +18,7 @@ public class Affichage extends JPanel {
     private Tir tir;
 
     Position position;
-    private Araignee a = new Araignee(position,c);
+    private Araignee a = new Araignee(position,c,tir);
 
     
 
@@ -59,6 +59,7 @@ public class Affichage extends JPanel {
     public void drawAraignee(Graphics g){
         ArrayList<Point> araignee = a.getPosition();
         for(Point araigneP : araignee){
+            g.setColor(Color.BLUE);
             g.fillOval(araigneP.x, araigneP.y, position.LARGEUR_A, position.HAUTEUR_A);
         }
     }
