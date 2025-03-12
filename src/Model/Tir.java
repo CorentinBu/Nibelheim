@@ -12,36 +12,41 @@ public class Tir {
     // Liste de balles tirées
     private ArrayList<Point> tirs;
     private ArrayList<Point> directions; // Nouvel attribut pour stocker la direction de chaque tir
-    Character c;
+    private Point mousePosition; // Position de la souris
+    private Character c;
 
     // Constructeur pour initialiser la liste de tirs
     public Tir(Character c) {
         this.c = c;
         tirs = new ArrayList<>();
         directions = new ArrayList<>(); // Initialiser la liste des directions
+        mousePosition = new Point(0, 0); // Initialiser la position de la souris
+
+        // Démarrer le thread pour mettre à jour la position de la souris
+        startMousePositionThread();
     }
 
-    // Getteur pour recuperer les tirs
+    // Getteur pour récupérer les tirs
     public ArrayList<Point> getTirs() {
         return tirs;
     }
 
-    // Methode pour ajouter un tir (tirer une nouvelle balle)
-    public void addTir(int mouseX, int mouseY) {
+    // Méthode pour ajouter un tir (tirer une nouvelle balle)
+    public void addTir() {
         Point startPoint = new Point(c.current_x + 50, c.current_y + 50); // Point de départ du tir
-        Point direction = new Point(mouseX - startPoint.x, mouseY - startPoint.y); // Direction du tir
+        Point direction = new Point(mousePosition.x - startPoint.x, mousePosition.y - startPoint.y); // Direction du tir
 
         tirs.add(startPoint);
         directions.add(direction);
     }
 
-    // methode pour supprimer les tirs qui sont sortis de la fenetre
+    // Méthode pour supprimer les tirs qui sont sortis de la fenêtre
     public void removeTir(int index) {
         tirs.remove(index);
         directions.remove(index);
     }
 
-    // Methode pour mettre à jour les tirs et les faire avancer
+    // Méthode pour mettre à jour les tirs et les faire avancer
     public void updateTirs() {
         for (int i = 0; i < tirs.size(); i++) {
             Point tir = tirs.get(i);
@@ -62,5 +67,26 @@ public class Tir {
                 i--; // Ajuster l'index après suppression
             }
         }
+    }
+
+    // Méthode pour démarrer le thread de mise à jour de la position de la souris
+    private void startMousePositionThread() {
+        Thread mousePositionThread = new Thread(() -> {
+            while (true) {
+                PointerInfo mouseInfo = MouseInfo.getPointerInfo();
+                if (mouseInfo != null) {
+                    Point mousePoint = mouseInfo.getLocation();
+                    mousePosition.setLocation(mousePoint);
+                }
+
+                try {
+                    Thread.sleep(50); // Délai de mise à jour de la position de la souris
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        mousePositionThread.start();
     }
 }
