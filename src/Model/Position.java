@@ -8,15 +8,14 @@ public class Position {
     //constante pour l'horizon
     public static final int BEFORE= 50;
     public static final int AFTER=2000;
-
-    
     public static final int HAUTEUR_MAX= 1000;
+    
     //centre page
     public static final int X_CENTRE = AFTER/3 -BEFORE;
     public static final int Y_CENTRE = HAUTEUR_MAX/4;
 
     //vitesse de l'araignée
-    public int vitesseA=5;
+    public int vitesseA=10;
     
     /*getter et setter pour la vitesse */
     public int getVitesseAraignee() {

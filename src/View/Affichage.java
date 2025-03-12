@@ -3,7 +3,7 @@ package View;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
+import java.util.List;
 import Controler.Character;
 import Model.Tir;
 import Model.Araignee;
@@ -13,12 +13,14 @@ public class Affichage extends JPanel {
     public static final int X = 1920;
     public static final int Y = 1080;
 
+    private List<Point> bonusPoints = new ArrayList<>();
+    private List<Integer> bonusSizes = new ArrayList<>();
 
     Character c;
     private Tir tir;
 
     Position position;
-    private Araignee a = new Araignee(position,c);
+    private Araignee a = new Araignee(position,c,tir);
 
     
 
@@ -50,16 +52,31 @@ public class Affichage extends JPanel {
                 g.fillOval(tir.getTirs().get(j).x, tir.getTirs().get(j).y, 10, 10);
             }
         }
+
+        // Dessiner les bonus
+        for (int i = 0; i < bonusPoints.size(); i++) {
+            g.setColor(Color.GREEN);
+            g.fillOval(bonusPoints.get(i).x, bonusPoints.get(i).y, bonusSizes.get(i), bonusSizes.get(i));
+        }
+
         /*afficher les araignées */
         drawAraignee(g);
        
+    }
+
+    public void drawBonus(Point p, int size) {
+        bonusPoints.add(p);
+        bonusSizes.add(size);
+        repaint();
     }
 
     /*dessiner les araignées */
     public void drawAraignee(Graphics g){
         ArrayList<Point> araignee = a.getPosition();
         for(Point araigneP : araignee){
+            g.setColor(Color.BLUE);
             g.fillOval(araigneP.x, araigneP.y, position.LARGEUR_A, position.HAUTEUR_A);
+            a.toucher(araigneP);
         }
     }
     

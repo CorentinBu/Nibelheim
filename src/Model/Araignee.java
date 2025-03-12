@@ -5,16 +5,20 @@ import java.awt.Point;
 import Controler.Character;
 
 public class Araignee {
-    private ArrayList<Point> posAraignee;
-    private int quantite = 10;
-    Position position;
-    Character c;
 
-    
+    // Insances de classes utiles
+    private ArrayList<Point> posAraignee;
+    private Position position;
+    private Tir tir;
+    private Character c;
+    // Quantité d'araignées à afficher
+    private int quantite = 10;
+    private static final int POINTPERDU = 10;
     
     public static final Random rand = new Random();
 
-    public Araignee(Position position, Character c){
+    public Araignee(Position position, Character c, Tir tir) {
+        this.tir = tir;
         this.position = position;
         this.c=c;
         this.posAraignee = new ArrayList<Point>();
@@ -81,10 +85,44 @@ public class Araignee {
                 point.y -= rand.nextInt(position.vitesseA);
             }
             araignee.add(new Point(point.x, point.y));
-            
-
         }
         return araignee;
+    }
+
+    public void toucher(Point point){
+        if (point.x == c.current_x+ Character.WIDTH/2 && point.y == c.current_y+ Character.HEIGHT/2){
+            c.setVie(c.getVie()-POINTPERDU);
+            System.out.println("Vie: "+c.getVie());
+            supprimerAraignee(point);
+        }
+           
+    }
+
+    // Détecter une collision entre l'araignée et le tir
+    public boolean detectionCollision(Point point) {
+        for (Point tir : tir.getTirs()) {
+            if (point.x < tir.x + 10 && point.x + 10 > tir.x && point.y < tir.y + 10 && point.y + 10 > tir.y) {
+                
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Supprimer les araignées qui ont été touchées en utilisant la méthode detectionCollision
+    public void removeAraigneeTouchee() {
+        for (int i = 0; i < posAraignee.size(); i++) {
+            System.out.println("Collision avec une arraignée");
+            if (detectionCollision(posAraignee.get(i))) {
+                posAraignee.remove(i);
+                i--;
+            }
+        }
+    }
+
+    //methode pour supprimer une araignée
+    public void supprimerAraignee(Point point){
+        posAraignee.remove(point);
     }
 
     //@Override

@@ -1,6 +1,9 @@
 package Controler;
 
 import javax.swing.ImageIcon;
+
+import View.Affichage;
+
 import java.awt.Image;
 
 
@@ -18,6 +21,9 @@ public class Character extends Thread {
     public int current_x = 820;
     public int current_y = 540;
     private int speed = 50;
+    private Collision collision;
+    //points de vie du joueur
+    private int vie=110;
 
     private Inputs inputs;
 
@@ -56,23 +62,37 @@ public class Character extends Thread {
             }
         }
     }
+    //getter et setter vie du joueur
+    public int getVie() {
+        return vie;
+    }
+    public void setVie(int vie) {
+        this.vie = vie;
+    }
 
-    // Méthodes
+    // Méthodes de déplacement
     public void moveUp() {
-        this.current_y -= speed;
-        // System.out.println(current_y);
+        if (current_y > 0) {
+            this.current_y -= speed;
+        }
     }
 
     public void moveDown() {
-        this.current_y += speed;
+        if (current_y < 1080) {
+            this.current_y += speed;
+        }
     }
 
     public void moveLeft() {
-        this.current_x -= speed;
+        if (current_x > 0){
+            this.current_x -= speed;
+        }
     }
 
     public void moveRight() {
-        this.current_x += speed;
+        if (current_x <1800){
+            this.current_x += speed;
+        }
     }
 
 }
