@@ -9,6 +9,7 @@ import Model.Tir;
 import Model.Araignee;
 import Model.Position;
 
+
 public class Affichage extends JPanel {
     public static final int X = 1920;
     public static final int Y = 1080;
@@ -16,7 +17,6 @@ public class Affichage extends JPanel {
 
     Character c;
     private Tir tir;
-
     Position position;
     private Araignee a = new Araignee(position,c);
 
@@ -46,6 +46,7 @@ public class Affichage extends JPanel {
         // position par rapport au centre de la fenetre
         if (tir != null && tir.getTirs().size() > 0) {
             for (int j = 0; j < tir.getTirs().size(); j++) {
+                System.err.println("x: "+tir.getTirs().get(j).x+"  Y: "+tir.getTirs().get(j).y);
                 g.setColor(Color.RED);
                 g.fillOval(tir.getTirs().get(j).x, tir.getTirs().get(j).y, 10, 10);
             }
@@ -60,6 +61,7 @@ public class Affichage extends JPanel {
         ArrayList<Point> araignee = a.getPosition();
         for(Point araigneP : araignee){
             g.fillOval(araigneP.x, araigneP.y, position.LARGEUR_A, position.HAUTEUR_A);
+            a.toucher(araigneP);
         }
     }
     

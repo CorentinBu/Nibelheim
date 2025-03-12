@@ -24,7 +24,6 @@ public class Main {
         f.add(a);
         f.pack();
         f.setVisible(true);
-
         ReactionClic m = new ReactionClic(a, t);
         PositionSouris ps = new PositionSouris(m);
         a.addMouseListener(m);
@@ -32,13 +31,12 @@ public class Main {
         Redessine r = new Redessine(a);
 
         /*Modifier la position des araignées */
-        MouvementAraignee mvtA = new MouvementAraignee(position);
-        mvtA.start();
+       
 
         avancer_tir.start();
         ps.start();
         r.start();
         c.run();
-        m.run();
+       
     }
 }

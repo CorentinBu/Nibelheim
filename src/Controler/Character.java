@@ -18,6 +18,8 @@ public class Character extends Thread {
     public int current_x = 820;
     public int current_y = 540;
     private int speed = 50;
+    //points de vie du joueur
+    private int vie=110;
 
     private Inputs inputs;
 
@@ -55,6 +57,13 @@ public class Character extends Thread {
                 e.printStackTrace();
             }
         }
+    }
+    //getter et setter vie du joueur
+    public int getVie() {
+        return vie;
+    }
+    public void setVie(int vie) {
+        this.vie = vie;
     }
 
     // Méthodes

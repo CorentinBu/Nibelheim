@@ -1,11 +1,9 @@
 package View;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 
+//Redessine l'écran
 public class Redessine extends Thread{
-
+    //delai de rafraichissement
     public static final int DELAY = 50;
     public Affichage monAffichage;
 

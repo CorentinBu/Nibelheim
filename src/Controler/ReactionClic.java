@@ -46,30 +46,15 @@ public class ReactionClic implements MouseListener {
         isPressed = false;
     }
 
-    public void run() {
-        while (true) {
-            if (isPressed) {
-                System.out.println("Z appuyé");
-                tir.addTir(x, y); // Passer les coordonnées de la souris à la méthode addTir
-                affichage.repaint();
-            }
-            try {
-                Thread.sleep(DELAY);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     @Override
     public void mouseEntered(MouseEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+        //throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
+        //throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
     }
 }
