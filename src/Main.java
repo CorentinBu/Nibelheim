@@ -22,14 +22,8 @@ public class Main {
         f.pack();
         f.setVisible(true);
 
-        // Test collision
-        int x = 100;
-        int y = 100;
-
-        System.out.println("Position initiale : x = " + x + ", y = " + y);
-        // Vérification des collisions
-        int[] newPosition = position.collisionJoueur(x, y);
-        System.out.println("Position après collision : x = " + newPosition[0] + ", y = " + newPosition[1]);
+      
+      
 
         // Reste du code
         ReactionClic m = new ReactionClic(a, t);
