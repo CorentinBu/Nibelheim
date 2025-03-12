@@ -30,7 +30,8 @@ public class ReactionClic implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Ne rien faire ici pour éviter les tirs multiples (tirs gérés dans mousePressed)
+        // Ne rien faire ici pour éviter les tirs multiples (tirs gérés dans
+        // mousePressed)
     }
 
     // On ajoute un nouveau tir à la liste à chaque clic ou maintien du clic
@@ -46,8 +47,8 @@ public class ReactionClic implements MouseListener {
             @Override
             public void run() {
                 if (isPressed) {
-                    tir.addTir(x, y);
-                    //affichage.repaint();
+                    tir.addTir();
+                    // affichage.repaint();
                 }
             }
         };
