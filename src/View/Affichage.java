@@ -29,6 +29,7 @@ public class Affichage extends JPanel {
         this.a=a;
         this.position=position;
     }
+    
 
     // Override de la méthode paint qui va afficher l'image "character.png" au
     // centre de l'écran

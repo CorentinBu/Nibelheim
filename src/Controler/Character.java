@@ -1,6 +1,9 @@
 package Controler;
 
 import javax.swing.ImageIcon;
+
+import View.Affichage;
+
 import java.awt.Image;
 
 // Classe du personnage principal du jeu
@@ -42,6 +45,7 @@ public class Character extends Thread {
             if (inputs.right) {
                 moveRight();
             }
+            
             try {
                 Thread.sleep(50); // Attente de 50ms avant de traiter le prochain mouvement
             } catch (InterruptedException e) {
@@ -52,30 +56,45 @@ public class Character extends Thread {
 
     // Méthodes de déplacement
     public void moveUp() {
+    if (this.current_y > 0) { 
         this.current_y -= speed;
-        int[] newPos = collision.collisionJoueur(this.current_x, this.current_y);
-        this.current_x = newPos[0];
-        this.current_y = newPos[1];
     }
+    int[] newPos = collision.collisionJoueur(this.current_x, this.current_y);
+    this.current_x = newPos[0];
+    this.current_y = newPos[1];
+}
 
-    public void moveDown() {
-        this.current_y += speed;
-        int[] newPos = collision.collisionJoueur(this.current_x, this.current_y);
-        this.current_x = newPos[0];
-        this.current_y = newPos[1];
-    }
 
-    public void moveLeft() {
+
+public void moveLeft() {
+    if (this.current_x > 0) { 
         this.current_x -= speed;
-        int[] newPos = collision.collisionJoueur(this.current_x, this.current_y);
-        this.current_x = newPos[0];
-        this.current_y = newPos[1];
     }
+    int[] newPos = collision.collisionJoueur(this.current_x, this.current_y);
+    this.current_x = newPos[0];
+    this.current_y = newPos[1];
+}
 
-    public void moveRight() {
-        this.current_x += speed;
-        int[] newPos = collision.collisionJoueur(this.current_x, this.current_y);
-        this.current_x = newPos[0];
-        this.current_y = newPos[1];
-    }
+
+public void moveDown() {
+    // Calcul de la nouvelle position Y
+    int newY = this.current_y + speed;
+    
+    // Vérification de la collision et mise à jour de la position
+    int[] newPos = collision.collisionJoueur(this.current_x, newY);
+    this.current_x = newPos[0];  // Nouvelle position X (après collision)
+    this.current_y = newPos[1];  // Nouvelle position Y (après collision)
+
+    System.out.println("Position du joueur : x = " + current_x + ", y = " + current_y);
+    System.out.println("Taille de la fenêtre : " + Affichage.X + "x" + Affichage.Y);
+}
+
+public void moveRight() {
+    int newX = this.current_x + speed;
+    int[] newPos = collision.collisionJoueur(newX, this.current_y);
+    this.current_x = newPos[0];
+    System.out.println("Position du joueur : x = " + current_x + ", y = " + current_y);
+    System.out.println("Taille de la fenêtre : " + Affichage.X + "x" + Affichage.Y);
+    System.out.println("Dessin du personnage à x = " + current_x + ", y = " + current_y);
+}
 }
