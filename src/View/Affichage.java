@@ -24,16 +24,16 @@ public class Affichage extends JPanel {
     private Tir tir;
 
     Position position;
-    private Araignee a = new Araignee(position,c,tir);
-    private Ennemies e = new Ennemies(10, 10, 10,new Point(100,100),Character.characterSprite);
-    
+    private Araignee a = new Araignee(position, c, tir);
+    // private Ennemies e = new Ennemies(10, 10, 10, new Point(100, 100),
+    // Character.characterSprite);
 
-    public Affichage(Character c, Tir t,Araignee a, Position position) {
+    public Affichage(Character c, Tir t, Araignee a, Position position) {
         setPreferredSize(new Dimension(X, Y));
         this.c = c;
         this.tir = t;
-        this.a=a;
-        this.position=position;
+        this.a = a;
+        this.position = position;
     }
 
     // Override de la méthode paint qui va afficher l'image "character.png" au
@@ -63,10 +63,10 @@ public class Affichage extends JPanel {
             g.fillOval(bonusPoints.get(i).x, bonusPoints.get(i).y, bonusSizes.get(i), bonusSizes.get(i));
         }
 
-        /*afficher les araignées */
-        //drawAraignee(g);
+        /* afficher les araignées */
+        // drawAraignee(g);
         drawEnnemies(g);
-       
+
     }
 
     public void drawBonus(Point p, int size) {
@@ -74,36 +74,37 @@ public class Affichage extends JPanel {
         bonusSizes.add(size);
         repaint();
     }
-    public void drawEnnemies(Graphics g){
+
+    public void drawEnnemies(Graphics g) {
         // Appel de la méthode statique sans instance
         List<Ennemies> ennemies = Ennemies.getListEnnemies();
         for (Ennemies ennemi : ennemies) {
             // Vérification si l'ennemi est un Fantome
             if (ennemi instanceof Fantome) {
-                Fantome fantome = (Fantome) ennemi;  // Casting en Fantome
-                g.drawImage(fantome.img, (int)fantome.getPosition().getX(), (int)fantome.getPosition().getY(), null);
-                System.out.println("Position x : "+fantome.getPosition().getX());
-                System.out.println("Position y : "+fantome.getPosition().getY());
-                System.out.println("img : "+fantome.img);
+                Fantome fantome = (Fantome) ennemi; // Casting en Fantome
+                g.drawImage(fantome.img, (int) fantome.getPosition().getX(), (int) fantome.getPosition().getY(), null);
+                System.out.println("Position x : " + fantome.getPosition().getX());
+                // System.out.println("Position y : "+fantome.getPosition().getY());
+                // System.out.println("img : "+fantome.img);
             }
         }
     }
- 
 
-        /*dessiner les araignées */
-        public void drawAraignee(Graphics g){
-            ArrayList<Point> araignee = a.getPosition();
-            for(Point araigneP : araignee){
-                // afficher les images des araignées
-                g.drawImage(Araignee.araigneeSprite, araigneP.x, araigneP.y, null);
-                //si le joueur touche une araignée, on appelle la méthode toucher de la classe Araignée
-                a.toucher(araigneP);
-            }
-            
-            // faire réaparaitre des araignées s'il reste moins de 4 (Juste pour le fun !)
-            if (a.getNombreAraignee() < 4){
-                a.Listeposition();
-            }
+    /* dessiner les araignées */
+    public void drawAraignee(Graphics g) {
+        ArrayList<Point> araignee = a.getPosition();
+        for (Point araigneP : araignee) {
+            // afficher les images des araignées
+            g.drawImage(Araignee.araigneeSprite, araigneP.x, araigneP.y, null);
+            // si le joueur touche une araignée, on appelle la méthode toucher de la classe
+            // Araignée
+            a.toucher(araigneP);
         }
-    
+
+        // faire réaparaitre des araignées s'il reste moins de 4 (Juste pour le fun !)
+        if (a.getNombreAraignee() < 4) {
+            a.Listeposition();
+        }
+    }
+
 }
