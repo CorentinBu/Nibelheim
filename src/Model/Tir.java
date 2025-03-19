@@ -33,7 +33,7 @@ public class Tir {
 
     // Méthode pour ajouter un tir (tirer une nouvelle balle)
     public void addTir() {
-        Point startPoint = new Point(c.current_x + 50, c.current_y + 50); // Point de départ du tir
+        Point startPoint = new Point((int) (c.current_x + 50), (int) (c.current_y + 50)); // Point de départ du tir
         Point direction = new Point(mousePosition.x - startPoint.x, mousePosition.y - startPoint.y); // Direction du tir
 
         tirs.add(startPoint);

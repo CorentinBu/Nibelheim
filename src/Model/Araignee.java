@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.Point;
 import Controler.Character;
+import Model.Bonus;
 
 public class Araignee {
 
@@ -14,6 +15,7 @@ public class Araignee {
     private Position position;
     private Tir tir;
     private Character c;
+    private Bonus b;
     // Dimensions de l'araignée (taille du gif)
     public static final int weight = 80;
     public static final int height = 50;
@@ -26,12 +28,14 @@ public class Araignee {
     
     public static final Random rand = new Random();
 
-    public Araignee(Position position, Character c, Tir tir) {
+    public Araignee(Position position, Character c, Tir tir, Bonus b) {
         this.tir = tir;
         this.position = position;
         this.c=c;
         this.posAraignee = new ArrayList<Point>();
+        this.b = b;
         Listeposition();
+
         
     }
 
@@ -108,6 +112,8 @@ public class Araignee {
             c.setVie(c.getVie()-POINTPERDU);
             System.out.println("Vie: "+c.getVie());
             supprimerAraignee(point);
+            // Faire apparaitre un bonus la ou l'araignee est morte
+            b.addBonus(point);
         }
            
     }
@@ -127,6 +133,8 @@ public class Araignee {
     public void removeAraigneeTouchee() {
         for (int i = 0; i < posAraignee.size(); i++) {
             if (detectionCollision(posAraignee.get(i))) {
+                // Rajouter un bonus la ou l'araignee est morte
+                b.addBonus(posAraignee.get(i));
                 posAraignee.remove(i);
                 i--;
             }

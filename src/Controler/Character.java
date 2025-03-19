@@ -14,85 +14,86 @@ import java.awt.Image;
 //Il peut également tirer des projectiles.
 //Il a une barre de vie qui diminue lorsqu'il est touché par un ennemi.
 //Il peut ramasser des bonus pour augmenter sa vie ou sa puissance de tir.
-
 public class Character extends Thread {
 
     // Attributs
-    public int current_x = 820;
-    public int current_y = 540;
-    private int speed = 25;
-    private Collision collision;
-    //points de vie du joueur
-    private int vie=110;
+    public double current_x = 820;
+    public double current_y = 540;
+    
+    private double vx = 0, vy = 0;  // Vitesse horizontale et verticale
+    private double acceleration = 2; // Accélération progressive
+    private double friction = 0.9;  // Décélération (simule l’inertie)
+    private double maxSpeed = 25;   // Vitesse maximale
+    
+    private int vie = 110; // Points de vie du joueur
+    private Inputs inputs; // Gestion des entrées clavier
 
-    private Inputs inputs;
+    // Dimensions du personnage
+    public static final int WIDTH = 100;
+    public static final int HEIGHT = 100;
+    //cree des getter pour vx et vy
+    public double getVx() {
+        return vx;
+    }
+    public double getVy() {
+        return vy;
+    }
+
+
+    // Sprite du personnage
+    public static final Image characterSprite = new ImageIcon("src/Images/character.png")
+            .getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
 
     // Constructeur
     public Character(Inputs i) {
         inputs = i;
     }
 
-    /*image character */
-    public static final int WIDTH = 100;
-    public static final int HEIGHT = 100;
-    public static final Image characterSprite = new ImageIcon("src/Images/character.png").getImage()
-            .getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
-
-
-    // Thread qui va regarder les valeurs booléennes dans la classe Input pour
-    // appeler ou non les fonctions de déplacement
+    // Thread qui gère le déplacement
     public void run() {
         while (true) {
-            if (inputs.up) {
-                moveUp();
-            }
-            if (inputs.down) {
-                moveDown();
-            }
-            if (inputs.left) {
-                moveLeft();
-            }
-            if (inputs.right) {
-                moveRight();
-            }
+            updateMovement(); // Mise à jour des déplacements
+
             try {
-                Thread.sleep(50);
+                Thread.sleep(16); // Environ 60 FPS
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
-    //getter et setter vie du joueur
+
+    // Gestion du déplacement avec inertie
+    private void updateMovement() {
+        // Accélération selon les touches pressées
+        if (inputs.up) { vy -= acceleration; }
+        if (inputs.down) { vy += acceleration; }
+        if (inputs.left) { vx -= acceleration; }
+        if (inputs.right) { vx += acceleration; }
+        
+
+        // Limite la vitesse maximale
+        vx = Math.max(-maxSpeed, Math.min(maxSpeed, vx));
+        vy = Math.max(-maxSpeed, Math.min(maxSpeed, vy));
+
+        // Appliquer la friction (simule une glisse après l'arrêt des touches)
+        vx *= friction;
+        vy *= friction;
+
+        // Appliquer le mouvement
+        current_x += vx;
+        current_y += vy;
+
+        // Garder la sorcière dans l'écran
+        current_x = Math.max(0, Math.min(1800, current_x));
+        current_y = Math.max(0, Math.min(1080, current_y));
+    }
+
+    // Getter et setter pour la vie
     public int getVie() {
         return vie;
     }
+
     public void setVie(int vie) {
         this.vie = vie;
     }
-
-    // Méthodes de déplacement
-    public void moveUp() {
-        if (current_y > 0) {
-            this.current_y -= speed;
-        }
-    }
-
-    public void moveDown() {
-        if (current_y < 1080) {
-            this.current_y += speed;
-        }
-    }
-
-    public void moveLeft() {
-        if (current_x > 0){
-            this.current_x -= speed;
-        }
-    }
-
-    public void moveRight() {
-        if (current_x <1800){
-            this.current_x += speed;
-        }
-    }
-
 }

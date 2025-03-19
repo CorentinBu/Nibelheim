@@ -17,8 +17,10 @@ public class Main {
         Character c = new Character(inputs);
         Tir t = new Tir(c);
 
-        Position position = new Position();
-        Araignee araignee = new Araignee(position,c, t);
+        Bonus b = new Bonus();
+
+        Position position = new Position(100, 100);  // Exemple : position de départ (100, 100)
+        Araignee araignee = new Araignee(position,c, t, b);
         
 
         Affichage a = new Affichage(c, t, araignee, position);
@@ -32,9 +34,8 @@ public class Main {
         Avancer_tir avancer_tir = new Avancer_tir(t);
         Redessine r = new Redessine(a);
 
-        Bonus b = new Bonus(a);
         b.start();
-        b.spawn(new Point(500,600), 10);
+        b.spawn();
 
 
         /*Modifier la position des araignées */

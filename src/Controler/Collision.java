@@ -34,6 +34,7 @@ public class Collision extends Thread {
             // Redessiner l'écran
             aff.revalidate();
             aff.repaint();
+            System.out.println("position x:"+c.getVx()+" position y "+c.getVy());
 
             try {
                 Thread.sleep(DELAY);
