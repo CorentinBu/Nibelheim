@@ -20,7 +20,7 @@ public class Character extends Thread {
     // Attributs
     public int current_x = 820;
     public int current_y = 540;
-    private int speed = 50;
+    private int speed = 25;
     private Collision collision;
     //points de vie du joueur
     private int vie=110;

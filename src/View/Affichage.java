@@ -71,14 +71,20 @@ public class Affichage extends JPanel {
         repaint();
     }
 
-    /*dessiner les araignées */
-    public void drawAraignee(Graphics g){
-        ArrayList<Point> araignee = a.getPosition();
-        for(Point araigneP : araignee){
-            g.setColor(Color.BLUE);
-            g.fillOval(araigneP.x, araigneP.y, position.LARGEUR_A, position.HAUTEUR_A);
-            a.toucher(araigneP);
+        /*dessiner les araignées */
+        public void drawAraignee(Graphics g){
+            ArrayList<Point> araignee = a.getPosition();
+            for(Point araigneP : araignee){
+                // afficher les images des araignées
+                g.drawImage(Araignee.araigneeSprite, araigneP.x, araigneP.y, null);
+                //si le joueur touche une araignée, on appelle la méthode toucher de la classe Araignée
+                a.toucher(araigneP);
+            }
+            
+            // faire réaparaitre des araignées s'il reste moins de 4 (Juste pour le fun !)
+            if (a.getNombreAraignee() < 4){
+                a.Listeposition();
+            }
         }
-    }
     
 }

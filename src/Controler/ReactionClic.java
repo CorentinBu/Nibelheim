@@ -38,8 +38,8 @@ public class ReactionClic implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         isPressed = true;
-        x = e.getX();
-        y = e.getY();
+        // x = e.getX();
+        // y = e.getY();
 
         // Démarrer un Timer pour ajouter des tirs à intervalles réguliers
         timer = new Timer();

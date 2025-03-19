@@ -1,6 +1,9 @@
 package Model;
 import java.util.*;
 
+import javax.swing.ImageIcon;
+
+import java.awt.Image;
 import java.awt.Point;
 import Controler.Character;
 
@@ -11,6 +14,12 @@ public class Araignee {
     private Position position;
     private Tir tir;
     private Character c;
+    // Dimensions de l'araignée (taille du gif)
+    public static final int weight = 80;
+    public static final int height = 50;
+    // Image gif de l'araignée
+    public static final Image araigneeSprite = new ImageIcon("src/Images/araignee.gif").getImage()
+            .getScaledInstance(weight, height, Image.SCALE_DEFAULT);
     // Quantité d'araignées à afficher
     private int quantite = 10;
     private static final int POINTPERDU = 10;
@@ -25,7 +34,12 @@ public class Araignee {
         Listeposition();
         
     }
-    /*methode qui genere une liste de points */
+
+    // Getters pour recuperer le nombre d'araignées
+    public int getNombreAraignee() {
+        return posAraignee.size();
+    }
+
     public void Listeposition() {
         for(int i=0; i<quantite;i++){
             int x,y;
@@ -99,11 +113,11 @@ public class Araignee {
            
     }
 
-    // Détecter une collision entre l'araignée et le tir
+    // Détecter une collision entre l'araignée et le tir (Taille de l'araignée prise en compte)
     public boolean detectionCollision(Point point) {
         for (Point tir : tir.getTirs()) {
-            if (point.x < tir.x + 10 && point.x + 10 > tir.x && point.y < tir.y + 10 && point.y + 10 > tir.y) {
-                
+            //if (point.x < tir.x + 10 && point.x + 10 > tir.x && point.y < tir.y + 10 && point.y + 10 > tir.y) {
+            if (tir.x >= point.x && tir.x <= point.x + weight && tir.y >= point.y && tir.y <= point.y + height) {
                 return true;
             }
         }
@@ -113,7 +127,6 @@ public class Araignee {
     // Supprimer les araignées qui ont été touchées en utilisant la méthode detectionCollision
     public void removeAraigneeTouchee() {
         for (int i = 0; i < posAraignee.size(); i++) {
-            System.out.println("Collision avec une arraignée");
             if (detectionCollision(posAraignee.get(i))) {
                 posAraignee.remove(i);
                 i--;
