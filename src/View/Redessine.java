@@ -1,7 +1,6 @@
 package View;
 ;
 
-//Redessine l'écran
 public class Redessine extends Thread{
     // Constante pour le délai de rafraichissement
     public static final int DELAY = 50;

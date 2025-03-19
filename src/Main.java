@@ -36,6 +36,10 @@ public class Main {
         b.start();
         b.spawn(new Point(500,600), 10);
 
+        Fantome f1 = new Fantome(1, 0,new Point(500,500));
+        Fantome f2 = new Fantome(2, 0,new Point(400,500));
+        Fantome f3 = new Fantome(3, 0, new Point(300,20));
+
 
         /*Modifier la position des araignées */
         MouvementAraignee mvtA = new MouvementAraignee(position);
