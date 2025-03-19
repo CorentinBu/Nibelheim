@@ -1,20 +1,23 @@
 package View;
-
+;
 
 //Redessine l'écran
 public class Redessine extends Thread{
-    //delai de rafraichissement
+    // Constante pour le délai de rafraichissement
     public static final int DELAY = 50;
-    public Affichage monAffichage;
 
-    public Redessine(Affichage a){
-        this.monAffichage = a;
+    // Instances de classe utiles
+    private Affichage monAffichage;
+
+    public Redessine(Affichage aff) {
+        this.monAffichage = aff;
     }
 
     //Redessine l'écran 
     @Override
     public void run() {
       while (true) {
+        // Redessiner l'écran
         monAffichage.revalidate();
         monAffichage.repaint();
         try { Thread.sleep(DELAY); }
