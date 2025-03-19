@@ -5,7 +5,6 @@ public class MouvementAraignee extends Thread {
     Position p;
     public MouvementAraignee(Position p){
         this.p=p;
-
     }
    
     //methode run pour faire avancer les araignée
@@ -13,6 +12,7 @@ public class MouvementAraignee extends Thread {
     public void run() {
         while (true){
             
+            // Mettre à jour la position de l'araignée
             p.setVitesseAraignee(p.getVitesseAraignee());
 
             try { Thread.sleep(DELAY); }
