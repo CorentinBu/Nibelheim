@@ -15,7 +15,7 @@ public class Position {
     public static final int Y_CENTRE = HAUTEUR_MAX/4;
 
     //vitesse de l'araignée
-    public int vitesseA=10;
+    public int vitesseA=6;
     
     /*getter et setter pour la vitesse */
     public int getVitesseAraignee() {
