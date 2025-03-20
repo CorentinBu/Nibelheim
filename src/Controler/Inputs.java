@@ -57,4 +57,5 @@ public class Inputs extends KeyAdapter {
             // System.out.println("D release");
         }
     }
+
 }

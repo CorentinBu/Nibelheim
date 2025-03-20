@@ -7,6 +7,7 @@ import java.util.List;
 import Controler.Character;
 import Model.Tir;
 import Model.Araignee;
+import Model.Obstacle;
 import Model.Position;
 
 
@@ -21,15 +22,17 @@ public class Affichage extends JPanel {
     private Tir tir;
     Position position;
     private Araignee a = new Araignee(position,c,tir);
+    Obstacle o = new Obstacle();
 
     
 
-    public Affichage(Character c, Tir t,Araignee a, Position position) {
+    public Affichage(Character c, Tir t,Araignee a, Position position, Obstacle o) {
         setPreferredSize(new Dimension(X, Y));
         this.c = c;
         this.tir = t;
         this.a=a;
         this.position=position;
+        this.o=o;
     }
 
     // Override de la méthode paint qui va afficher l'image "character.png" au
@@ -62,6 +65,8 @@ public class Affichage extends JPanel {
 
         /*afficher les araignées */
         drawAraignee(g);
+        //dessiner les obstacles
+        drawObstacle(g);
        
     }
 
@@ -71,20 +76,33 @@ public class Affichage extends JPanel {
         repaint();
     }
 
-        /*dessiner les araignées */
-        public void drawAraignee(Graphics g){
-            ArrayList<Point> araignee = a.getPosition();
-            for(Point araigneP : araignee){
-                // afficher les images des araignées
-                g.drawImage(Araignee.araigneeSprite, araigneP.x, araigneP.y, null);
-                //si le joueur touche une araignée, on appelle la méthode toucher de la classe Araignée
-                a.toucher(araigneP);
-            }
-            
-            // faire réaparaitre des araignées s'il reste moins de 4 (Juste pour le fun !)
-            if (a.getNombreAraignee() < 4){
-                a.Listeposition();
-            }
+    /*dessiner les araignées */
+    public void drawAraignee(Graphics g){
+        ArrayList<Point> araignee = a.getPosition();
+        for(Point araigneP : araignee){
+            // afficher les images des araignées
+            g.drawImage(Araignee.araigneeSprite, araigneP.x, araigneP.y, null);
+            //si le joueur touche une araignée, on appelle la méthode toucher de la classe Araignée
+            a.collisionAraigneeJoueur(araigneP);
         }
+        
+        // faire réaparaitre des araignées s'il reste moins de 4 (Juste pour le fun !)
+        if (a.getNombreAraignee() < 4){
+            a.Listeposition();
+        }
+    }
+
+    //methode qui dessine les obstacles
+    public void drawObstacle(Graphics g){
+        int i = 0;
+        ArrayList<Point> obstacles = o.getObstacles();
+        for(Point obstacle : obstacles){
+            g.setColor(Color.BLUE);
+            g.fillRect(obstacle.x, obstacle.y, Obstacle.WIDTH_O, Obstacle.HEIGHT_O);
+            g.setColor(Color.WHITE);
+            g.drawString(String.valueOf(i), obstacle.x + Obstacle.WIDTH_O / 2, obstacle.y + Obstacle.HEIGHT_O / 2);
+            i+=1;
+        }
+    }
     
 }

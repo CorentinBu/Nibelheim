@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.Point;
 import Controler.Character;
+import Model.Obstacle;
 
 public class Araignee {
 
@@ -103,8 +104,8 @@ public class Araignee {
         }
         return araignee;
     }
-
-    public void toucher(Point point){
+//collision entre l'araignée et le joueur
+    public void collisionAraigneeJoueur(Point point){
         if (point.x == c.current_x+ Character.WIDTH/2 && point.y == c.current_y+ Character.HEIGHT/2){
             c.setVie(c.getVie()-POINTPERDU);
             System.out.println("Vie: "+c.getVie());
@@ -138,6 +139,30 @@ public class Araignee {
     public void supprimerAraignee(Point point){
         posAraignee.remove(point);
     }
+
+    //methode qui detecte si une araignée touche un obstacle
+   /*  public void collisionAraigneeObstacle(Point point){
+        for(Point obstacle:o.getObstacles()){
+            int x_o = obstacle.x;
+            int y_o = obstacle.y;
+            int x = point.x;
+            int y = point.y;
+            int obstacleWidth = 50;  // Ajuste en fonction de la taille réelle de ton obstacle
+            int obstacleHeight = 50;
+            // Vérification de collision en utilisant l'intersection de rectangles
+            boolean collisionX = (x < x_o - obstacleWidth+ weight/2) && (x + weight > x_o);
+            boolean collisionY = (y < y_o - obstacleHeight +height/2) && (y + height > y_o);
+            if (collisionX && collisionY) {
+                System.out.println("Collision détectée avec obstacle à (" + x_o + "," + y_o + ")");
+            // return true;  // Collision détectée, bloquer le déplacement
+            }
+            else{
+                System.out.println("Pas de collision avec obstacle");
+            }
+        }
+        
+       // return false;
+    }*/
 
     //@Override
     public int getQuantite() {

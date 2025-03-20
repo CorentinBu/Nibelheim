@@ -14,14 +14,16 @@ public class Main {
         Inputs inputs = new Inputs();
         f.addKeyListener(inputs);
 
-        Character c = new Character(inputs);
+        Obstacle obstacle = new Obstacle();
+        Character c = new Character(inputs, obstacle);
         Tir t = new Tir(c);
 
         Position position = new Position();
         Araignee araignee = new Araignee(position,c, t);
         
+        
 
-        Affichage a = new Affichage(c, t, araignee, position);
+        Affichage a = new Affichage(c, t, araignee, position, obstacle);
         f.add(a);
         f.pack();
         f.setVisible(true);
@@ -38,10 +40,10 @@ public class Main {
 
 
         /*Modifier la position des araignées */
-        MouvementAraignee mvtA = new MouvementAraignee(position);
+        //MouvementAraignee mvtA = new MouvementAraignee(position);
         Collision col = new Collision(c, t, araignee, a);
         col.start();
-        mvtA.start();
+        //mvtA.start();
         avancer_tir.start();
         ps.start();
         r.start();

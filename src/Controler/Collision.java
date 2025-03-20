@@ -1,6 +1,7 @@
 package Controler;
 
 import Model.Araignee;
+import Model.Obstacle;
 import Model.Tir;
 import View.Affichage;
 
@@ -15,6 +16,7 @@ public class Collision extends Thread {
     private Tir t;
     private Araignee a;
     private Affichage aff;
+   // private Obstacle o;
 
     // Constructeur pour initialiser les instances de classe
     public Collision(Character c, Tir t, Araignee a, Affichage aff) {
@@ -22,14 +24,16 @@ public class Collision extends Thread {
         this.t = t;
         this.a = a;
         this.aff = aff;
+       // this.o = o;
     }
+
 
     // Methode pour gérer les collisions
     @Override
     public void run() {
         while (true) {
             // Gérer les collisions entre les tirs et les araignées
-            System.out.println("Check collision");
+            //System.out.println("Check collision");
             a.removeAraigneeTouchee();
             // Redessiner l'écran
             aff.revalidate();
