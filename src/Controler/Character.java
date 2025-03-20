@@ -14,7 +14,6 @@ import java.awt.Point;
 //Il peut également tirer des projectiles.
 //Il a une barre de vie qui diminue lorsqu'il est touché par un ennemi.
 //Il peut ramasser des bonus pour augmenter sa vie ou sa puissance de tir.
-
 public class Character extends Thread {
 
     // Attributs
@@ -38,37 +37,94 @@ public class Character extends Thread {
     /*image character */
     public static final int WIDTH = 100;
     public static final int HEIGHT = 100;
-    public static final Image characterSprite = new ImageIcon("src/Images/character.png").getImage()
-            .getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
+
+    //creer des getters pour vx et vy
+    public double getVx() {
+        return vx;
+    }
+    public double getVy() {
+        return vy;
+    }
+
+    // Getters pour la position du joueur
+    public double getCurrent_x() {
+        return current_x;
+    }
+    public double getCurrent_y() {
+        return current_y;
+    }
+
+    // Constructeur pour la classe Character
+    public Character(Bonus bonus, Inputs i) {
+        this.b = bonus;
+        this.inputs = i;
+    }
+
+    // Setters pour la position du joueur
+    public void setCurrent_x(double current_x) {
+        this.current_x = current_x;
+    }
+    public void setCurrent_y(double current_y) {
+        this.current_y = current_y;
+    }
+
+    // Getteur et setteur pour le nombre de bonus
+    public int getNombreBonus() {
+        return nombreBonus;
+    }
+    public void setNombreBonus(int nombreBonus) {
+        this.nombreBonus = nombreBonus;
+    }
 
 
-    // Thread qui va regarder les valeurs booléennes dans la classe Input pour
-    // appeler ou non les fonctions de déplacement
+    // Sprite du personnage
+    public static final Image characterSprite = new ImageIcon("src/Images/character.png")
+            .getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
+
+    // Thread qui gère le déplacement
     public void run() {
         while (true) {
-            if (inputs.up) {
-                moveUp();
-            }
-            if (inputs.down) {
-                moveDown();
-            }
-            if (inputs.left) {
-                moveLeft();
-            }
-            if (inputs.right) {
-                moveRight();
-            }
+            updateMovement(); // Mise à jour des déplacements
+
             try {
-                Thread.sleep(50);
+                Thread.sleep(16); // Environ 60 FPS
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
-    //getter et setter vie du joueur
+
+    // Gestion du déplacement avec inertie
+    private void updateMovement() {
+        // Accélération selon les touches pressées
+        if (inputs.up) { vy -= acceleration; }
+        if (inputs.down) { vy += acceleration; }
+        if (inputs.left) { vx -= acceleration; }
+        if (inputs.right) { vx += acceleration; }
+        
+
+        // Limite la vitesse maximale
+        vx = Math.max(-maxSpeed, Math.min(maxSpeed, vx));
+        vy = Math.max(-maxSpeed, Math.min(maxSpeed, vy));
+
+        // Appliquer la friction (simule une glisse après l'arrêt des touches)
+        vx *= friction;
+        vy *= friction;
+
+        // Appliquer le mouvement
+        current_x += vx;
+        current_y += vy;
+
+        // Garder la sorcière dans l'écran
+        current_x = Math.max(0, Math.min(1800, current_x));
+        current_y = Math.max(0, Math.min(1080, current_y));
+    }
+
+    // Getter et setter pour les points de vie
     public int getVie() {
         return vie;
     }
+
     public void setVie(int vie) {
         this.vie = vie;
     }

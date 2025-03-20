@@ -15,6 +15,7 @@ public class Araignee {
     private Position position;
     private Tir tir;
     private Character c;
+    private Bonus b;
     // Dimensions de l'araignée (taille du gif)
     public static final int weight = 80;
     public static final int height = 50;
@@ -23,16 +24,17 @@ public class Araignee {
             .getScaledInstance(weight, height, Image.SCALE_DEFAULT);
     // Quantité d'araignées à afficher
     private int quantite = 10;
-    private static final int POINTPERDU = 10;
+    private static final int POINTPERDU = 10; // Dégats causés par l'araignée
     
     public static final Random rand = new Random();
 
-    public Araignee(Position position, Character c, Tir tir) {
+    public Araignee(Position position, Character c, Tir tir, Bonus bonus) {
         this.tir = tir;
         this.position = position;
         this.c=c;
         this.posAraignee = new ArrayList<Point>();
-        Listeposition();
+        this.b = bonus;
+        ListePosition();
         
     }
 
@@ -41,7 +43,7 @@ public class Araignee {
         return posAraignee.size();
     }
 
-    public void Listeposition() {
+    public void ListePosition() {
         for(int i=0; i<quantite;i++){
             int x,y;
             //mettre tous les points hors de la fenetre
@@ -67,12 +69,12 @@ public class Araignee {
     public ArrayList<Point> getPosition() {
         ArrayList<Point> araignee = new ArrayList<Point>();
         for(Point point : this.posAraignee) {
-            if(point.x < (c.current_x +Character.WIDTH/2)){
-                if (point.y < c.current_y + Character.HEIGHT/2){
+            if(point.x < (c.getCurrent_x() +Character.WIDTH/2)){
+                if (point.y < c.getCurrent_y() + Character.HEIGHT/2){
                     point.x += rand.nextInt(position.vitesseA);
                     point.y += rand.nextInt(position.vitesseA);
                 }
-                else if (point.y > c.current_y + Character.HEIGHT/2){
+                else if (point.y > c.getCurrent_x() + Character.HEIGHT/2){
                     point.x += rand.nextInt(position.vitesseA);
                     point.y -= rand.nextInt(position.vitesseA);
                 }
@@ -80,12 +82,12 @@ public class Araignee {
                     point.x += rand.nextInt(position.vitesseA);
                 }
             }
-            else if (point.x> c.current_x + Character.WIDTH/2){
-                if (point.y > c.current_y + Character.HEIGHT/2){
+            else if (point.x> c.getCurrent_x() + Character.WIDTH/2){
+                if (point.y > c.getCurrent_y() + Character.HEIGHT/2){
                     point.x -= rand.nextInt(position.vitesseA);
                     point.y -= rand.nextInt(position.vitesseA/2);
                 }
-                else if (point.y < c.current_y + Character.HEIGHT/2){
+                else if (point.y < c.getCurrent_y() + Character.HEIGHT/2){
                     point.x -= rand.nextInt(position.vitesseA);
                     point.y += rand.nextInt(position.vitesseA/2);
                 }
@@ -93,10 +95,10 @@ public class Araignee {
                     point.x -= rand.nextInt(position.vitesseA);
                 }
             }
-            else if (point.y < c.current_y + Character.HEIGHT/2){
+            else if (point.y < c.getCurrent_y() + Character.HEIGHT/2){
                 point.y += rand.nextInt(position.vitesseA);
             }
-            else if (point.y > c.current_y + Character.HEIGHT/2){
+            else if (point.y > c.getCurrent_y() + Character.HEIGHT/2){
                 point.y -= rand.nextInt(position.vitesseA);
             }
            
@@ -114,29 +116,32 @@ public class Araignee {
            
     }
 
-    // Détecter une collision entre l'araignée et le tir (Taille de l'araignée prise en compte)
-    public boolean detectionCollision(Point point) {
-        for (Point tir : tir.getTirs()) {
-            //if (point.x < tir.x + 10 && point.x + 10 > tir.x && point.y < tir.y + 10 && point.y + 10 > tir.y) {
-            if (tir.x >= point.x && tir.x <= point.x + weight && tir.y >= point.y && tir.y <= point.y + height) {
+    // Détecter une collision entre l'araignée et le tir (Taille de l'araignée prise en compte, on divise par 2 pour ne pas prendre en compte les pates)
+    public boolean collisionAraigneeProjectile(Point point) {
+        for (int i = 0; i < tir.getTirs().size(); i++) {
+            if (tir.getTirs().get(i).getPosition().x >= point.x && tir.getTirs().get(i).getPosition().x <= point.x + weight/2
+                    && tir.getTirs().get(i).getPosition().y >= point.y && tir.getTirs().get(i).getPosition().y <= point.y + height/2) {
+                // Un bonus apparait la où l'araignée meurt
+                b.addBonus(point);
                 return true;
             }
         }
         return false;
     }
 
-    // Supprimer les araignées qui ont été touchées en utilisant la méthode detectionCollision
+    // Détecter les araignées qui ont été touchées par un projectile et les supprimer de la liste
     public void removeAraigneeTouchee() {
         for (int i = 0; i < posAraignee.size(); i++) {
-            if (detectionCollision(posAraignee.get(i))) {
+            if (collisionAraigneeProjectile(posAraignee.get(i))) {
+                // L'araignée est supprimée de la liste
                 posAraignee.remove(i);
-                i--;
             }
         }
     }
 
-    //methode pour supprimer une araignée
+    // Méthode pour supprimer une araignée
     public void supprimerAraignee(Point point){
+        // L'araignée est supprimée de la liste
         posAraignee.remove(point);
     }
 

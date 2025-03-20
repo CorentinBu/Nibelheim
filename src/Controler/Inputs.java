@@ -1,7 +1,5 @@
 package Controler;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
 //Classe permettant de gérer les entrées clavier du joueur.
