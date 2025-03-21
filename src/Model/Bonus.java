@@ -20,7 +20,7 @@ public class Bonus {
     //  Methode pour ajouter un bonus à la liste pointBonus
     public void addBonus(Point p) {
         pointBonus.add(p);
-        System.out.println("Bonus ajouté à la position: " + p);
+        //System.out.println("Bonus ajouté à la position: " + p);
     }
 
     // Methode pour supprimer un bonus de pointBonus

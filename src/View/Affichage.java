@@ -11,6 +11,7 @@ import Model.Bonus;
 import Model.Position;
 import Model.Ennemies;
 import Model.Fantome;
+import Model.Obstacles;
 
 public class Affichage extends JPanel {
     // Dimensions de la vue
@@ -22,7 +23,9 @@ public class Affichage extends JPanel {
     Character c;
     private Tir tir;
     Position position;
-    private Araignee a = new Araignee(position, c, tir, b);
+    private Araignee a ;
+    private Obstacles o;
+
 
     // Position de la barre de vie
     public static final int xBarreVie = 20;
@@ -34,11 +37,12 @@ public class Affichage extends JPanel {
 
     private Image coinImage; // Variable pour stocker l'image du coin
 
-    public Affichage(Character c, Tir t, Araignee a, Position position, Bonus bonus) {
+    public Affichage(Character c, Tir t, Araignee a, Position position, Bonus bonus, Obstacles o) {
         setPreferredSize(new Dimension(X, Y));
         this.c = c;
         this.tir = t;
         this.b = bonus;
+        this.o = o;
 
         // Initialisation de position si c'est elle est nulle
         if (position == null) {
@@ -81,14 +85,17 @@ public class Affichage extends JPanel {
 
         // Dessiner une barre de vie rouge dans un contour noir et des bordures arrondies
         g.setColor(Color.GRAY);
-        g.fillRoundRect(xBarreVie, yBarreVie, c.maxVie*2, heightBarreVie, arcBarreVie, arcBarreVie);
+        g.fillRoundRect(xBarreVie, yBarreVie, Character.maxVie*2, heightBarreVie, arcBarreVie, arcBarreVie);
         g.setColor(Color.RED);
         g.fillRoundRect(xBarreVie, yBarreVie, c.getVie()*2, heightBarreVie, arcBarreVie, arcBarreVie);
         g.setColor(Color.BLACK);
-        g.drawRoundRect(xBarreVie, yBarreVie, c.maxVie*2, heightBarreVie, arcBarreVie, arcBarreVie);
+        g.drawRoundRect(xBarreVie, yBarreVie, Character.maxVie*2, heightBarreVie, arcBarreVie, arcBarreVie);
 
         // Dessiner les bonus
         drawBonus(g);
+
+        //dessiner les obstacles
+        drawObstacle(g);
     }
 
   //Metode pour dessiner les bonus avec l'image coin.png
@@ -107,7 +114,7 @@ public class Affichage extends JPanel {
             if (ennemi instanceof Fantome) {
                 Fantome fantome = (Fantome) ennemi; // Casting en Fantome
                 g.drawImage(fantome.img, (int) fantome.getPosition().getX(), (int) fantome.getPosition().getY(), null);
-                System.out.println("Position x : " + fantome.getPosition().getX());
+                //System.out.println("Position x : " + fantome.getPosition().getX());
                 // System.out.println("Position y : "+fantome.getPosition().getY());
                 // System.out.println("img : "+fantome.img);
             }
@@ -130,6 +137,16 @@ public class Affichage extends JPanel {
         // Faire réapparaître des araignées s'il reste moins de 4 (Juste pour le fun !)
         if (a.getNombreAraignee() < 4) {
             a.ListePosition();
+        }
+    }
+
+    //methode qui dessine les obstacles
+    public void drawObstacle(Graphics g){
+        ArrayList<Point> obstacle = o.getObstacles();
+        for(Point o : obstacle){
+            g.setColor(Color.BLUE);
+            g.fillRect(o.x, o.y, Obstacles.WIDTH_O, Obstacles.HEIGHT_O);
+            g.setColor(Color.WHITE);
         }
     }
 }

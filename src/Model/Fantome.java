@@ -51,11 +51,11 @@ public class Fantome extends Ennemies {
             setPosition(ghostPosition);
 
             // Log pour déboguer
-            System.out.println("Position du fantôme : " + ghostPosition);
-            System.out.println("Direction : (" + directionX + ", " + directionY + ")");
+           // System.out.println("Position du fantôme : " + ghostPosition);
+            //System.out.println("Direction : (" + directionX + ", " + directionY + ")");
         } else {
             // Le fantôme est déjà sur le joueur
-            System.out.println("Le fantôme a atteint le joueur !");
+           // System.out.println("Le fantôme a atteint le joueur !");
         }
     }
 

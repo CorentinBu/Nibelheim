@@ -3,7 +3,12 @@ package Controler;
 import javax.swing.ImageIcon;
 
 import java.awt.Image;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.awt.Point;
+
 import Model.Bonus;
+import Model.Obstacles;
 
 
 
@@ -17,6 +22,9 @@ public class Character extends Thread {
 
     // Instance de la classe bonus
     private Bonus b ;
+
+    //Instance de la classe Obstacles
+    private Obstacles o;
 
     // Attributs pour la position du joueur
     private double current_x = 820;
@@ -54,9 +62,10 @@ public class Character extends Thread {
     }
 
     // Constructeur pour la classe Character
-    public Character(Bonus bonus, Inputs i) {
+    public Character(Bonus bonus, Inputs i, Obstacles o) {
         this.b = bonus;
         this.inputs = i;
+        this.o = o;
     }
 
     // Setters pour la position du joueur
@@ -96,10 +105,10 @@ public class Character extends Thread {
     // Gestion du déplacement avec inertie
     private void updateMovement() {
         // Accélération selon les touches pressées
-        if (inputs.up) { vy -= acceleration; }
-        if (inputs.down) { vy += acceleration; }
-        if (inputs.left) { vx -= acceleration; }
-        if (inputs.right) { vx += acceleration; }
+        if (inputs.up) { vy-=acceleration; }
+        if (inputs.down ) { vy+=acceleration; }
+        if (inputs.left) { vx-=acceleration; }
+        if (inputs.right) { vx+=acceleration; }
         
 
         // Limite la vitesse maximale
@@ -111,8 +120,19 @@ public class Character extends Thread {
         vy *= friction;
 
         // Appliquer le mouvement
-        current_x += vx;
-        current_y += vy;
+        // Vérifier si le mouvement horizontal du joueur l'amène en collision avec un obstacle
+        if (!collisionObstacleJoueur(current_x + vx, current_y)) {
+            current_x += vx;
+        } else {
+            vx = 0; // Arrêt du mouvement horizontal en cas de collision
+        }
+        // Vérifier si le mouvement vertical du joueur l'amène en collision avec un obstacle
+        if (!collisionObstacleJoueur(current_x, current_y + vy)) {
+            current_y += vy;
+        } else {
+            vy = 0; // Arrêt du mouvement vertical en cas de collision
+        }
+        
 
         // Garder la sorcière dans l'écran
         current_x = Math.max(0, Math.min(1800, current_x));
@@ -139,5 +159,36 @@ public class Character extends Thread {
             }
         }
     }
+
+    
+    
+    public boolean collisionObstacleJoueur( double next_x, double next_y) {
+        for (Point obstacle : o.getObstacles()) {
+            double ox = obstacle.x;
+            double oy = obstacle.y;
+    
+            // Bordures du joueur après déplacement
+            double joueurGauche = next_x;
+            double joueurDroite = next_x + WIDTH;
+            double joueurHaut = next_y;
+            double joueurBas = next_y + HEIGHT;
+    
+            // Bordures de l'obstacle
+            double obstacleGauche = ox;
+            double obstacleDroite = ox + Obstacles.WIDTH_O;
+            double obstacleHaut = oy;
+            double obstacleBas = oy + Obstacles.HEIGHT_O;
+    
+            // Vérification de collision imminente
+            boolean collisionX = (joueurDroite > obstacleGauche) && (joueurGauche < obstacleDroite);
+            boolean collisionY = (joueurBas > obstacleHaut) && (joueurHaut < obstacleBas);
+    
+            if (collisionX && collisionY) {
+                return true; // Collision détectée
+            }
+        }
+        return false; // Pas de collision
+    }
+    
 
 }
