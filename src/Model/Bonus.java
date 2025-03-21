@@ -1,56 +1,49 @@
 package Model;
 
 import java.awt.Point;
-import java.util.ArrayList;
+
+import View.Affichage;
 
 //Cette classe décrit les bonus que le joueur peut ramasser.
 //Les bonus sont lâchés par les ennemis lorsqu'ils sont détruits.
 //Les bonus sont aimantés, attirés par le joueur
 
-public class Bonus {
+public class Bonus extends Thread {
 
-    // Instance de la classe utiles
-    private ArrayList<Point> pointBonus = new ArrayList<>();
-    
-    // Getter pour récupérer la liste des points de bonus
-    public ArrayList<Point> getPointBonus(){
-        return pointBonus;
+    private Affichage a;
+    private Point spawnPoint;
+    private int size = 1;
+
+    // Constructeur
+    public Bonus(Affichage a) {
+        this.a = a;
     }
 
-    //  Methode pour ajouter un bonus à la liste pointBonus
-    public void addBonus(Point p) {
-        pointBonus.add(p);
-        //System.out.println("Bonus ajouté à la position: " + p);
+    public Point getSpawnPoint() {
+        return spawnPoint;
     }
 
-    // Methode pour supprimer un bonus de pointBonus
-    public void removeBonus(Point point) {
-        pointBonus.remove(point);
+    public void setSpawnPoint(Point spawnPoint) {
+        this.spawnPoint = spawnPoint;
     }
 
-    // Méthode vérifiant si le joueur touche le bonus
-    // public void checkCollision(int playerX, int playerY) {
-    //     // Si le joueur est assez proche du bonus pour le ramasser
-    //     if (!collected && Math.abs(playerX - spawnPoint.x) < size && Math.abs(playerY - spawnPoint.y) < size) {
-    //         collected = true; // Le bonus est collecté
-    //         removeBonus(this); // Retirer le bonus de l'affichage (méthode à créer dans Affichage)
-    //         // On peut aussi ici ajouter des points ou d'autres effets, selon le type de bonus
-    //     }
-    // }
- 
+    public int getSize() {
+        return size;
+    }
 
-    // Méthode de déplacement du bonus attiré par le joueur
-    public void attractToPlayer(Point p) {
-        // Vérifier si la piéce est proche du joueur (p)
-        for (int i = 0; i < pointBonus.size(); i++) {
-            // le bonus va vers le joueur
-            if (pointBonus.get(i).x < p.x) {
-                pointBonus.get(i).x += 1;
-            } else if (pointBonus.get(i).x > p.x) {
-                pointBonus.get(i).x -= 1;
-            }
-        }
+    public void setSize(int size) {
+        this.size = size;
+    }
 
+    // Méthode faisant apparaître le bonus à la coordonnée spawnPoint
+    public void spawn(Point spawnPoint, int size) {
+        a.drawBonus(spawnPoint, size);
+    }
+
+    // Méthode vérifiant si le joueur touche le bonus, si le joueur le touche alors
+    // le bonus disparaît et le joueur gagne des points
+    public void checkCollision() {
+        // TODO
     }
 
 }

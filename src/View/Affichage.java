@@ -4,149 +4,110 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
 import Controler.Character;
-import Model.Tir;
-import Model.Araignee;
-import Model.Bonus;
-import Model.Position;
-import Model.Ennemies;
-import Model.Fantome;
-import Model.Obstacles;
+import Model.*;
 
 public class Affichage extends JPanel {
-    // Dimensions de la vue
+
+    // Constantes pour la taille de la fenetre
     public static final int X = 1920;
     public static final int Y = 1080;
 
-    // Instances de classe utiles
-    private Bonus b;
+    // Liste des points et des tailles des bonus
+    private List<Point> bonusPoints = new ArrayList<>();
+    private List<Integer> bonusSizes = new ArrayList<>();
+
+    // Variables des autres classes
     Character c;
     private Tir tir;
     Position position;
-    private Araignee a ;
-    private Obstacles o;
+    private Araignee a = new Araignee(position, c, tir);
 
-
-    // Position de la barre de vie
-    public static final int xBarreVie = 20;
-    public static final int yBarreVie = 20;
-
-    // Dimension barre de vie
-    public static final int heightBarreVie = 20;  // Hauteur
-    public static final int arcBarreVie = 10;  // Angle des bordures
-
-    private Image coinImage; // Variable pour stocker l'image du coin
-
-    public Affichage(Character c, Tir t, Araignee a, Position position, Bonus bonus, Obstacles o) {
+    // Constructeur
+    public Affichage(Character c, Tir t, Araignee a, Position position) {
         setPreferredSize(new Dimension(X, Y));
         this.c = c;
         this.tir = t;
-        this.b = bonus;
-        this.o = o;
-
-        // Initialisation de position si c'est elle est nulle
-        if (position == null) {
-            this.position = new Position(100, 100); // Exemple de position initiale
-        } else {
-            this.position = position;
-        }
         this.a = a;
-
-        // Charger l'image du coin (ici on suppose qu'elle s'appelle "coin.png")
-        coinImage = new ImageIcon("src/Images/coin.png").getImage()
-                .getScaledInstance(25, 25, Image.SCALE_DEFAULT);
+        this.position = position;
     }
 
-    // Redessiner la vue pour ajouter nos différents éléments
+    // Override de la méthode paint qui va afficher l'image "character.png" au
+    // centre de l'écran
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        // Dessiner le personnage au centre de l'écran
-        g.drawImage(Character.characterSprite, (int) c.getCurrent_x(), (int) c.getCurrent_y(), null);
 
-        // Recuperer la liste des tirs et les afficher à l'écran en tenant compte de la classe Tir
-        for (int i = 0; i < tir.getTirs().size(); i++) {
-            g.setColor(Color.RED);
-            int x = tir.getTirs().get(i).getPosition().x;
-            int y = tir.getTirs().get(i).getPosition().y;
-            g.fillOval(x, y, 10, 10);
+        // Dessiner le sprite de la sorcière
+        g.drawImage(Character.characterSprite, c.current_x, c.current_y, null);
+
+        // Carré Noir au centre de la fenetre comme point de départ du tir
+        g.setColor(Color.BLACK);
+        g.setColor(Color.BLACK);
+        g.fillRect(X / 2, Y / 2, 10, 10);
+
+        // Recuperer la liste des tirs et les afficher sachant x et y c'est leur
+        // position par rapport au centre de la fenetre
+        if (tir != null && tir.getTirs().size() > 0) {
+            for (int j = 0; j < tir.getTirs().size(); j++) {
+                g.setColor(Color.RED);
+                g.fillOval(tir.getTirs().get(j).x, tir.getTirs().get(j).y, 10, 10);
+            }
         }
 
-        // Afficher le nombre de bonus récupérés en haut à droite
-        g.drawImage(coinImage, X - 130, 21, null);
-        g.setColor(Color.BLACK);
-        g.drawString("Pièces : " + c.getNombreBonus(), X - 98, 40);
+        // Dessiner les bonus (faut penser à le changer en utilisant la procédure)
+        for (int i = 0; i < bonusPoints.size(); i++) {
+            g.setColor(Color.GREEN);
+            g.fillOval(bonusPoints.get(i).x, bonusPoints.get(i).y, bonusSizes.get(i), bonusSizes.get(i));
+        }
 
-        // Dessiner les araignées
-        drawAraignee(g);
-
-        // Dessiner les ennemis
+        // Aficher tous les ennemis
         drawEnnemies(g);
-
-        // Dessiner une barre de vie rouge dans un contour noir et des bordures arrondies
-        g.setColor(Color.GRAY);
-        g.fillRoundRect(xBarreVie, yBarreVie, Character.maxVie*2, heightBarreVie, arcBarreVie, arcBarreVie);
-        g.setColor(Color.RED);
-        g.fillRoundRect(xBarreVie, yBarreVie, c.getVie()*2, heightBarreVie, arcBarreVie, arcBarreVie);
-        g.setColor(Color.BLACK);
-        g.drawRoundRect(xBarreVie, yBarreVie, Character.maxVie*2, heightBarreVie, arcBarreVie, arcBarreVie);
-
-        // Dessiner les bonus
-        drawBonus(g);
-
-        //dessiner les obstacles
-        drawObstacle(g);
     }
 
-  //Metode pour dessiner les bonus avec l'image coin.png
-    public void drawBonus(Graphics g) {
-        for (int i = 0; i < b.getPointBonus().size(); i++) {
-            g.drawImage(coinImage, b.getPointBonus().get(i).x, b.getPointBonus().get(i).y, null);
-        }
+    // Inutilisée mais à mettre dans le paint
+    public void drawBonus(Point p, int size) {
+        bonusPoints.add(p);
+        bonusSizes.add(size);
+        repaint();
     }
 
-    // Méthode pour dessiner les ennemis
+    // Procédure affichant tous les ennemis
     public void drawEnnemies(Graphics g) {
+
         // Appel de la méthode statique sans instance
         List<Ennemies> ennemies = Ennemies.getListEnnemies();
+
+        // Boucle affichant tous les ennemis
         for (Ennemies ennemi : ennemies) {
+
             // Vérification si l'ennemi est un Fantome
             if (ennemi instanceof Fantome) {
                 Fantome fantome = (Fantome) ennemi; // Casting en Fantome
                 g.drawImage(fantome.img, (int) fantome.getPosition().getX(), (int) fantome.getPosition().getY(), null);
-                //System.out.println("Position x : " + fantome.getPosition().getX());
-                // System.out.println("Position y : "+fantome.getPosition().getY());
-                // System.out.println("img : "+fantome.img);
             }
         }
     }
 
-    // Méthode pour dessiner les araignées
+    // Ancienne procédure dessinant les araignées, inutilisée, à retirer lorsque la
+    // classe Ennemie sera bien implémentée
     public void drawAraignee(Graphics g) {
+
         ArrayList<Point> araignee = a.getPosition();
+
         for (Point araigneP : araignee) {
-            // Afficher les images des araignées
+            // afficher les images des araignées
             g.drawImage(Araignee.araigneeSprite, araigneP.x, araigneP.y, null);
-            // Afficher un point rouge qui represente l'araignée
-            g.setColor(Color.RED);
-            g.drawOval(X, Y, 5, 5);
-            // Si le joueur touche une araignée, on appelle la méthode toucher de la classe Araignée
-            a.detecterCollisionAraigneeJoueur(araigneP);
+            // si le joueur touche une araignée, on appelle la méthode toucher de la classe
+            // Araignée
+            a.toucher(araigneP);
         }
 
-        // Faire réapparaître des araignées s'il reste moins de 4 (Juste pour le fun !)
+        // faire réaparaitre des araignées s'il reste moins de 4 (Juste pour le fun !)
         if (a.getNombreAraignee() < 4) {
-            a.ListePosition();
+            a.Listeposition();
         }
     }
 
-    //methode qui dessine les obstacles
-    public void drawObstacle(Graphics g){
-        ArrayList<Point> obstacle = o.getObstacles();
-        for(Point o : obstacle){
-            g.setColor(Color.BLUE);
-            g.fillRect(o.x, o.y, Obstacles.WIDTH_O, Obstacles.HEIGHT_O);
-            g.setColor(Color.WHITE);
-        }
-    }
 }

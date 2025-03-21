@@ -4,17 +4,20 @@ import java.awt.Image;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.ImageIcon;
 
+//Classe représentant un ennemie quelconque. Ses sous-classes sont les ennemies spécifiques
 public class Ennemies {
+
     /* VARIABLES */
     int health, speed, bonusAmount;
     boolean randomSpawn;
     Point position;
 
+    // Variables static afin de savoir quels sont les ennemis présents à l'écran
     public static List<Ennemies> ListEnnemies = new ArrayList<>();
 
+    // Taille du sprite de l'ennemi
     public static final int weight = 50;
     public static final int height = 50;
     public Image img = new ImageIcon("src/Images/character.png").getImage().getScaledInstance(weight, height,

@@ -48,5 +48,5 @@ public class Collision extends Thread {
             }
         }
     }
-    
+
 }
