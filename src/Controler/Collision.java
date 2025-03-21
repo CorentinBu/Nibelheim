@@ -8,7 +8,7 @@ import View.Affichage;
 public class Collision extends Thread {
 
     // Constante pour le délai de rafraichissement
-    public static final int DELAY = 50;
+    public static final int DELAY = 25;
 
     // Instances de classe utiles
     private Character c;
@@ -30,6 +30,13 @@ public class Collision extends Thread {
         while (true) {
             // Gérer les collisions entre les tirs et les araignées
             a.removeAraigneeTouchee();
+
+            // Détecter si le joueur touche un bonus
+            c.checkBonusProche();
+
+            // Détecter si le joueur touche un obstacle
+            //c.detecterCollisionObstacleJoueur();
+
             // Redessiner l'écran
             aff.revalidate();
             aff.repaint();
