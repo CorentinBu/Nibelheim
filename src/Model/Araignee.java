@@ -68,38 +68,49 @@ public class Araignee {
     public ArrayList<Point> getPosition() {
         ArrayList<Point> araignee = new ArrayList<Point>();
         for(Point point : this.posAraignee) {
+            // Si l'araignée est a gauche du joueur on deplace l'araignée vers la droite
             if(point.x < (c.getCurrent_x() +Character.WIDTH/2)){
+                // Si l'araignée est en haut du joueur on deplace l'araignée vers le bas
                 if (point.y < c.getCurrent_y() + Character.HEIGHT/2){
                     point.x += rand.nextInt(position.vitesseA);
                     point.y += rand.nextInt(position.vitesseA);
                 }
+                // Si l'araignée est en bas du joueur on deplace l'araignée vers le haut
                 else if (point.y > c.getCurrent_x() + Character.HEIGHT/2){
                     point.x += rand.nextInt(position.vitesseA);
                     point.y -= rand.nextInt(position.vitesseA);
                 }
+                // Sinon on deplace l'araignée uniquement vers la droite
                 else{
                     point.x += rand.nextInt(position.vitesseA);
                 }
             }
+            // Si l'araignée est a droite du joueur on deplace l'araignée vers la gauche
             else if (point.x> c.getCurrent_x() + Character.WIDTH/2){
+                // Si l'araignée est en bas du joueur on deplace l'araignée vers le haut
                 if (point.y > c.getCurrent_y() + Character.HEIGHT/2){
                     point.x -= rand.nextInt(position.vitesseA);
                     point.y -= rand.nextInt(position.vitesseA/2);
                 }
+                // Si l'araignée est en haut du joueur on deplace l'araignée vers le bas
                 else if (point.y < c.getCurrent_y() + Character.HEIGHT/2){
                     point.x -= rand.nextInt(position.vitesseA);
                     point.y += rand.nextInt(position.vitesseA/2);
                 }
+                // Sinon on deplace l'araignée uniquement vers la gauche
                 else{
                     point.x -= rand.nextInt(position.vitesseA);
                 }
             }
+            // Si l'araignée est uniquement en haut du joueur on deplace l'araignée vers le bas
             else if (point.y < c.getCurrent_y() + Character.HEIGHT/2){
                 point.y += rand.nextInt(position.vitesseA);
             }
+            // Si l'araignée est uniquement en bas du joueur on deplace l'araignée vers le haut
             else if (point.y > c.getCurrent_y() + Character.HEIGHT/2){
                 point.y -= rand.nextInt(position.vitesseA);
             }
+            //On ajoute la nouvelle position de l'araignée
             araignee.add(new Point(point.x, point.y));
         }
         return araignee;
@@ -113,8 +124,6 @@ public class Araignee {
             if (c.getVie() > 0) {
                 c.setVie(c.getVie()-POINTPERDU);
             }
-            // Un bonus apparait la où l'araignéer est supprimée
-            b.addBonus(point);
             // L'araignée est supprimée de la liste
             posAraignee.remove(point);
         }

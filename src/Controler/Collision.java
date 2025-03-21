@@ -34,6 +34,9 @@ public class Collision extends Thread {
             // Détecter si le joueur touche un bonus
             c.checkBonusProche();
 
+            // Détecter si le joueur touche un obstacle
+            //c.detecterCollisionObstacleJoueur();
+
             // Redessiner l'écran
             aff.revalidate();
             aff.repaint();
