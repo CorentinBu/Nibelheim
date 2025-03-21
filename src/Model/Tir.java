@@ -6,7 +6,7 @@ import Controler.Character;
 
 public class Tir {
 
-    // Attributs et constantes
+    // Vitesse des projectiles
     public static final int speed = 20;
 
     // Liste de balles tirées
@@ -35,7 +35,6 @@ public class Tir {
     public void addTir() {
         Point startPoint = new Point(c.current_x + 50, c.current_y + 50); // Point de départ du tir
         Point direction = new Point(mousePosition.x - startPoint.x, mousePosition.y - startPoint.y); // Direction du tir
-
         tirs.add(startPoint);
         directions.add(direction);
     }
@@ -57,9 +56,10 @@ public class Tir {
             double dirX = direction.x / length;
             double dirY = direction.y / length;
 
-            // Avancer le tir dans la direction de la souris
-            tir.x += dirX * speed;
-            tir.y += dirY * speed;
+            // Avancer le tir dans la direction de la souris, on y ajoute la vitesse du
+            // joueur pour que les tirs suivent correcteur les déplacements
+            tir.x += dirX * (speed + c.getSpeed());
+            tir.y += dirY * (speed + c.getSpeed());
 
             // Supprimer le tir s'il sort de l'écran
             if (tir.x > 1920 || tir.y > 1080 || tir.x < 0 || tir.y < 0) {

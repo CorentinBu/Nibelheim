@@ -2,28 +2,33 @@ package Model;
 
 import java.awt.Image;
 import java.awt.Point;
-import Controler.Character;
-import Model.Ennemies;
-
 import javax.swing.ImageIcon;
 
+import Controler.Character;
+
 public class Fantome extends Ennemies {
+
+    // Points de vie de l'ennemie
     private static final int HEALTH_MAX = 20;
 
+    // Taille du sprite du fantôme
     public static final int weight = 80;
     public static final int height = 50;
 
+    // Classe Character
     Character c;
 
-    // Image gif de l'araignée
+    // Image de l'ennemie
     public static final Image sprite = new ImageIcon("src/Images/ghost.png").getImage().getScaledInstance(weight,
             height, Image.SCALE_DEFAULT);
 
+    // Constructeur
     public Fantome(int speed, int bonusAmount, Point pos, Character c) {
         super(HEALTH_MAX, speed, bonusAmount, pos, sprite);
         this.c = c;
     }
 
+    // Méthode pour déplacer le fantôme vers le joueur
     public void goToCharacter() {
         // Récupérer la position actuelle du joueur
         Point playerPosition = new Point(c.current_x, c.current_y);
@@ -50,16 +55,13 @@ public class Fantome extends Ennemies {
 
             // Mettre à jour la position du fantôme
             setPosition(ghostPosition);
-
-            // Log pour déboguer
-            System.out.println("Position du fantôme : " + ghostPosition);
-            System.out.println("Direction : (" + directionX + ", " + directionY + ")");
         } else {
             // Le fantôme est déjà sur le joueur
             System.out.println("Le fantôme a atteint le joueur !");
         }
     }
 
+    // Thread pour démarrer le déplacement de l'ennemie
     public void startMovement() {
         Thread movementThread = new Thread(() -> {
             while (true) {

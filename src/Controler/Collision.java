@@ -29,7 +29,6 @@ public class Collision extends Thread {
     public void run() {
         while (true) {
             // Gérer les collisions entre les tirs et les araignées
-            // System.out.println("Check collision");
             a.removeAraigneeTouchee();
             // Redessiner l'écran
             aff.revalidate();
@@ -42,5 +41,5 @@ public class Collision extends Thread {
             }
         }
     }
-    
+
 }

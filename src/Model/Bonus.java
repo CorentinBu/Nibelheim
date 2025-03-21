@@ -14,6 +14,7 @@ public class Bonus extends Thread {
     private Point spawnPoint;
     private int size = 1;
 
+    // Constructeur
     public Bonus(Affichage a) {
         this.a = a;
     }
@@ -34,19 +35,15 @@ public class Bonus extends Thread {
         this.size = size;
     }
 
-    //Méthode faisant apparaître le bonus à la coordonnée spawnPoint
+    // Méthode faisant apparaître le bonus à la coordonnée spawnPoint
     public void spawn(Point spawnPoint, int size) {
         a.drawBonus(spawnPoint, size);
     }
 
-    //Méthode vérifiant si le joueur touche le bonus, si le joueur le touche alors le bonus disparaît et le joueur gagne des points
+    // Méthode vérifiant si le joueur touche le bonus, si le joueur le touche alors
+    // le bonus disparaît et le joueur gagne des points
     public void checkCollision() {
-        //TODO
-    }
-
-    @Override
-    public void run(){
-
+        // TODO
     }
 
 }

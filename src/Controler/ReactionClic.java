@@ -9,9 +9,7 @@ import Model.Tir;
 
 // Classe pour gérer les clics de souris et y réagir
 public class ReactionClic implements MouseListener {
-    public boolean isPressed = false;
-    private int x;
-    private int y;
+    public boolean isPressed = false; // Booléen pour savoir si le clic est maintenu
     public static final int DELAY = 100; // Intervalle de temps entre chaque tir (en millisecondes)
 
     // Timer pour ajouter des tirs à intervalles réguliers
@@ -38,8 +36,6 @@ public class ReactionClic implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         isPressed = true;
-        // x = e.getX();
-        // y = e.getY();
 
         // Démarrer un Timer pour ajouter des tirs à intervalles réguliers
         timer = new Timer();
@@ -48,7 +44,6 @@ public class ReactionClic implements MouseListener {
             public void run() {
                 if (isPressed) {
                     tir.addTir();
-                    // affichage.repaint();
                 }
             }
         };

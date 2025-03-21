@@ -1,12 +1,7 @@
 package Controler;
 
 import javax.swing.ImageIcon;
-
-import View.Affichage;
-
 import java.awt.Image;
-
-
 
 //Classe du personnage principal du jeu. Celui contrôlé par le joueur.
 //Le joueur utilise les touches Z,Q,S,D pour se déplacer.
@@ -22,8 +17,8 @@ public class Character extends Thread {
     public int current_y = 540;
     private int speed = 25;
     private Collision collision;
-    //points de vie du joueur
-    private int vie=110;
+    // points de vie du joueur
+    private int vie = 110;
 
     private Inputs inputs;
 
@@ -32,12 +27,11 @@ public class Character extends Thread {
         inputs = i;
     }
 
-    /*image character */
+    /* image character */
     public static final int WIDTH = 100;
     public static final int HEIGHT = 100;
     public static final Image characterSprite = new ImageIcon("src/Images/character.png").getImage()
-            .getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
-
+            .getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
 
     // Thread qui va regarder les valeurs booléennes dans la classe Input pour
     // appeler ou non les fonctions de déplacement
@@ -62,10 +56,12 @@ public class Character extends Thread {
             }
         }
     }
-    //getter et setter vie du joueur
+
+    // getter et setter vie du joueur
     public int getVie() {
         return vie;
     }
+
     public void setVie(int vie) {
         this.vie = vie;
     }
@@ -84,15 +80,19 @@ public class Character extends Thread {
     }
 
     public void moveLeft() {
-        if (current_x > 0){
+        if (current_x > 0) {
             this.current_x -= speed;
         }
     }
 
     public void moveRight() {
-        if (current_x <1800){
+        if (current_x < 1800) {
             this.current_x += speed;
         }
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 
 }
