@@ -19,7 +19,7 @@ public class Main {
         Bonus b = new Bonus();
         Obstacles obstacles = new Obstacles();
         Character c = new Character(b, inputs, obstacles);
-        Tir t = new Tir(c);
+        Tir t = new Tir(c,obstacles);
         Position position = new Position(100, 100);  // Exemple : position de départ (100, 100)
         Araignee araignee = new Araignee(position,c, t, b);
        

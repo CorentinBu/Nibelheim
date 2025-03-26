@@ -3,6 +3,7 @@ package Model;
 import java.awt.*;
 import java.util.ArrayList;
 import Controler.Character;
+import java.awt.Rectangle;
 
 public class Tir {
 
@@ -16,10 +17,12 @@ public class Tir {
 
     private Point mousePosition; // Position de la souris
     private Character c;  // Le joueur
+    private Obstacles o; // Les obstacles
 
     // Constructeur pour initialiser la liste de tirs
-    public Tir(Character c) {
+    public Tir(Character c, Obstacles o) {
         this.c = c;
+        this.o = o;
         tirs = new ArrayList<>();
         mousePosition = new Point(0, 0); // Initialiser la position de la souris
 
@@ -67,7 +70,6 @@ public class Tir {
                 removeTir(i);
             }
 
-
             /// for (int i = 0; i < tirs.size(); i++) {
             ///     Projectile tir = tirs.get(i);
             ///     Point direction = tir.getDirection(); ///directions.get(i); // Récupérer la direction du tir
@@ -90,6 +92,25 @@ public class Tir {
             /// 
             /// 
             ///tir.setPosition(new Point((int) (tir.getPosition().x + dirX * speed + c.getVx()), (int) (tir.getPosition().y + dirY * speed + c.getVy())));
+        }
+    }
+
+    // methode pour verifier si le tir touche un obstacle
+    public boolean collisionTirObstacle(Projectile tir, Point obstacle) {
+        Rectangle r1 = new Rectangle(tir.getPosition().x, tir.getPosition().y, 10, 10);
+        Rectangle r2 = new Rectangle(obstacle.x, obstacle.y, Obstacles.WIDTH_O, Obstacles.HEIGHT_O);
+        return r1.intersects(r2);
+    }
+
+    // Méthode pour vérifier si un tir touche un obstacle et le supprimer
+    public void removeTirObstacle() {
+        for (int i = 0; i < tirs.size(); i++) {
+            for (Point obstacle : o.getObstacles()) {
+                if (collisionTirObstacle(tirs.get(i), obstacle)) {
+                    tirs.remove(i);
+                    break;
+                }
+            }
         }
     }
 

@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import Model.Bonus;
 import Model.Obstacles;
@@ -121,13 +122,13 @@ public class Character extends Thread {
 
         // Appliquer le mouvement
         // Vérifier si le mouvement horizontal du joueur l'amène en collision avec un obstacle
-        if (!collisionObstacleJoueur(current_x + vx, current_y)) {
+        if (parcoursObstacle(current_x + vx, current_y) == false) {
             current_x += vx;
         } else {
             vx = 0; // Arrêt du mouvement horizontal en cas de collision
         }
         // Vérifier si le mouvement vertical du joueur l'amène en collision avec un obstacle
-        if (!collisionObstacleJoueur(current_x, current_y + vy)) {
+        if (parcoursObstacle(current_x, current_y + vy) ==false) {
             current_y += vy;
         } else {
             vy = 0; // Arrêt du mouvement vertical en cas de collision
@@ -161,33 +162,25 @@ public class Character extends Thread {
     }
 
     
-    
-    public boolean collisionObstacleJoueur( double next_x, double next_y) {
+    //methode pour verifier si il y a collision entre le joueur et un obstacle
+    public boolean collisionObstacleJoueur( double next_x, double next_y, int ox, int oy) {
+       Rectangle r1 = new Rectangle((int) next_x, (int) next_y,WIDTH, HEIGHT);
+       Rectangle r2 = new Rectangle(ox, oy, Obstacles.WIDTH_O, Obstacles.HEIGHT_O);
+       return r1.intersects(r2);
+        
+    }
+    //methode pour parcourir la liste des obstacles et verifier si il y a collision
+    public boolean parcoursObstacle(double next_x, double next_y) {
+        boolean collision = false;
         for (Point obstacle : o.getObstacles()) {
-            double ox = obstacle.x;
-            double oy = obstacle.y;
-    
-            // Bordures du joueur après déplacement
-            double joueurGauche = next_x;
-            double joueurDroite = next_x + WIDTH;
-            double joueurHaut = next_y;
-            double joueurBas = next_y + HEIGHT;
-    
-            // Bordures de l'obstacle
-            double obstacleGauche = ox;
-            double obstacleDroite = ox + Obstacles.WIDTH_O;
-            double obstacleHaut = oy;
-            double obstacleBas = oy + Obstacles.HEIGHT_O;
-    
-            // Vérification de collision imminente
-            boolean collisionX = (joueurDroite > obstacleGauche) && (joueurGauche < obstacleDroite);
-            boolean collisionY = (joueurBas > obstacleHaut) && (joueurHaut < obstacleBas);
-    
-            if (collisionX && collisionY) {
-                return true; // Collision détectée
+            if (collisionObstacleJoueur(next_x, next_y, obstacle.x, obstacle.y)) {
+                System.out.println("Collision avec un obstacle");
+                collision=true;
+                break;
             }
         }
-        return false; // Pas de collision
+        return collision;
+        
     }
     
 

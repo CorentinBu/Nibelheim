@@ -12,7 +12,7 @@ import Model.Position;
 import Model.Ennemies;
 import Model.Fantome;
 import Model.Obstacles;
-
+import Controler.Collision;
 public class Affichage extends JPanel {
     // Dimensions de la vue
     public static final int X = 1920;
@@ -131,7 +131,7 @@ public class Affichage extends JPanel {
             g.setColor(Color.RED);
             g.drawOval(X, Y, 5, 5);
             // Si le joueur touche une araignée, on appelle la méthode toucher de la classe Araignée
-            a.detecterCollisionAraigneeJoueur(araigneP);
+            //a.detecterCollisionAraigneeJoueur(araigneP);
         }
 
         // Faire réapparaître des araignées s'il reste moins de 4 (Juste pour le fun !)

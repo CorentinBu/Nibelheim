@@ -41,7 +41,7 @@ public class Araignee {
     public int getNombreAraignee() {
         return posAraignee.size();
     }
-
+    //initialiser la position des araignées
     public void ListePosition() {
         for(int i=0; i<quantite;i++){
             int x,y;
@@ -63,7 +63,10 @@ public class Araignee {
             posAraignee.add(new Point(x, y)); 
         }
     }
-
+    //recuperer la liste des araignées
+    public ArrayList<Point> getAraignee() {
+        return posAraignee;
+    }
     //recuperer la position des araignées et les deplaces vers le centre
     public ArrayList<Point> getPosition() {
         ArrayList<Point> araignee = new ArrayList<Point>();
@@ -117,7 +120,7 @@ public class Araignee {
     }
 
     // Détecter une collision entre l'araignée et le joueur
-    public void detecterCollisionAraigneeJoueur(Point point){
+    /*public void detecterCollisionAraigneeJoueur(Point point){
         if (point.x >= c.getCurrent_x() && point.x <= c.getCurrent_x() + Character.WIDTH
                 && point.y >= c.getCurrent_y() && point.y <= c.getCurrent_y() + Character.HEIGHT) {
             // Le joueur perds des points de vie du joueur s'il en a encore
@@ -128,7 +131,7 @@ public class Araignee {
             posAraignee.remove(point);
         }
            
-    }
+    }*/
 
     // Détecter une collision entre l'araignée et le tir (Taille de l'araignée prise en compte, on divise par 2 pour ne pas prendre en compte les pates)
     public boolean collisionAraigneeProjectile(Point point) {
