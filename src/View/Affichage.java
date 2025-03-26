@@ -22,14 +22,12 @@ public class Affichage extends JPanel {
     Character c;
     private Tir tir;
     Position position;
-    private Araignee a = new Araignee(position, c, tir);
 
     // Constructeur
-    public Affichage(Character c, Tir t, Araignee a, Position position) {
+    public Affichage(Character c, Tir t, Position position) {
         setPreferredSize(new Dimension(X, Y));
         this.c = c;
         this.tir = t;
-        this.a = a;
         this.position = position;
     }
 
@@ -39,6 +37,7 @@ public class Affichage extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
+        g.drawRect(c.current_x, c.current_y, c.WIDTH, c.HEIGHT);
         // Dessiner le sprite de la sorcière
         g.drawImage(Character.characterSprite, c.current_x, c.current_y, null);
 
@@ -49,11 +48,12 @@ public class Affichage extends JPanel {
 
         // Recuperer la liste des tirs et les afficher sachant x et y c'est leur
         // position par rapport au centre de la fenetre
-        if (tir != null && tir.getTirs().size() > 0) {
-            for (int j = 0; j < tir.getTirs().size(); j++) {
-                g.setColor(Color.RED);
-                g.fillOval(tir.getTirs().get(j).x, tir.getTirs().get(j).y, 10, 10);
-            }
+        for (int i = 0; i < tir.getTirs().size(); i++) {
+            g.setColor(Color.RED);
+            int x = tir.getTirs().get(i).getPosition().x;
+            int y = tir.getTirs().get(i).getPosition().y;
+            g.fillOval(x, y, 10, 10);
+            g.drawRect(tir.getTirs().get(i).getPosition().x, tir.getTirs().get(i).getPosition().y, 10, 10);
         }
 
         // Dessiner les bonus (faut penser à le changer en utilisant la procédure)
@@ -86,27 +86,8 @@ public class Affichage extends JPanel {
             if (ennemi instanceof Fantome) {
                 Fantome fantome = (Fantome) ennemi; // Casting en Fantome
                 g.drawImage(fantome.img, (int) fantome.getPosition().getX(), (int) fantome.getPosition().getY(), null);
+                g.drawRect((int) fantome.getPosition().getX(), (int) fantome.getPosition().getY(), Ennemies.WIDTH, Ennemies.HEIGHT);
             }
-        }
-    }
-
-    // Ancienne procédure dessinant les araignées, inutilisée, à retirer lorsque la
-    // classe Ennemie sera bien implémentée
-    public void drawAraignee(Graphics g) {
-
-        ArrayList<Point> araignee = a.getPosition();
-
-        for (Point araigneP : araignee) {
-            // afficher les images des araignées
-            g.drawImage(Araignee.araigneeSprite, araigneP.x, araigneP.y, null);
-            // si le joueur touche une araignée, on appelle la méthode toucher de la classe
-            // Araignée
-            a.toucher(araigneP);
-        }
-
-        // faire réaparaitre des araignées s'il reste moins de 4 (Juste pour le fun !)
-        if (a.getNombreAraignee() < 4) {
-            a.Listeposition();
         }
     }
 

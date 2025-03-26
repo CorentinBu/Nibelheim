@@ -1,7 +1,7 @@
 package Controler;
 
 import javax.swing.ImageIcon;
-import java.awt.Image;
+import java.awt.*;
 
 //Classe du personnage principal du jeu. Celui contrôlé par le joueur.
 //Le joueur utilise les touches Z,Q,S,D pour se déplacer.
@@ -16,15 +16,18 @@ public class Character extends Thread {
     public int current_x = 820;
     public int current_y = 540;
     private int speed = 25;
-    private Collision collision;
+
     // points de vie du joueur
+    private double vx = 0, vy = 0;
     private int vie = 110;
 
     private Inputs inputs;
+    public Rectangle hitboxC;
 
     // Constructeur
     public Character(Inputs i) {
         inputs = i;
+        this.hitboxC = new Rectangle(current_x, current_y, WIDTH, HEIGHT);
     }
 
     /* image character */
@@ -33,10 +36,29 @@ public class Character extends Thread {
     public static final Image characterSprite = new ImageIcon("src/Images/character.png").getImage()
             .getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
 
+                //creer des getters pour vx et vy
+    public double getVx() {
+        return vx;
+    }
+    public double getVy() {
+        return vy;
+    }
+
+    // Getters pour la position du joueur
+    public double getCurrent_x() {
+        return current_x;
+    }
+    public double getCurrent_y() {
+        return current_y;
+    }
+
     // Thread qui va regarder les valeurs booléennes dans la classe Input pour
     // appeler ou non les fonctions de déplacement
     public void run() {
         while (true) {
+            hitboxC.x = current_x;
+            hitboxC.y = current_y;
+
             if (inputs.up) {
                 moveUp();
             }
@@ -66,6 +88,10 @@ public class Character extends Thread {
         this.vie = vie;
     }
 
+    public int getSpeed() {
+        return speed;
+    }
+
     // Méthodes de déplacement
     public void moveUp() {
         if (current_y > 0) {
@@ -89,10 +115,6 @@ public class Character extends Thread {
         if (current_x < 1800) {
             this.current_x += speed;
         }
-    }
-
-    public int getSpeed() {
-        return speed;
     }
 
 }

@@ -9,7 +9,7 @@ import Controler.Character;
 public class Fantome extends Ennemies {
 
     // Points de vie de l'ennemie
-    private static final int HEALTH_MAX = 20;
+    private static final int HEALTH_MAX = 10;
 
     // Taille du sprite du fantôme
     public static final int weight = 80;
@@ -23,8 +23,8 @@ public class Fantome extends Ennemies {
             height, Image.SCALE_DEFAULT);
 
     // Constructeur
-    public Fantome(int speed, int bonusAmount, Point pos, Character c) {
-        super(HEALTH_MAX, speed, bonusAmount, pos, sprite);
+    public Fantome(Character c, int speed, int bonusAmount, Point pos) {
+        super(c, HEALTH_MAX, speed, bonusAmount, pos, sprite);
         this.c = c;
     }
 
@@ -32,6 +32,10 @@ public class Fantome extends Ennemies {
     public void goToCharacter() {
         // Récupérer la position actuelle du joueur
         Point playerPosition = new Point(c.current_x, c.current_y);
+
+        //
+        this.hitboxEnnemie.x=this.position.x;
+        this.hitboxEnnemie.y=this.position.y;
 
         // Récupérer la position actuelle du fantôme
         Point ghostPosition = getPosition();
