@@ -1,7 +1,8 @@
 package Model;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import Controler.Character;
 
 public class Tir {
@@ -10,7 +11,8 @@ public class Tir {
     public static final int speed = 20;
 
     // Liste de balles tirées
-    private ArrayList<Projectile> tirs;
+    private CopyOnWriteArrayList<Projectile> tirs = new CopyOnWriteArrayList<>();
+    
     ///private ArrayList<Point> directions; // Nouvel attribut pour stocker la direction de chaque tir
 
 
@@ -20,7 +22,7 @@ public class Tir {
     // Constructeur pour initialiser la liste de tirs
     public Tir(Character c) {
         this.c = c;
-        tirs = new ArrayList<>();
+        tirs = new CopyOnWriteArrayList<>();
         mousePosition = new Point(0, 0); // Initialiser la position de la souris
 
         // Démarrer le thread pour mettre à jour la position de la souris
@@ -28,7 +30,7 @@ public class Tir {
     }
 
     // Getteur pour récupérer les tirs
-    public ArrayList<Projectile> getTirs() {
+    public CopyOnWriteArrayList<Projectile> getTirs() {
         return tirs;
     }
 

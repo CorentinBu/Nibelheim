@@ -1,10 +1,8 @@
 package Model;
 
 import Controler.Character;
-import Model.Tir; 
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -63,15 +61,18 @@ public class Ennemies {
 
     //Lorsque l'ennemie touche le joueur
     public static void allCollisions(Character c, Tir t) {
-        ArrayList<Projectile> tirs = t.getTirs();
+        CopyOnWriteArrayList<Projectile> tirs = t.getTirs();
         for (Ennemies ennemi : ListEnnemies) {
+            //Collision entre la soricère et les ennemies (contact entre les deux hitboxes)
             if (c.hitboxC.intersects(ennemi.hitboxEnnemie)) {
                 ennemi.kill();
             }
             
+            //Collision entre les tirs et les ennemies
             for (Projectile proj : tirs){
                 if (proj.hitboxProjectile.intersects(ennemi.hitboxEnnemie)){
-                    ennemi.isHit(1);           
+                    ennemi.isHit(1);     
+                    tirs.remove(proj);
                 }
             }
         }        
@@ -97,7 +98,6 @@ public class Ennemies {
         Thread collisionThread = new Thread(() -> {
             while (true) {
                 allCollisions(c, t);
-
                 try {
                     Thread.sleep(50); // Attendre 50 ms entre chaque déplacement
                 } catch (InterruptedException e) {
