@@ -23,7 +23,7 @@ public class Araignee {
             .getScaledInstance(weight, height, Image.SCALE_DEFAULT);
     // Quantité d'araignées à afficher
     private int quantite = 10;
-    private static final int POINTPERDU = 10; // Dégats causés par l'araignée
+    private static final int POINTPERDU = 20; // Dégats causés par l'araignée
     
     public static final Random rand = new Random();
 
@@ -114,7 +114,7 @@ public class Araignee {
                 c.setVie(c.getVie()-POINTPERDU);
             }
             // Un bonus apparait la où l'araignéer est supprimée
-            b.addBonus(point);
+            //b.addBonus(point);
             // L'araignée est supprimée de la liste
             posAraignee.remove(point);
         }
