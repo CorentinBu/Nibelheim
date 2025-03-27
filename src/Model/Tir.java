@@ -1,16 +1,17 @@
 package Model;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import Controler.Character;
 
 public class Tir {
 
     // Attributs et constantes
-    public static final int speed = 20;
+    public static final int speed = 25;
 
     // Liste de balles tirées
-    private ArrayList<Projectile> tirs;
+    private CopyOnWriteArrayList<Projectile> tirs = new CopyOnWriteArrayList<>();
     ///private ArrayList<Point> directions; // Nouvel attribut pour stocker la direction de chaque tir
 
 
@@ -20,7 +21,7 @@ public class Tir {
     // Constructeur pour initialiser la liste de tirs
     public Tir(Character c) {
         this.c = c;
-        tirs = new ArrayList<>();
+        tirs = new CopyOnWriteArrayList<>();
         mousePosition = new Point(0, 0); // Initialiser la position de la souris
 
         // Démarrer le thread pour mettre à jour la position de la souris
@@ -28,7 +29,7 @@ public class Tir {
     }
 
     // Getteur pour récupérer les tirs
-    public ArrayList<Projectile> getTirs() {
+    public CopyOnWriteArrayList<Projectile> getTirs() {
         return tirs;
     }
 
@@ -61,35 +62,14 @@ public class Tir {
             // Déplacer le tir dans la direction de la souris
             tir.setPosition(new Point((int) (tir.getPosition().x + dirX * speed), (int) (tir.getPosition().y + dirY * speed)));
             
+            // Mettre à jour la hitbox du tir
+            tir.hitboxProjectile.x = tir.getPosition().x;
+            tir.hitboxProjectile.y = tir.getPosition().y;
 
             // Vérifier si le tir est sorti de la fenêtre et le supprimer
             if (tir.getPosition().x < 0 || tir.getPosition().x > 1920 || tir.getPosition().y < 0 || tir.getPosition().y > 1080) {
                 removeTir(i);
             }
-
-
-            /// for (int i = 0; i < tirs.size(); i++) {
-            ///     Projectile tir = tirs.get(i);
-            ///     Point direction = tir.getDirection(); ///directions.get(i); // Récupérer la direction du tir
-    
-            ///     // Normaliser la direction
-            ///     double length = Math.sqrt(direction.x * direction.x + direction.y * direction.y);
-            ///     double dirX = direction.x / length;
-            ///     double dirY = direction.y / length;
-    
-            ///     // Avancer le tir dans la direction de la souris
-            ///     tir.x += dirX * speed;
-            ///     tir.y += dirY * speed;
-    
-            ///     // Supprimer le tir s'il sort de l'écran
-            ///     if (tir.x > 1920 || tir.y > 1080 || tir.x < 0 || tir.y < 0) {
-            ///         removeTir(i);
-            ///         i--; // Ajuster l'index après suppression
-            ///     }
-            /// }
-            /// 
-            /// 
-            ///tir.setPosition(new Point((int) (tir.getPosition().x + dirX * speed + c.getVx()), (int) (tir.getPosition().y + dirY * speed + c.getVy())));
         }
     }
 
@@ -112,5 +92,11 @@ public class Tir {
         });
 
         mousePositionThread.start();
+    }
+
+
+    // Methode pour réinitialiser la liste des projectiles 
+    public void resetTirs() {
+        tirs.clear();
     }
 }

@@ -11,7 +11,7 @@ public class Araignee {
 
     // Insances de classes utiles
     private ArrayList<Point> posAraignee;
-    private Position position;
+    private PositionAraignee position;
     private Tir tir;
     private Character c;
     private Bonus b;
@@ -27,7 +27,7 @@ public class Araignee {
     
     public static final Random rand = new Random();
 
-    public Araignee(Position position, Character c, Tir tir, Bonus bonus) {
+    public Araignee(PositionAraignee position, Character c, Tir tir, Bonus bonus) {
         this.tir = tir;
         this.position = position;
         this.c=c;
@@ -48,16 +48,16 @@ public class Araignee {
             //mettre tous les points hors de la fenetre
             //si le booleen est true, on met x en dessous de 0, sinon on met x au-dessus de AFTER
             if (rand.nextBoolean()) { 
-                x = rand.nextInt(Position.BEFORE); 
+                x = rand.nextInt(PositionAraignee.BEFORE); 
             } else { 
-                x = Position.AFTER + rand.nextInt(20); 
+                x = PositionAraignee.AFTER + rand.nextInt(20); 
             }
     
             // Générer Y soit en dessous de 0, soit au-dessus de HAUTEUR_MAX
             if (rand.nextBoolean()) { 
                 y = -rand.nextInt(50);
             } else { 
-                y = Position.HAUTEUR_MAX + rand.nextInt(50); 
+                y = PositionAraignee.HAUTEUR_MAX + rand.nextInt(50); 
             }
     
             posAraignee.add(new Point(x, y)); 
