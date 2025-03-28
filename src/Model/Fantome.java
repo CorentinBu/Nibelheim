@@ -2,30 +2,41 @@ package Model;
 
 import java.awt.Image;
 import java.awt.Point;
-import Controler.Character;
-
 import javax.swing.ImageIcon;
 
-public class Fantome extends Ennemies {
-    private static final int HEALTH_MAX = 20;
 
+import Controler.Character;
+
+public class Fantome extends Ennemies {
+
+    // Points de vie de l'ennemie
+    private static final int HEALTH_MAX = 10;
+
+    // Taille du sprite du fantôme
     public static final int weight = 80;
     public static final int height = 50;
 
+    // Classe Character
     Character c;
 
-    // Image gif de l'araignée
+    // Image de l'ennemie
     public static final Image sprite = new ImageIcon("src/Images/ghost.png").getImage().getScaledInstance(weight,
             height, Image.SCALE_DEFAULT);
 
-    public Fantome(int speed, int bonusAmount, Point pos, Character c) {
-        super(HEALTH_MAX, speed, bonusAmount, pos, sprite);
+    // Constructeur
+    public Fantome(Character c, int speed, int bonusAmount, Point pos) {
+        super(c, HEALTH_MAX, speed, bonusAmount, pos, sprite);
         this.c = c;
     }
 
+    // Méthode pour déplacer le fantôme vers le joueur
     public void goToCharacter() {
         // Récupérer la position actuelle du joueur
-        Point playerPosition = new Point((int)(c.getCurrent_x()), (int)(c.getCurrent_y()) );
+        Point playerPosition = new Point((int)c.getCurrent_x(), (int)c.getCurrent_y());
+
+        // Mettre à jour la hitbox de l'ennemie
+        this.hitboxEnnemie.x=this.position.x;
+        this.hitboxEnnemie.y=this.position.y;
 
         // Récupérer la position actuelle du fantôme
         Point ghostPosition = getPosition();
@@ -49,16 +60,13 @@ public class Fantome extends Ennemies {
 
             // Mettre à jour la position du fantôme
             setPosition(ghostPosition);
-
-            // Log pour déboguer
-           // System.out.println("Position du fantôme : " + ghostPosition);
-            //System.out.println("Direction : (" + directionX + ", " + directionY + ")");
         } else {
             // Le fantôme est déjà sur le joueur
-           // System.out.println("Le fantôme a atteint le joueur !");
+            // System.out.println("Le fantôme a atteint le joueur !");
         }
     }
 
+    // Thread pour démarrer le déplacement de l'ennemie
     public void startMovement() {
         Thread movementThread = new Thread(() -> {
             while (true) {

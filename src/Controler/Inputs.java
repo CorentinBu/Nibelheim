@@ -20,19 +20,15 @@ public class Inputs extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_Z) {
             up = true;
-            // System.out.println("Z appuyé");
         }
         if (e.getKeyCode() == KeyEvent.VK_S) {
             down = true;
-            // System.out.println("S appuyé");
         }
         if (e.getKeyCode() == KeyEvent.VK_Q) {
             left = true;
-            // System.out.println("Q appuyé");
         }
         if (e.getKeyCode() == KeyEvent.VK_D) {
             right = true;
-            // System.out.println("D appuyé");
         }
     }
 
@@ -40,19 +36,23 @@ public class Inputs extends KeyAdapter {
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_Z) {
             up = false;
-            // System.out.println("Z release");
         }
         if (e.getKeyCode() == KeyEvent.VK_S) {
             down = false;
-            // System.out.println("S release");
         }
         if (e.getKeyCode() == KeyEvent.VK_Q) {
             left = false;
-            // System.out.println("Q release");
         }
         if (e.getKeyCode() == KeyEvent.VK_D) {
             right = false;
-            // System.out.println("D release");
         }
+    }
+
+    // Méthode pour reinitialiser les touches
+    public void resetKeys() {
+        up = false;
+        down = false;
+        left = false;
+        right = false;
     }
 }

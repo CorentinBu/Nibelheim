@@ -1,12 +1,13 @@
 package Controler;
 
 import javax.swing.ImageIcon;
-
 import java.awt.Image;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import Model.Bonus;
 import Model.Obstacles;
@@ -19,13 +20,15 @@ import Model.Obstacles;
 //Il peut également tirer des projectiles.
 //Il a une barre de vie qui diminue lorsqu'il est touché par un ennemi.
 //Il peut ramasser des bonus pour augmenter sa vie ou sa puissance de tir.
+
 public class Character extends Thread {
 
     // Instance de la classe bonus
     private Bonus b ;
-
-    //Instance de la classe Obstacles
+    // Instance de la classe obstacles
     private Obstacles o;
+    // Hitbox du personnage
+    public Rectangle hitboxC;
 
     // Attributs pour la position du joueur
     private double current_x = 820;
@@ -34,17 +37,19 @@ public class Character extends Thread {
     private double vx = 0, vy = 0;  // Vitesse horizontale et verticale
     private double acceleration = 2; // Accélération progressive
     private double friction = 0.9;  // Décélération (simule l’inertie)
-    private double maxSpeed = 10;   // Vitesse maximale
+    private double maxSpeed = 8;   // Vitesse maximale
+
     
-    private int vie = 110; // Points de vie du joueur
-    public static final int maxVie = 110; // Points de vie maximum du joueur
+    private int vie = 100; // Points de vie du joueur
+    public static final int maxVie = 100; // Points de vie maximum du joueur
     private Inputs inputs; // Gestion des entrées clavier
 
     private int nombreBonus = 0; // Nombre de bonus ramassés
+    private boolean paused = false; // Booléen pour mettre en pause le jeu
 
     // Dimensions du personnage
-    public static final int WIDTH = 100;
-    public static final int HEIGHT = 100;
+    public static final int WIDTH = 90;
+    public static final int HEIGHT = 90;
 
     //creer des getters pour vx et vy
     public double getVx() {
@@ -64,9 +69,10 @@ public class Character extends Thread {
 
     // Constructeur pour la classe Character
     public Character(Bonus bonus, Inputs i, Obstacles o) {
+        this.o = o;
         this.b = bonus;
         this.inputs = i;
-        this.o = o;
+        this.hitboxC = new Rectangle((int)current_x, (int)current_y, WIDTH, HEIGHT);
     }
 
     // Setters pour la position du joueur
@@ -85,23 +91,52 @@ public class Character extends Thread {
         this.nombreBonus = nombreBonus;
     }
 
+    // Methode pour reinitialiser le KeyListener
+    public void resetInput(Inputs i) {
+        this.inputs = i;
+    }
+
 
     // Sprite du personnage
     public static final Image characterSprite = new ImageIcon("src/Images/character.png")
             .getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
 
-    // Thread qui gère le déplacement
+
+
+    public synchronized void pauseGame() {
+        paused = true;
+    }
+
+    public synchronized void resumeGame() {
+        paused = false;
+        notify(); // Réveille le thread s'il est en attente
+    }
+        
     public void run() {
-        while (true) {
+        while (vie >= 0) {
+            // synchronized (this) {
+            //     while (paused) {
+            //         try {
+            //             wait(); // Met en pause l'exécution du thread
+            //         } catch (InterruptedException e) {
+            //             Thread.currentThread().interrupt();
+            //         }
+            //     }
+            // }
+
+            hitboxC.x = (int) current_x;
+            hitboxC.y = (int) current_y;
             updateMovement(); // Mise à jour des déplacements
 
             try {
-                Thread.sleep(16); // Environ 60 FPS
+                Thread.sleep(15);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                //Thread.currentThread().interrupt();
             }
         }
     }
+
+    
 
     // Gestion du déplacement avec inertie
     private void updateMovement() {
@@ -183,5 +218,16 @@ public class Character extends Thread {
         
     }
     
-
+     // Méthode pour réinitialiser le personnage
+     public void restartPlayer() {
+        pauseGame();
+        current_x = 820;
+        current_y = 540;
+        vie = maxVie;
+        vx = 0;
+        vy = 0;
+        nombreBonus = 0;
+        inputs.resetKeys();
+        resumeGame();
+    }
 }
