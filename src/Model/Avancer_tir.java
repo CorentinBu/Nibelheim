@@ -18,6 +18,7 @@ public class Avancer_tir extends Thread {
         while (true) {
             // Mettre à jour les tirs
             tir.updateTirs();
+            tir.removeTirObstacle();
             try {
                 Thread.sleep(DELAY);
             } catch (InterruptedException e) {

@@ -1,5 +1,4 @@
 package View;
-;
 
 public class Redessine extends Thread{
     // Constante pour le délai de rafraichissement

@@ -1,6 +1,7 @@
 package Model;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 //Cette classe décrit les bonus que le joueur peut ramasser.
@@ -9,36 +10,35 @@ import java.util.ArrayList;
 
 public class Bonus {
 
+    // Taille des bonus 
+    public static final int WIDTH_B = 25;
+    public static final int HEIGHT_B = 25;
+
+    // Hitbox du bonus
+    public Rectangle hitboxBonus;
+
     // Instance de la classe utiles
-    private ArrayList<Point> pointBonus = new ArrayList<>();
+    private ArrayList<Rectangle> pointBonus = new ArrayList<Rectangle>();
     
     // Getter pour récupérer la liste des points de bonus
-    public ArrayList<Point> getPointBonus(){
+    public ArrayList<Rectangle> getPointBonus(){
         return pointBonus;
     }
 
     //  Methode pour ajouter un bonus à la liste pointBonus
     public void addBonus(Point p) {
-        pointBonus.add(p);
+        Rectangle bonus = new Rectangle(p.x,p.y,WIDTH_B, HEIGHT_B);
+        pointBonus.add(bonus);
     }
 
     // Methode pour supprimer un bonus de pointBonus
     public void removeBonus(Point point) {
-        pointBonus.remove(point);
-    } 
-
-    // Méthode de déplacement du bonus attiré par le joueur
-    public void attractToPlayer(Point p) {
-        // Vérifier si la piéce est proche du joueur (p)
         for (int i = 0; i < pointBonus.size(); i++) {
-            // le bonus va vers le joueur
-            if (pointBonus.get(i).x < p.x) {
-                pointBonus.get(i).x += 1;
-            } else if (pointBonus.get(i).x > p.x) {
-                pointBonus.get(i).x -= 1;
+            if (pointBonus.get(i).getLocation().equals(point)) {
+                pointBonus.remove(i);
+                break;
             }
         }
-
     }
 
     // Methode pour reinitialiser la liste des bonus

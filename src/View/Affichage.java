@@ -7,6 +7,7 @@ import java.util.List;
 import Controler.Character;
 import Controler.Inputs;
 import Model.Tir;
+import Model.Obstacles;
 import Model.Araignee;
 import Model.Bonus;
 import Model.PositionAraignee;
@@ -30,7 +31,7 @@ public class Affichage extends JPanel {
     private JButton resumeButton;  // Bouton pour reprendre le jeu
 
     // Attribut pour lancer le jeu ou le mettre en pause
-    public boolean game_running = false;
+    public boolean game_running = true;
     // Attribut pour savoir si le jeu est perdu
     public boolean game_lose = false;
     // Attribut pour savoir si le jeu est en pause
@@ -39,13 +40,24 @@ public class Affichage extends JPanel {
     // Attribut pour afficher la oboutique ou pas
     private boolean showStore = false;
 
+    
+    
     // Instances de classe utiles
     private Bonus b;
     Character c;
     private Tir tir;
     PositionAraignee position;
     Inputs i;
+    private Obstacles o; // Instance de la classe Obstacles
     private Araignee a = new Araignee(position, c, tir, b);
+    
+    // Charger l'mage pour les obstacles (caisse.png)
+    public Image imgObstacle = new ImageIcon("src/Images/caisse.png").getImage()
+        .getScaledInstance(o.WIDTH_O, o.HEIGHT_O,Image.SCALE_DEFAULT);
+
+    // Charger l'image du coin (ici on suppose qu'elle s'appelle "coin.png")
+    public Image coinImage = new ImageIcon("src/Images/coin.png").getImage()
+    .getScaledInstance(b.WIDTH_B, b.HEIGHT_B, Image.SCALE_DEFAULT);
 
     // Position de la barre de vie
     public static final int xBarreVie = 30;
@@ -54,8 +66,6 @@ public class Affichage extends JPanel {
     // Dimension barre de vie
     public static final int heightBarreVie = 20;  // Hauteur
     public static final int arcBarreVie = 10;  // Angle des bordures
-
-    private Image coinImage; // Variable pour stocker l'image du coin
 
     // Getteurs pour game_running, game_pause et game_lose
     public boolean getGame_running(){
@@ -68,9 +78,10 @@ public class Affichage extends JPanel {
         return game_pause;
     } 
 
-    public Affichage(Character character, Tir t, Araignee araignee, PositionAraignee position, Bonus bonus, Inputs inputs) {
+    public Affichage(Character character, Tir t, Araignee araignee, PositionAraignee position, Bonus bonus, Inputs inputs, Obstacles obs) {
         setPreferredSize(new Dimension(X, Y));
         this.c = character;
+        this.o = obs;
         this.tir = t;
         this.b = bonus;
         this.i = inputs;
@@ -82,6 +93,8 @@ public class Affichage extends JPanel {
             this.position = position;
         }
         this.a = araignee;
+
+        // -------------------------*   Gestion des boutons   *--------------------------------------------------------------    
 
         // Initialisation des boutons à afficher lors du Game Over
         relancerButton = new JButton("Nouvelle Partie");
@@ -193,6 +206,7 @@ public class Affichage extends JPanel {
             // Réinitialiser les autres éléments du jeu
             b.resetBonus();  // Réinitialiser les bonus
             t.resetTirs();  // Réinitialiser les tirs
+            b.resetBonus(); // Réinitialiser les bonus
         });
 
         // Acceder à la boutique pendant la partie
@@ -230,9 +244,6 @@ public class Affichage extends JPanel {
         add(boutique);
         add(quitter);
 
-        // Charger l'image du coin (ici on suppose qu'elle s'appelle "coin.png")
-        coinImage = new ImageIcon("src/Images/coin.png").getImage()
-                .getScaledInstance(25, 25, Image.SCALE_DEFAULT);
     }
 
 // ----------------- On redefinie la méthode paint pour ajouter les elements graphiques  ------------------------------
@@ -276,6 +287,9 @@ public class Affichage extends JPanel {
 
                 // Dessiner les ennemis
                 drawEnnemies(g);
+
+                // Dessiner les obstacles
+                drawObstacle(g);
                
                 // Dessiner la barre de vie
                 drawBarreVie(g);
@@ -307,6 +321,9 @@ public class Affichage extends JPanel {
     public void drawBonus(Graphics g) {
         for (int i = 0; i < b.getPointBonus().size(); i++) {
             g.drawImage(coinImage, b.getPointBonus().get(i).x, b.getPointBonus().get(i).y, null);
+            // dessiner un rectangle aqutour des bonus
+            g.setColor(Color.GREEN);
+            g.drawRect(b.getPointBonus().get(i).x, b.getPointBonus().get(i).y, Bonus.WIDTH_B, Bonus.HEIGHT_B);
         }
     }
 
@@ -317,7 +334,7 @@ public class Affichage extends JPanel {
             int x = tir.getTirs().get(i).getPosition().x;
             int y = tir.getTirs().get(i).getPosition().y;
             g.fillOval(x, y, 8, 8);
-            g.drawRect(tir.getTirs().get(i).getPosition().x, tir.getTirs().get(i).getPosition().y, 8, 8);
+            // g.drawRect(tir.getTirs().get(i).getPosition().x, tir.getTirs().get(i).getPosition().y, 8, 8);
         }
     }
 
@@ -343,9 +360,19 @@ public class Affichage extends JPanel {
             g.drawImage(Araignee.araigneeSprite, araigneP.x, araigneP.y, null);
             a.detecterCollisionAraigneeJoueur(araigneP);
         }
-
         if (a.getNombreAraignee() < 4) {
             a.ListePosition();
+        }
+    }
+    
+    //methode qui dessine les obstacles
+    public void drawObstacle(Graphics g){
+        int i = 0;
+        ArrayList<Point> obstacles = o.getObstacles();
+        for(Point obstacle : obstacles){
+        // Afficher les images de caisse
+        g.drawImage(imgObstacle,(int)obstacle.getX(),(int)obstacle.getY(), null);
+        i+=1;
         }
     }
 

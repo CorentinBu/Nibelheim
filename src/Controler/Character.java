@@ -2,8 +2,9 @@ package Controler;
 
 import javax.swing.ImageIcon;
 import java.awt.*;
-
 import Model.Bonus;
+import Model.Obstacles;
+
 
 
 
@@ -17,6 +18,9 @@ public class Character extends Thread {
 
     // Instance de la classe bonus
     private Bonus b ;
+    // Instance de la classe obstacles
+    private Obstacles o;
+    // Hitbox du personnage
     public Rectangle hitboxC;
 
     // Attributs pour la position du joueur
@@ -57,7 +61,8 @@ public class Character extends Thread {
     }
 
     // Constructeur pour la classe Character
-    public Character(Bonus bonus, Inputs i) {
+    public Character(Bonus bonus, Inputs i, Obstacles o) {
+        this.o = o;
         this.b = bonus;
         this.inputs = i;
         this.hitboxC = new Rectangle((int)current_x, (int)current_y, WIDTH, HEIGHT);
@@ -102,15 +107,15 @@ public class Character extends Thread {
         
     public void run() {
         while (vie >= 0) {
-            // synchronized (this) {
-            //     while (paused) {
-            //         try {
-            //             wait(); // Met en pause l'exécution du thread
-            //         } catch (InterruptedException e) {
-            //             Thread.currentThread().interrupt();
-            //         }
-            //     }
-            // }
+            synchronized (this) {
+                while (paused) {
+                    try {
+                        wait(); // Met en pause l'exécution du thread
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
 
             hitboxC.x = (int) current_x;
             hitboxC.y = (int) current_y;
@@ -142,8 +147,18 @@ public class Character extends Thread {
         vy *= friction;
 
         // Appliquer le mouvement
-        current_x += vx;
-        current_y += vy;
+        // Vérifier si le mouvement horizontal du joueur l'amène en collision avec un obstacle
+        if (parcoursObstacle(current_x + vx, current_y) == false) {
+            current_x += vx;
+        } else {
+            vx = 0; // Arrêt du mouvement horizontal en cas de collision
+        }
+        // Vérifier si le mouvement vertical du joueur l'amène en collision avec un obstacle
+        if (parcoursObstacle(current_x, current_y + vy) ==false) {
+            current_y += vy;
+        } else {
+            vy = 0; // Arrêt du mouvement vertical en cas de collision
+        }
 
         // Garder la sorcière dans l'écran
         current_x = Math.max(0, Math.min(1800, current_x));
@@ -162,16 +177,37 @@ public class Character extends Thread {
     // Méthode pour vérifier si le joueur est proche d'un bonus et récupérer ce bonus
     public void checkBonusProche() {
         for (int i = 0; i < b.getPointBonus().size(); i++) {
-            // Si le joueur est assez proche du bonus pour le ramasser
-            if (Math.abs(current_x - b.getPointBonus().get(i).x) < 50 && Math.abs(current_y - b.getPointBonus().get(i).y) < 50) {
-                b.removeBonus(b.getPointBonus().get(i)); // Retirer le bonus de la liste
-                nombreBonus++; // Incrémenter le nombre de bonus
-                System.out.println("Bonus ramassé !");
+            if (hitboxC.intersects(b.getPointBonus().get(i))) {
+                nombreBonus++;
+                b.removeBonus(b.getPointBonus().get(i).getLocation());
+                break;
             }
         }
     }
 
-    // Méthode pour réinitialiser le personnage
+
+    //methode pour verifier si il y a collision entre le joueur et un obstacle
+    public boolean collisionObstacleJoueur( double next_x, double next_y, int ox, int oy) {
+        Rectangle r1 = new Rectangle((int) next_x, (int) next_y,WIDTH, HEIGHT);
+        Rectangle r2 = new Rectangle(ox, oy, Obstacles.WIDTH_O, Obstacles.HEIGHT_O);
+        return r1.intersects(r2);
+         
+     }
+     //methode pour parcourir la liste des obstacles et verifier si il y a collision
+     public boolean parcoursObstacle(double next_x, double next_y) {
+         boolean collision = false;
+         for (Point obstacle : o.getObstacles()) {
+             if (collisionObstacleJoueur(next_x, next_y, obstacle.x, obstacle.y)) {
+                 // System.out.println("Collision avec un obstacle");
+                 collision=true;
+                 break;
+             }
+         }
+         return collision;
+         
+     }
+
+    // Méthode pour réinitialiser le personnage (Quand on relance une partie)
     public void restartPlayer() {
         pauseGame();
         current_x = 820;

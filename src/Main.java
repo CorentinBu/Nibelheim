@@ -17,11 +17,13 @@ public class Main {
         // Instances de classe utiles
         Inputs inputs = new Inputs();
         Bonus b = new Bonus();
-        Character c = new Character(b, inputs);
-        Tir t = new Tir(c);
+        Obstacles o = new Obstacles();
+        Character c = new Character(b, inputs, o);
+        Tir t = new Tir(c, o);
         PositionAraignee position = new PositionAraignee();  // Exemple : position de départ (100, 100)
         Araignee araignee = new Araignee(position,c, t, b);
-        Affichage a = new Affichage(c, t, araignee, position, b, inputs);
+        Affichage a = new Affichage(c, t, araignee, position, b, inputs, o);
+        // Les Threads
         ReactionClic m = new ReactionClic(t);
         Avancer_tir avancer_tir = new Avancer_tir(t);
         Redessine r = new Redessine(a);

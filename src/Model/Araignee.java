@@ -68,12 +68,12 @@ public class Araignee {
     public ArrayList<Point> getPosition() {
         ArrayList<Point> araignee = new ArrayList<Point>();
         for(Point point : this.posAraignee) {
-            if(point.x < (c.getCurrent_x() +Character.WIDTH/2)){
-                if (point.y < c.getCurrent_y() + Character.HEIGHT/2){
+            if(point.x < (c.getCurrent_x() + c.WIDTH/2)){
+                if (point.y < c.getCurrent_y() + c.HEIGHT/2){
                     point.x += rand.nextInt(position.vitesseA);
                     point.y += rand.nextInt(position.vitesseA);
                 }
-                else if (point.y > c.getCurrent_x() + Character.HEIGHT/2){
+                else if (point.y > c.getCurrent_x() + c.HEIGHT/2){
                     point.x += rand.nextInt(position.vitesseA);
                     point.y -= rand.nextInt(position.vitesseA);
                 }
@@ -81,12 +81,12 @@ public class Araignee {
                     point.x += rand.nextInt(position.vitesseA);
                 }
             }
-            else if (point.x> c.getCurrent_x() + Character.WIDTH/2){
-                if (point.y > c.getCurrent_y() + Character.HEIGHT/2){
+            else if (point.x> c.getCurrent_x() + c.WIDTH/2){
+                if (point.y > c.getCurrent_y() + c.HEIGHT/2){
                     point.x -= rand.nextInt(position.vitesseA);
                     point.y -= rand.nextInt(position.vitesseA/2);
                 }
-                else if (point.y < c.getCurrent_y() + Character.HEIGHT/2){
+                else if (point.y < c.getCurrent_y() + c.HEIGHT/2){
                     point.x -= rand.nextInt(position.vitesseA);
                     point.y += rand.nextInt(position.vitesseA/2);
                 }
@@ -94,10 +94,10 @@ public class Araignee {
                     point.x -= rand.nextInt(position.vitesseA);
                 }
             }
-            else if (point.y < c.getCurrent_y() + Character.HEIGHT/2){
+            else if (point.y < c.getCurrent_y() + c.HEIGHT/2){
                 point.y += rand.nextInt(position.vitesseA);
             }
-            else if (point.y > c.getCurrent_y() + Character.HEIGHT/2){
+            else if (point.y > c.getCurrent_y() + c.HEIGHT/2){
                 point.y -= rand.nextInt(position.vitesseA);
             }
             araignee.add(new Point(point.x, point.y));
@@ -107,14 +107,12 @@ public class Araignee {
 
     // Détecter une collision entre l'araignée et le joueur
     public void detecterCollisionAraigneeJoueur(Point point){
-        if (point.x >= c.getCurrent_x() && point.x <= c.getCurrent_x() + Character.WIDTH
-                && point.y >= c.getCurrent_y() && point.y <= c.getCurrent_y() + Character.HEIGHT) {
+        if (point.x >= c.getCurrent_x() && point.x <= c.getCurrent_x() + c.WIDTH
+                && point.y >= c.getCurrent_y() && point.y <= c.getCurrent_y() + c.HEIGHT) {
             // Le joueur perds des points de vie du joueur s'il en a encore
             if (c.getVie() > 0) {
                 c.setVie(c.getVie()-POINTPERDU);
             }
-            // Un bonus apparait la où l'araignéer est supprimée
-            //b.addBonus(point);
             // L'araignée est supprimée de la liste
             posAraignee.remove(point);
         }

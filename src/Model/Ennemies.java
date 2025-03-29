@@ -21,6 +21,7 @@ public class Ennemies {
     // Taille du sprite de l'ennemi
     public static final int WIDTH = 45;
     public static final int HEIGHT = 45;
+    // Image de l'ennemi
     public Image img = new ImageIcon("src/Images/character.png").getImage().getScaledInstance(WIDTH, HEIGHT,Image.SCALE_DEFAULT);
 
     /* CONSTRUCTEUR */

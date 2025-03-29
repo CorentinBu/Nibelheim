@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class Obstacle {
-    //nombre d'obstacle
-    private int nbObstacle = 10;
+public class Obstacles {
+    //nombre d'obstacle valeur aleartoire entre 7 et 10
+    public static int nbObstacle = 7 + (int) (Math.random() * 4);
     //dimension de l'obstacle
-    public static final int HEIGHT_O = 30;
-    public static final int WIDTH_O = 30;
+    public static final int HEIGHT_O = 50;
+    public static final int WIDTH_O = 50;
     //liste d'obstacle
     public ArrayList<Point> obstacles= new ArrayList<Point>();
     //generer un nombre aleatoire
@@ -19,7 +19,7 @@ public class Obstacle {
     private static final int DISTANCE_MIN = 150;
 
     //constructeur de la classe Obstacles
-    public Obstacle() {
+    public Obstacles() {
         genererObstacle();
     }
     //generer une liste d'obstacle
