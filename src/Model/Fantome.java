@@ -2,6 +2,11 @@ package Model;
 
 import java.awt.Image;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import javax.swing.ImageIcon;
 
 import Controler.Character;
@@ -15,8 +20,18 @@ public class Fantome extends Ennemies {
     public static final int weight = 80;
     public static final int height = 50;
 
+    // Timer pour ajouter les ennemis à intervalles réguliers
+    private Timer timer;
+    private TimerTask task;
+
     // Classe Character
     Character c;
+
+    // Liste des postions possibles pour le fantôme
+    private ArrayList<Point> ListPositions = new ArrayList<Point>();
+
+    // Liste des fantômes
+    public static CopyOnWriteArrayList<Fantome> ListFantomes = new CopyOnWriteArrayList<>();
 
     // Image de l'ennemie
     public static final Image sprite = new ImageIcon("src/Images/ghost.png").getImage().getScaledInstance(weight,
@@ -26,6 +41,41 @@ public class Fantome extends Ennemies {
     public Fantome(Character c, int speed, int bonusAmount, Point pos) {
         super(c, HEALTH_MAX, speed, bonusAmount, pos, sprite);
         this.c = c;
+        ListPositions.add(new Point(-50, -50));
+        ListPositions.add(new Point(-50, 520));
+        ListPositions.add(new Point(-50, 1080));
+    }
+
+    // Getteurs pour la liste des fantômes
+    public static CopyOnWriteArrayList<Fantome> getListFantomes() {
+        return ListFantomes;
+    }
+
+    // Methode pour créer les fantômes à intervalle regulier
+    public void createFantomes(int nombreFantomes) {
+        // On crée un timer pour ajouter 1/4 des fantômes à intervalles réguliers (toutes les 1 minute)
+        timer = new Timer();
+        task = new TimerTask() {
+         // Ajouter 1/4 de nombreFamtomes
+            int count = 0;
+
+            @Override
+            public void run() {
+                if (count < nombreFantomes) {
+                    // Créer un fantôme à une position aléatoire
+                    Point randomPosition = ListPositions.get((int) (Math.random() * ListPositions.size()));
+                    Fantome f = new Fantome(c, 5, 0, randomPosition);
+                    f.setPosition(randomPosition);
+                    f.startMovement();
+                    count++;
+                } else {
+                    timer.cancel(); // Arrêter le timer une fois tous les fantômes créés
+                }
+            }
+        };
+        timer.scheduleAtFixedRate(task, 0, 3000); // Démarrer le timer toutes les secondes
+
+        
     }
 
     // Méthode pour déplacer le fantôme vers le joueur

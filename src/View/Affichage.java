@@ -37,7 +37,7 @@ public class Affichage extends JPanel {
     // Attribut pour savoir si le jeu est en pause
     public boolean game_pause = false;
 
-    // Attribut pour afficher la oboutique ou pas
+    // Attribut pour afficher la boutique ou pas
     private boolean showStore = false;
 
     

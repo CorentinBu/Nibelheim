@@ -29,29 +29,22 @@ public class Main {
         Redessine r = new Redessine(a);
         MouvementAraignee mvtA = new MouvementAraignee(position);
         Collision col = new Collision(c, t, araignee, a);
+        Fantome fantome = new Fantome(c, 2, 0, new Point(0, 0));
+        LevelManager lm = new LevelManager(c, fantome);
 
         // Ajouter un MouseListener pour gérer les clics de souris
         a.addMouseListener(m);
-
-        // Ajouter des fantomes
-        Fantome f1 = new Fantome(c, 2, 0, new Point(500, 800));
-        Fantome f2 = new Fantome(c, 2, 0, new Point(400, 500));
-        Fantome f3 = new Fantome(c, 3, 0, new Point(300, 20));
-
-        // Démarrer les mouvements des fantomes
-        f1.startMovement();
-        f2.startMovement();
-        f3.startMovement();
 
         // 
         Ennemies.startCollision(c,t);
 
         // Démarrer nos différentes Threads
-        col.start();
-        mvtA.start();
-        avancer_tir.start();
-        r.start();
-        c.start();
+        col.start(); // Démarrer le thread de collision
+        mvtA.start(); // Démarrer le thread de mouvement de l'araignée
+        avancer_tir.start(); // Démarrer le thread de tir
+        r.start(); // Démarrer le thread de redessin
+        c.start(); // Démarrer le thread du personnage
+        lm.start(); // Démarrer le gestionnaire de niveaux
 
         // Ajouter un KeyListener pour gérer les entrées clavier
         f.addKeyListener(inputs);
