@@ -5,8 +5,6 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import Model.Bonus;
 
-
-
 //Classe du personnage principal du jeu. Celui contrôlé par le joueur.
 //Le joueur utilise les touches Z,Q,S,D pour se déplacer.
 //Il peut se déplacer librement sur toute la fenêre.
@@ -16,17 +14,17 @@ import Model.Bonus;
 public class Character extends Thread {
 
     // Instance de la classe bonus
-    private Bonus b ;
+    private Bonus b;
 
     // Attributs pour la position du joueur
     private double current_x = 820;
     private double current_y = 540;
-    
-    private double vx = 0, vy = 0;  // Vitesse horizontale et verticale
+
+    private double vx = 0, vy = 0; // Vitesse horizontale et verticale
     private double acceleration = 2; // Accélération progressive
-    private double friction = 0.9;  // Décélération (simule l’inertie)
-    private double maxSpeed = 10;   // Vitesse maximale
-    
+    private double friction = 0.9; // Décélération (simule l’inertie)
+    private double maxSpeed = 10; // Vitesse maximale
+
     private int vie = 110; // Points de vie du joueur
     public static final int maxVie = 110; // Points de vie maximum du joueur
     private Inputs inputs; // Gestion des entrées clavier
@@ -37,10 +35,11 @@ public class Character extends Thread {
     public static final int WIDTH = 100;
     public static final int HEIGHT = 100;
 
-    //creer des getters pour vx et vy
+    // creer des getters pour vx et vy
     public double getVx() {
         return vx;
     }
+
     public double getVy() {
         return vy;
     }
@@ -49,6 +48,7 @@ public class Character extends Thread {
     public double getCurrent_x() {
         return current_x;
     }
+
     public double getCurrent_y() {
         return current_y;
     }
@@ -63,6 +63,7 @@ public class Character extends Thread {
     public void setCurrent_x(double current_x) {
         this.current_x = current_x;
     }
+
     public void setCurrent_y(double current_y) {
         this.current_y = current_y;
     }
@@ -71,14 +72,15 @@ public class Character extends Thread {
     public int getNombreBonus() {
         return nombreBonus;
     }
+
     public void setNombreBonus(int nombreBonus) {
         this.nombreBonus = nombreBonus;
     }
 
-
     // Sprite du personnage
-    public static final Image characterSprite = new ImageIcon("src/Images/character.png")
-            .getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
+    public static final Image characterSprite = new ImageIcon(
+            Character.class.getResource("/Images/character.png")).getImage()
+            .getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
 
     // Thread qui gère le déplacement
     public void run() {
@@ -96,11 +98,18 @@ public class Character extends Thread {
     // Gestion du déplacement avec inertie
     private void updateMovement() {
         // Accélération selon les touches pressées
-        if (inputs.up) { vy -= acceleration; }
-        if (inputs.down) { vy += acceleration; }
-        if (inputs.left) { vx -= acceleration; }
-        if (inputs.right) { vx += acceleration; }
-        
+        if (inputs.up) {
+            vy -= acceleration;
+        }
+        if (inputs.down) {
+            vy += acceleration;
+        }
+        if (inputs.left) {
+            vx -= acceleration;
+        }
+        if (inputs.right) {
+            vx += acceleration;
+        }
 
         // Limite la vitesse maximale
         vx = Math.max(-maxSpeed, Math.min(maxSpeed, vx));
@@ -128,11 +137,13 @@ public class Character extends Thread {
         this.vie = vie;
     }
 
-    // Méthode pour vérifier si le joueur est proche d'un bonus et récupérer ce bonus
+    // Méthode pour vérifier si le joueur est proche d'un bonus et récupérer ce
+    // bonus
     public void checkBonusProche() {
         for (int i = 0; i < b.getPointBonus().size(); i++) {
             // Si le joueur est assez proche du bonus pour le ramasser
-            if (Math.abs(current_x - b.getPointBonus().get(i).x) < 50 && Math.abs(current_y - b.getPointBonus().get(i).y) < 50) {
+            if (Math.abs(current_x - b.getPointBonus().get(i).x) < 50
+                    && Math.abs(current_y - b.getPointBonus().get(i).y) < 50) {
                 b.removeBonus(b.getPointBonus().get(i)); // Retirer le bonus de la liste
                 nombreBonus++; // Incrémenter le nombre de bonus
                 System.out.println("Bonus ramassé !");

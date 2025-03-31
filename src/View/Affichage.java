@@ -5,6 +5,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import Controler.Character;
+import Controler.LevelManager;
 import Model.Tir;
 import Model.Araignee;
 import Model.Bonus;
@@ -14,53 +15,83 @@ import Model.Fantome;
 
 public class Affichage extends JPanel {
     // Dimensions de la vue
-    public static final int X = 1920;
-    public static final int Y = 1080;
+    public static final int X = 1500;
+    public static final int Y = 800;
 
     // Instances de classe utiles
     private Bonus b;
     Character c;
     private Tir tir;
     Position position;
-    private Araignee a = new Araignee(position, c, tir, b);
+    private Araignee a;
+    private LevelManager levelManager;
 
     // Position de la barre de vie
     public static final int xBarreVie = 20;
     public static final int yBarreVie = 20;
 
     // Dimension barre de vie
-    public static final int heightBarreVie = 20;  // Hauteur
-    public static final int arcBarreVie = 10;  // Angle des bordures
+    public static final int heightBarreVie = 20;
+    public static final int arcBarreVie = 10;
 
-    private Image coinImage; // Variable pour stocker l'image du coin
+    // Barre de niveau
+    public static final int xBarreNiveau = 20;
+    public static final int yBarreNiveau = 50;
+    public static final int heightBarreNiveau = 20;
+    public static final int largeurBarreNiveauMax = 400;
+    public static final int NIVEAU_MAX = 10; // Nombre maximum de niveaux
+
+    private Image coinImage;
 
     public Affichage(Character c, Tir t, Araignee a, Position position, Bonus bonus) {
         setPreferredSize(new Dimension(X, Y));
         this.c = c;
         this.tir = t;
         this.b = bonus;
-
-        // Initialisation de position si c'est elle est nulle
+        this.a = a;
+        
         if (position == null) {
-            this.position = new Position(100, 100); // Exemple de position initiale
+            this.position = new Position(100, 100);
         } else {
             this.position = position;
         }
-        this.a = a;
-
-        // Charger l'image du coin (ici on suppose qu'elle s'appelle "coin.png")
-        coinImage = new ImageIcon("src/Images/coin.png").getImage()
-                .getScaledInstance(25, 25, Image.SCALE_DEFAULT);
+        
+        this.levelManager = new LevelManager(a);
+        coinImage = new ImageIcon(getClass().getResource("/Images/coin.png"))
+                .getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT);
     }
 
-    // Redessiner la vue pour ajouter nos différents éléments
+    private void drawNiveauTermine(Graphics g) {
+        // Fond semi-transparent
+        g.setColor(new Color(0, 0, 0, 180));
+        g.fillRect(0, 0, X, Y);
+        
+        // Message
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 50));
+        String message = "Niveau " + (levelManager.getNiveau()) + " terminé!";
+        int msgWidth = g.getFontMetrics().stringWidth(message);
+        g.drawString(message, X/2 - msgWidth/2, Y/2 - 30);
+        
+        g.setFont(new Font("Arial", Font.PLAIN, 30));
+        String nextMsg = "Niveau " + (levelManager.getNiveau()+1) + " en préparation...";
+        int nextWidth = g.getFontMetrics().stringWidth(nextMsg);
+        g.drawString(nextMsg, X/2 - nextWidth/2, Y/2 + 30);
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        // Dessiner le personnage au centre de l'écran
+        
+        if (levelManager.isNiveauTermine()) {
+            drawNiveauTermine(g);
+            return;
+        }
+
+        // Dessiner le personnage
         g.drawImage(Character.characterSprite, (int) c.getCurrent_x(), (int) c.getCurrent_y(), null);
 
-        // Recuperer la liste des tirs et les afficher à l'écran en tenant compte de la classe Tir
+        // Dessiner les tirs
         for (int i = 0; i < tir.getTirs().size(); i++) {
             g.setColor(Color.RED);
             int x = tir.getTirs().get(i).getPosition().x;
@@ -68,68 +99,61 @@ public class Affichage extends JPanel {
             g.fillOval(x, y, 10, 10);
         }
 
-        // Afficher le nombre de bonus récupérés en haut à droite
+        // Affichage des pièces
         g.drawImage(coinImage, X - 130, 21, null);
         g.setColor(Color.BLACK);
         g.drawString("Pièces : " + c.getNombreBonus(), X - 98, 40);
 
-        // Dessiner les araignées
-        drawAraignee(g);
+        // Affichage du niveau et des araignées
+        g.drawString("Niveau : " + levelManager.getNiveau(), X - 150, 60);
+        g.drawString("Araignées restantes : " + a.getNombreAraignee(), X - 180, 90);
 
-        // Dessiner les ennemis
-        drawEnnemies(g);
-
-        // Dessiner une barre de vie rouge dans un contour noir et des bordures arrondies
+        // Barre de niveau
         g.setColor(Color.GRAY);
-        g.fillRoundRect(xBarreVie, yBarreVie, c.maxVie*2, heightBarreVie, arcBarreVie, arcBarreVie);
-        g.setColor(Color.RED);
-        g.fillRoundRect(xBarreVie, yBarreVie, c.getVie()*2, heightBarreVie, arcBarreVie, arcBarreVie);
+        g.fillRoundRect(xBarreNiveau, yBarreNiveau, largeurBarreNiveauMax, heightBarreNiveau, arcBarreVie, arcBarreVie);
+        g.setColor(Color.BLUE);
+        int niveauWidth = (int)(largeurBarreNiveauMax * ((float)levelManager.getNiveau() / NIVEAU_MAX));
+        g.fillRoundRect(xBarreNiveau, yBarreNiveau, niveauWidth, heightBarreNiveau, arcBarreVie, arcBarreVie);
         g.setColor(Color.BLACK);
-        g.drawRoundRect(xBarreVie, yBarreVie, c.maxVie*2, heightBarreVie, arcBarreVie, arcBarreVie);
+        g.drawRoundRect(xBarreNiveau, yBarreNiveau, largeurBarreNiveauMax, heightBarreNiveau, arcBarreVie, arcBarreVie);
 
-        // Dessiner les bonus
+        // Barre de vie
+        g.setColor(Color.GRAY);
+        g.fillRoundRect(xBarreVie, yBarreVie, c.maxVie * 2, heightBarreVie, arcBarreVie, arcBarreVie);
+        g.setColor(Color.RED);
+        g.fillRoundRect(xBarreVie, yBarreVie, c.getVie() * 2, heightBarreVie, arcBarreVie, arcBarreVie);
+        g.setColor(Color.BLACK);
+        g.drawRoundRect(xBarreVie, yBarreVie, c.maxVie * 2, heightBarreVie, arcBarreVie, arcBarreVie);
+
+        // Dessiner les éléments du jeu
         drawBonus(g);
+        drawEnnemies(g);
+        drawAraignee(g);
     }
 
-  //Metode pour dessiner les bonus avec l'image coin.png
     public void drawBonus(Graphics g) {
         for (int i = 0; i < b.getPointBonus().size(); i++) {
             g.drawImage(coinImage, b.getPointBonus().get(i).x, b.getPointBonus().get(i).y, null);
         }
     }
 
-    // Méthode pour dessiner les ennemis
     public void drawEnnemies(Graphics g) {
-        // Appel de la méthode statique sans instance
         List<Ennemies> ennemies = Ennemies.getListEnnemies();
         for (Ennemies ennemi : ennemies) {
-            // Vérification si l'ennemi est un Fantome
             if (ennemi instanceof Fantome) {
-                Fantome fantome = (Fantome) ennemi; // Casting en Fantome
+                Fantome fantome = (Fantome) ennemi;
                 g.drawImage(fantome.img, (int) fantome.getPosition().getX(), (int) fantome.getPosition().getY(), null);
-                System.out.println("Position x : " + fantome.getPosition().getX());
-                // System.out.println("Position y : "+fantome.getPosition().getY());
-                // System.out.println("img : "+fantome.img);
             }
         }
     }
 
-    // Méthode pour dessiner les araignées
     public void drawAraignee(Graphics g) {
         ArrayList<Point> araignee = a.getPosition();
         for (Point araigneP : araignee) {
-            // Afficher les images des araignées
             g.drawImage(Araignee.araigneeSprite, araigneP.x, araigneP.y, null);
-            // Afficher un point rouge qui represente l'araignée
             g.setColor(Color.RED);
             g.drawOval(X, Y, 5, 5);
-            // Si le joueur touche une araignée, on appelle la méthode toucher de la classe Araignée
             a.detecterCollisionAraigneeJoueur(araigneP);
-        }
-
-        // Faire réapparaître des araignées s'il reste moins de 4 (Juste pour le fun !)
-        if (a.getNombreAraignee() < 4) {
-            a.ListePosition();
         }
     }
 }

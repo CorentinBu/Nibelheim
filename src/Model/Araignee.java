@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.Point;
 import Controler.Character;
+import Controler.LevelManager;
 
 public class Araignee {
 
@@ -19,9 +20,13 @@ public class Araignee {
     public static final int weight = 80;
     public static final int height = 50;
     // Image gif de l'araignée
-    public static final Image araigneeSprite = new ImageIcon("src/Images/araignee.gif").getImage()
-            .getScaledInstance(weight, height, Image.SCALE_DEFAULT);
+    public static final Image araigneeSprite = new ImageIcon(Araignee.class.getResource("/Images/araignee.gif"))
+            .getImage().getScaledInstance(weight, height, Image.SCALE_DEFAULT);
+            
+
+    private LevelManager levelManager; // Gestionnaire de niveaux
     // Quantité d'araignées à afficher
+
     private int quantite = 10;
     private static final int POINTPERDU = 10; // Dégats causés par l'araignée
     
@@ -33,6 +38,7 @@ public class Araignee {
         this.c=c;
         this.posAraignee = new ArrayList<Point>();
         this.b = bonus;
+        this.levelManager = new LevelManager(this); // Initialisez le LevelManager avec cette instance
         ListePosition();
         
     }
@@ -117,6 +123,7 @@ public class Araignee {
             b.addBonus(point);
             // L'araignée est supprimée de la liste
             posAraignee.remove(point);
+
         }
            
     }
@@ -136,11 +143,29 @@ public class Araignee {
 
     // Détecter les araignées qui ont été touchées par un projectile et les supprimer de la liste
     public void removeAraigneeTouchee() {
-        for (int i = 0; i < posAraignee.size(); i++) {
-            if (collisionAraigneeProjectile(posAraignee.get(i))) {
-                // L'araignée est supprimée de la liste
-                posAraignee.remove(i);
+        Iterator<Point> iterator = posAraignee.iterator();
+        boolean araigneeSupprimee = false;
+        
+        while (iterator.hasNext()) {
+            Point point = iterator.next();
+            if (collisionAraigneeProjectile(point)) {
+                b.addBonus(point);
+                iterator.remove();
+                araigneeSupprimee = true;
             }
+        }
+        
+        if (araigneeSupprimee && posAraignee.isEmpty()) {
+            levelManager.araigneeTuee();
+        }
+    }
+    public void reinitialiser(int nombre) {
+        System.out.println("Réinitialisation des araignées avec " + nombre + " nouvelles araignées.");
+        posAraignee.clear();  // Supprime toutes les anciennes araignées
+        for (int i = 0; i < nombre; i++) {
+            int x = rand.nextInt(Position.AFTER);
+            int y = rand.nextInt(Position.HAUTEUR_MAX);
+            posAraignee.add(new Point(x, y));
         }
     }
 

@@ -15,13 +15,14 @@ public class Fantome extends Ennemies {
     Character c;
 
     // Image gif de l'araignée
-    public static final Image sprite = new ImageIcon("src/Images/ghost.png").getImage().getScaledInstance(weight,
-            height, Image.SCALE_DEFAULT);
+    public static final Image sprite = new ImageIcon(Fantome.class.getResource("/Images/ghost.png")).getImage().getScaledInstance(weight,
+    height, Image.SCALE_DEFAULT);
 
     public Fantome(int speed, int bonusAmount, Point pos, Character c) {
         super(HEALTH_MAX, speed, bonusAmount, pos, sprite);
         this.c = c;
     }
+    
 
     public void goToCharacter() {
         // Récupérer la position actuelle du joueur

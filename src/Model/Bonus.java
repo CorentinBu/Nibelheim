@@ -50,7 +50,7 @@ public class Bonus {
                 pointBonus.get(i).x -= 1;
             }
         }
-
     }
+    
 
 }
