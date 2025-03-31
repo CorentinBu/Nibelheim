@@ -10,7 +10,6 @@ import Model.Tir;
 import Model.Obstacles;
 import Model.Araignee;
 import Model.Bonus;
-import Model.PositionAraignee;
 import Model.Ennemies;
 import Model.Fantome;
 
@@ -46,10 +45,8 @@ public class Affichage extends JPanel {
     private Bonus b;
     Character c;
     private Tir tir;
-    PositionAraignee position;
     Inputs i;
     private Obstacles o; // Instance de la classe Obstacles
-    private Araignee a = new Araignee(position, c, tir, b);
     
     // Charger l'mage pour les obstacles (caisse.png)
     public Image imgObstacle = new ImageIcon("src/Images/caisse.png").getImage()
@@ -78,21 +75,13 @@ public class Affichage extends JPanel {
         return game_pause;
     } 
 
-    public Affichage(Character character, Tir t, Araignee araignee, PositionAraignee position, Bonus bonus, Inputs inputs, Obstacles obs) {
+    public Affichage(Character character, Tir t, Bonus bonus, Inputs inputs, Obstacles obs) {
         setPreferredSize(new Dimension(X, Y));
         this.c = character;
         this.o = obs;
         this.tir = t;
         this.b = bonus;
         this.i = inputs;
-
-        // Initialisation de position si elle est nulle
-        if (position == null) {
-            this.position = new PositionAraignee(); // Exemple de position initiale
-        } else {
-            this.position = position;
-        }
-        this.a = araignee;
 
         // -------------------------*   Gestion des boutons   *--------------------------------------------------------------    
 
@@ -282,9 +271,6 @@ public class Affichage extends JPanel {
                 // Dessiner les bonus
                 drawBonus(g);
 
-                // Dessiner les araignées
-                drawAraignee(g);
-
                 // Dessiner les ennemis
                 drawEnnemies(g);
 
@@ -298,7 +284,6 @@ public class Affichage extends JPanel {
                 relancerButton.setVisible(false);
                 acceuil.setVisible(false);
                 boutiqueGame.setVisible(false);
-
             } 
             else {
                 // Si le jeu est perdu, afficher un écran de fin de partie avec game over
@@ -350,18 +335,11 @@ public class Affichage extends JPanel {
                 g.drawImage(fantome.img, (int) fantome.getPosition().getX(), (int) fantome.getPosition().getY(), null);
                 //g.drawRect((int) fantome.getPosition().getX(), (int) fantome.getPosition().getY(), Ennemies.WIDTH, Ennemies.HEIGHT);
             }
-        }
-    }
-
-    // Méthode pour dessiner les araignées
-    public void drawAraignee(Graphics g) {
-        ArrayList<Point> araignee = a.getPosition();
-        for (Point araigneP : araignee) {
-            g.drawImage(Araignee.araigneeSprite, araigneP.x, araigneP.y, null);
-            a.detecterCollisionAraigneeJoueur(araigneP);
-        }
-        if (a.getNombreAraignee() < 4) {
-            a.ListePosition();
+            if (ennemi instanceof Araignee) {
+                Araignee araignee = (Araignee) ennemi; // Casting en Fantome
+                g.drawImage(araignee.img, (int) araignee.getPosition().getX(), (int) araignee.getPosition().getY(), null);
+                //g.drawRect((int) fantome.getPosition().getX(), (int) fantome.getPosition().getY(), Ennemies.WIDTH, Ennemies.HEIGHT);
+            }
         }
     }
     
@@ -397,11 +375,11 @@ public class Affichage extends JPanel {
     public void drawBarreVie(Graphics g) {
         // Dessiner une barre de vie rouge dans un contour noir et des bordures arrondies
         g.setColor(Color.GRAY);
-        g.fillRoundRect(xBarreVie, yBarreVie, c.maxVie * 2, heightBarreVie, arcBarreVie, arcBarreVie);
+        g.fillRoundRect(xBarreVie, yBarreVie, c.maxVie * 40, heightBarreVie, arcBarreVie, arcBarreVie);
         g.setColor(Color.RED);
-        g.fillRoundRect(xBarreVie, yBarreVie, c.getVie() * 2, heightBarreVie, arcBarreVie, arcBarreVie);
+        g.fillRoundRect(xBarreVie, yBarreVie, c.getVie() * 40, heightBarreVie, arcBarreVie, arcBarreVie);
         g.setColor(Color.BLACK);
-        g.drawRoundRect(xBarreVie, yBarreVie, c.maxVie * 2, heightBarreVie, arcBarreVie, arcBarreVie);
+        g.drawRoundRect(xBarreVie, yBarreVie, c.maxVie * 40, heightBarreVie, arcBarreVie, arcBarreVie);
         // Afficher le nombre de bonus récupérés en haut à droite
         g.drawImage(coinImage, X - 135, 25, null);
         g.setColor(Color.BLACK);

@@ -8,7 +8,7 @@ import Controler.Character;
 public class Tir {
 
     // Attributs et constantes
-    public static final int speed = 25;
+    public static final int speed = 50;
 
     // Liste de balles tirées
     private CopyOnWriteArrayList<Projectile> tirs = new CopyOnWriteArrayList<>();
@@ -18,7 +18,6 @@ public class Tir {
     private Point mousePosition; // Position de la souris
     private Character c;  // Le joueur
     private Obstacles o; // Les obstacles
-
 
     // Constructeur pour initialiser la liste de tirs
     public Tir(Character c, Obstacles obs) {

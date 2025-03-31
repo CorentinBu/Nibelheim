@@ -23,8 +23,8 @@ public class Fantome extends Ennemies {
             height, Image.SCALE_DEFAULT);
 
     // Constructeur
-    public Fantome(Character c, int speed, int bonusAmount, Point pos) {
-        super(c, HEALTH_MAX, speed, bonusAmount, pos, sprite);
+    public Fantome(Character c, int speed, int bonusAmount, Point pos, Bonus b) {
+        super(c, HEALTH_MAX, speed, bonusAmount, pos, sprite, b);
         this.c = c;
     }
 
