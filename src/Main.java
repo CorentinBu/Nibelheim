@@ -20,35 +20,43 @@ public class Main {
         Obstacles o = new Obstacles();
         Character c = new Character(b, inputs, o);
         Tir t = new Tir(c, o);
-        PositionAraignee position = new PositionAraignee();  // Exemple : position de départ (100, 100)
-        Araignee araignee = new Araignee(position,c, t, b);
-        Affichage a = new Affichage(c, t, araignee, position, b, inputs, o);
+        Affichage a = new Affichage(c, t, b, inputs, o);
         // Les Threads
         ReactionClic m = new ReactionClic(t);
         Avancer_tir avancer_tir = new Avancer_tir(t);
         Redessine r = new Redessine(a);
-        MouvementAraignee mvtA = new MouvementAraignee(position);
-        Collision col = new Collision(c, t, araignee, a);
+        Collision col = new Collision(c, t, a);
 
         // Ajouter un MouseListener pour gérer les clics de souris
         a.addMouseListener(m);
 
         // Ajouter des fantomes
-        Fantome f1 = new Fantome(c, 2, 0, new Point(500, 800));
-        Fantome f2 = new Fantome(c, 2, 0, new Point(400, 500));
-        Fantome f3 = new Fantome(c, 3, 0, new Point(300, 20));
+        Fantome f1 = new Fantome(c, 2, 1, new Point(500, 800), b);
+        Fantome f2 = new Fantome(c, 5, 2, new Point(400, 500), b);
+        Fantome f3 = new Fantome(c, 3, 1, new Point(300, 20), b);
 
         // Démarrer les mouvements des fantomes
         f1.startMovement();
         f2.startMovement();
         f3.startMovement();
 
+        Araignee a1 = new Araignee(c, 15, 1, new Point(0, 0), b);
+        a1.startMovement();
+        
+        int posY = 0;
+        int araigneeSpeed = 0;
+        for (int nbEnnemies = 0; nbEnnemies < 5; nbEnnemies++) {
+            posY = posY + 25;
+            araigneeSpeed = (int) ((Math.random() * (15 - 8) + 8 ));
+            System.out.println("Speed : " + araigneeSpeed);
+            Araignee araigneeee = new Araignee(c, araigneeSpeed, 1, new Point(0, posY), b);
+            araigneeee.startMovement();
+        }
         // 
         Ennemies.startCollision(c,t);
 
         // Démarrer nos différentes Threads
         col.start();
-        mvtA.start();
         avancer_tir.start();
         r.start();
         c.start();
@@ -60,6 +68,5 @@ public class Main {
         f.add(a);
         f.pack();
         f.setVisible(true);
-
     }
 }

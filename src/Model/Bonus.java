@@ -27,7 +27,10 @@ public class Bonus {
 
     //  Methode pour ajouter un bonus à la liste pointBonus
     public void addBonus(Point p) {
-        Rectangle bonus = new Rectangle(p.x,p.y,WIDTH_B, HEIGHT_B);
+        //A un x et y aléatoires entre -0.5 et 0.5 aux alentours de p 
+        Point newP = new Point(p.x + (int)(Math.random()*WIDTH_B) - WIDTH_B/4, p.y + (int)(Math.random()*HEIGHT_B) - HEIGHT_B/4);   
+        
+        Rectangle bonus = new Rectangle(newP.x,newP.y,WIDTH_B, HEIGHT_B);
         pointBonus.add(bonus);
     }
 

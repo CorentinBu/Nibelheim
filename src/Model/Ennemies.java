@@ -14,18 +14,19 @@ public class Ennemies {
     boolean randomSpawn;
     Point position;
     Rectangle hitboxEnnemie;
+    private Bonus b;
 
     // Variables static afin de savoir quels sont les ennemis présents à l'écran
     public static List<Ennemies> ListEnnemies = new CopyOnWriteArrayList<>();
 
     // Taille du sprite de l'ennemi
-    public static final int WIDTH = 45;
-    public static final int HEIGHT = 45;
+    public static int WIDTH = 45;
+    public static int HEIGHT = 45;
     // Image de l'ennemi
     public Image img = new ImageIcon("src/Images/character.png").getImage().getScaledInstance(WIDTH, HEIGHT,Image.SCALE_DEFAULT);
 
     /* CONSTRUCTEUR */
-    public Ennemies(Character c, int health, int speed, int bonusAmount, Point position, Image sprite) {
+    public Ennemies(Character c, int health, int speed, int bonusAmount, Point position, Image sprite, Bonus b) {
         this.speed = speed;
         this.health = health;
         this.bonusAmount = bonusAmount;
@@ -34,6 +35,7 @@ public class Ennemies {
         this.hitboxEnnemie = new Rectangle(position.x, position.y,WIDTH, HEIGHT);
         // System.out.println("On insère dans liste d'ennemies : " + speed + "
         // vitesse");
+        this.b = b;
         ListEnnemies.add(this);
     }
 
@@ -66,6 +68,7 @@ public class Ennemies {
         for (Ennemies ennemi : ListEnnemies) {
             //Collision entre la soricère et les ennemies (contact entre les deux hitboxes)
             if (c.hitboxC.intersects(ennemi.hitboxEnnemie)) {
+                c.setVie(c.getVie() - 1);
                 ennemi.kill();
             }
             
@@ -82,9 +85,11 @@ public class Ennemies {
     // Losque l'ennemi est touché, il perd de la vie
     public void isHit(int damage) {
         health -= damage;
-        System.out.println("Point de vie : "+this.health);
+        //Lorsque l'ennemi n'a plus de vie, il meurt et lâche des bonus
         if (health == 0) {
-            System.out.println("Normalement je meurs la !");
+            for (int i = 0; i<bonusAmount; i++){
+                b.addBonus(position);
+            }
             this.kill();
         }
     }
