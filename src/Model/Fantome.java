@@ -12,19 +12,19 @@ public class Fantome extends Ennemies {
     private static final int HEALTH_MAX = 10;
 
     // Taille du sprite du fantôme
-    public static final int weight = 80;
-    public static final int height = 50;
+    public static final int width = 52;
+    public static final int height = 65;
 
     // Classe Character
     Character c;
 
     // Image de l'ennemie
-    public static final Image sprite = new ImageIcon("src/Images/ghost.png").getImage().getScaledInstance(weight,
+    public static final Image sprite = new ImageIcon("src/Images/ghost.png").getImage().getScaledInstance(width,
             height, Image.SCALE_DEFAULT);
 
     // Constructeur
     public Fantome(Character c, int speed, int bonusAmount, Point pos, Bonus b) {
-        super(c, HEALTH_MAX, speed, bonusAmount, pos, sprite, b);
+        super(c, HEALTH_MAX, speed,width,height, bonusAmount, pos, sprite, b);
         this.c = c;
     }
 

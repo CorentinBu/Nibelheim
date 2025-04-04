@@ -8,10 +8,10 @@ import Controler.Character;
 public class Tir {
 
     // Attributs et constantes
-    public static final int speed = 50;
+    public static final int speed = 50; // Vitesse de déplacement des balles
 
     // Liste de balles tirées
-    private CopyOnWriteArrayList<Projectile> tirs = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<Projectile> tirs = new CopyOnWriteArrayList<Projectile>();
     ///private ArrayList<Point> directions; // Nouvel attribut pour stocker la direction de chaque tir
 
     // Instances de classe

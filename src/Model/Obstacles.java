@@ -6,8 +6,6 @@ import java.util.Random;
 
 
 public class Obstacles {
-    //nombre d'obstacle valeur aleartoire entre 7 et 10
-    public static int nbObstacle = 7 + (int) (Math.random() * 4);
     //dimension de l'obstacle
     public static final int HEIGHT_O = 50;
     public static final int WIDTH_O = 50;
@@ -20,16 +18,18 @@ public class Obstacles {
 
     //constructeur de la classe Obstacles
     public Obstacles() {
-        genererObstacle();
+        //genererObstacle();
     }
-    //generer une liste d'obstacle
-    public void genererObstacle() {
+
+    // generer une liste d'obstacle
+    public void genererObstacle(int nbObstacle) {
+        obstacles.clear(); // Vider la liste d'obstacles avant de générer de nouveaux obstacles
         int x;
         int y;
         for (int i = 0; i < nbObstacle; i++) {
             //generer un obstacle
-            x = rand.nextInt(1000);
-            y = rand.nextInt(1000);
+            x = rand.nextInt(1920);
+            y = rand.nextInt(1080);
            
             //verifier que les obstacles ne sont pas a la position du joueur
             if(x>800 && x<900 && y>500 && y<600){
