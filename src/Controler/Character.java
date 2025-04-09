@@ -1,9 +1,13 @@
 package Controler;
 
 import javax.swing.ImageIcon;
-import java.awt.*;
+
 import Model.Bonus;
+import Model.ComboBonus;
 import Model.Obstacles;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 
 //Classe du personnage principal du jeu. Celui contrôlé par le joueur.
@@ -18,8 +22,13 @@ public class Character extends Thread {
     private Bonus b ;
     // Instance de la classe obstacles
     private Obstacles o;
+    // Instance de la classe combos
+    private ComboBonus cb;
     // Hitbox du personnage
     public Rectangle hitboxC;
+
+    // liste des combosbonus du joueur
+    private ArrayList<ComboBonus> listComboBonus = new ArrayList<ComboBonus>();
 
     // Attributs pour la position du joueur
     private double current_x = 820;
@@ -27,7 +36,7 @@ public class Character extends Thread {
     
     private double vx = 0, vy = 0;  // Vitesse horizontale et verticale
     private double acceleration = 2; // Accélération progressive
-    private double friction = 0.9;  // Décélération (simule l’inertie)
+    private double friction = 0.9;  // Déccélération (simule l’inertie)
     private double maxSpeed = 8;   // Vitesse maximale
 
     
@@ -42,7 +51,27 @@ public class Character extends Thread {
     public static final int WIDTH = 90;
     public static final int HEIGHT = 90;
 
-    //creer des getters pour vx et vy
+    // Getteurs pour les combos
+    public ArrayList<ComboBonus> getListComboBonus() {
+        return listComboBonus;
+    }
+
+    // Ajouter un nouveau combo à la liste
+    public void addComboBonus(ComboBonus cb) {
+        // Vérifier si le joueur a assez de bonus pour acheter le combo
+        if (this.nombreBonus < cb.prix) {
+            System.out.println("Pas assez de bonus pour acheter ce combo.");
+            return;
+        }
+        else {
+            System.out.println("Combo acheté !");
+            listComboBonus.add(cb);
+            this.nombreBonus -= cb.prix; // Réduire le nombre de bonus du joueur 
+        }
+        
+    }
+
+    // Creer des getters pour vx et vy
     public double getVx() {
         return vx;
     }

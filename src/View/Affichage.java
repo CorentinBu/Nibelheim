@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
 import Controler.Character;
 import Controler.Inputs;
 import Controler.LevelManager;
@@ -12,6 +13,7 @@ import Model.Obstacles;
 import Model.Araignee;
 import Model.Bonus;
 import Model.Bouton;
+import Model.ComboBonus;
 import Model.Ennemies;
 import Model.Fantome;
 
@@ -21,23 +23,33 @@ public class Affichage extends JPanel {
     public static final int X = 1920;
     public static final int Y = 1080;
 
+    // // Dimmension de la fenetre de bonus
+    // public static final int WIDTH_B = 900;
+
+
     // Buttons du jeu
     // Bouton pour relancer la partie si on a perdu
-    private Bouton relancerButton = new Bouton("Nouvelle Partie",X / 2 - 100, Y / 2 - 30, 200, 50, new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null);
+    private Bouton relancerButton = new Bouton("Nouvelle Partie",X / 2 - 100, Y / 2 - 30, 200, 50, new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null,18);
     // Bouton pour quitter le jeu
-    private Bouton acceuil = new Bouton("Acceuil",X / 2 - 100, Y / 2 + 100, 200, 50, new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null);  
+    private Bouton acceuil = new Bouton("Acceuil",X / 2 - 100, Y / 2 + 100, 200, 50, new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null,18);  
     // Bouton pour démarrer le jeu
-    private Bouton startGame = new Bouton("Commencer une partie", 30, Y - 180, 300, 55, new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), "src/Images/start_bouton.png");
+    private Bouton startGame = new Bouton("Commencer une partie", 30, Y - 180, 300, 55, new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), "src/Images/start_bouton.png",18);
     // Bouton pour passer au niveau suivant
-    private Bouton nextStageBtn = new Bouton("Etage suivant", X / 2 + 230, Y / 2 + 285, 180, 40, new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null); 
+    private Bouton nextStageBtn = new Bouton("Etage suivant", X / 2 + 230, Y / 2 + 285, 180, 40, new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null,18); 
     // Bouton pour quitter le jeu
-    private Bouton quitter = new Bouton("Quitter",X - 150, 30, 100, 35, new Color(255, 0, 0), Color.WHITE, new Color(255, 0, 0), null);
+    private Bouton quitter = new Bouton("Quitter",X - 150, 30, 100, 35, new Color(255, 0, 0), Color.WHITE, new Color(255, 0, 0), null,18);
     // Bouton pour accéder à la boutique
-    private Bouton boutique = new Bouton("Boutique",X - 320, 30, 140, 35, new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null);
+    private Bouton boutique = new Bouton("Boutique",X - 320, 30, 140, 35, new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null,18);
     // Bouton pour mettre le jeu en pause
     private Bouton pauseButton;
     // Bouton pour mettre le jeu en play
     private Bouton resumeButton;
+    // Bouton pour acheter les combos de types 1
+    private Bouton buyCombo1 = new Bouton("Buy 50p", X / 2 - 225, Y / 2 - 95, 90, 22, new Color(96,96,96), Color.WHITE, new Color(70, 130, 180), null,14);
+    // Bouton pour acheter les combos de types 2
+    private Bouton buyCombo2 = new Bouton("Buy 75p", X / 2 - 50, Y / 2 - 95, 90, 22, new Color(96,96,96), Color.WHITE, new Color(70, 130, 180), null,14);
+    // Bouton pour acheter les combos de types 3
+    private Bouton buyCombo3 = new Bouton("Buy 90p", X / 2 + 125, Y / 2 - 95, 90, 22, new Color(96,96,96), Color.WHITE, new Color(70, 130, 180), null,14);
 
     // Attribut pour lancer le jeu ou le mettre en pause
     public boolean game_running = false;
@@ -164,6 +176,25 @@ public class Affichage extends JPanel {
         nextStageBtn.setVisible(false);
         quitter.setVisible(false);
         boutique.setVisible(false);
+        buyCombo1.setVisible(false);
+        buyCombo2.setVisible(false);
+        buyCombo3.setVisible(false);
+
+        // Acheter un bonus de type 1 ()
+        buyCombo1.addActionListener(e -> {
+            c.addComboBonus(new ComboBonus(50, 1)); // Acheter le bonus de type 1
+        });
+
+        // Acheter un bonus de type 2
+        buyCombo2.addActionListener(e -> {
+            c.addComboBonus(new ComboBonus(75, 2)); // Acheter le bonus de type 2
+        });
+
+        // Acheter un bonus de type 3
+        buyCombo3.addActionListener(e -> {
+            c.addComboBonus(new ComboBonus(90, 3)); // Acheter le bonus de type 3
+        });
+
 
         // Ajouter les boutons au panel (sans les afficher directement)
         add(relancerButton);
@@ -172,6 +203,9 @@ public class Affichage extends JPanel {
         add(nextStageBtn);
         add(boutique);
         add(quitter);
+        add(buyCombo1);
+        add(buyCombo2);
+        add(buyCombo3);
 
     }
 
@@ -257,7 +291,7 @@ public class Affichage extends JPanel {
 
     // Méthode pour dessiner et afficher la boutique
     public void drawBoutique (Graphics g) {
-        if(lm.getShowStore() == true) {
+        if(lm.getShowStore() == false) {
             // Un grand carré de 900*700 au centre de la fenetre représente la boutique
             g.setColor(new Color(220, 220, 220, 200)); // Couleur de fond de la boutique
             g.fillRect(X / 2 - 450, Y / 2 - 350, 900, 700); // Fond de la boutique
@@ -265,14 +299,43 @@ public class Affichage extends JPanel {
             g.drawRect(X / 2 - 450, Y / 2 - 350, 900, 700); // Contour de la boutique
 
             // Contenu de la boutique ici
-            g.setFont(new Font("Arial", Font.BOLD, 20)); // Police de la boutique
+            g.setFont(new Font("Comic Sans MS", Font.BOLD, 20)); // Police de la boutique
             g.setColor(Color.BLACK); // Couleur du texte
-            g.drawString("Victoire !!! ...... Boutique ici", X / 2 - 100, Y / 2 - 300); // Titre de la boutique
+            g.drawString("Victoire ! Etage " + lm.getNiveauActuel().getNiveau() + " réussi ✅", X / 2 - 115, Y / 2 - 300); // Titre de la boutique
+
+            // dessiner 3 cercles alignés horizontalement qui representent les bonus qui peuvent etre achetés
+            g.setColor(Color.YELLOW); // Couleur des cercles
+            g.fillOval(X / 2 - 225, Y / 2 - 200, 80, 80); // Cercle 1
+            g.fillOval(X / 2 - 50, Y / 2 - 200, 80, 80); // Cercle 2
+            g.fillOval(X / 2 + 125, Y / 2 - 200, 80, 80); // Cercle 3
+
+            
+
+            // Afficher le nombre de pièces en bas à gauche
+            g.drawImage(coinImage, X / 2 + 225, Y / 2 + 400, null); // Afficher l'image du bonus
+            g.setColor(Color.BLACK); // Couleur du texte
+            g.setFont(new Font("Arial", Font.PLAIN, 15)); // Police de texte
+            g.drawString("Double tir", X / 2 - 220, Y / 2 - 105); // Texte du bonus 1
+            g.drawString("Vitesse x2", X / 2 - 45, Y / 2 - 105); // Texte du bonus 2
+            g.drawString("Vie pleine", X / 2 + 130, Y / 2 - 105); // Texte du bonus 3
+
+            // Afficher le nombre de bonus collectés en bas à gauche
+            g.setColor(Color.BLACK); // Couleur du texte
+            g.setFont(new Font("Arial", Font.PLAIN, 15)); // Police de texte
+            g.drawString("Pièces : " + c.getNombreBonus(), X / 2 + 300, Y / 2 + 400); // Texte du bonus 3
+           
 
             nextStageBtn.setVisible(true); // Afficher le bouton pour passer au niveau suivant
+            // Afficher les boutons d'achat des combos
+            buyCombo1.setVisible(true); // Afficher le bouton d'achat du combo 1
+            buyCombo2.setVisible(true); // Afficher le bouton d'achat du combo 2
+            buyCombo3.setVisible(true); // Afficher le bouton d'achat du combo 3
         }
         else {
             nextStageBtn.setVisible(false);
+            buyCombo1.setVisible(false);
+            buyCombo2.setVisible(false);
+            buyCombo3.setVisible(false);
         }
 
     }
@@ -316,7 +379,7 @@ public class Affichage extends JPanel {
         }
     }
     
-    //methode qui dessine les obstacles
+    // methode qui dessine les obstacles
     public void drawObstacle(Graphics g){
         int i = 0;
         ArrayList<Point> obstacles = o.getObstacles();
@@ -327,6 +390,7 @@ public class Affichage extends JPanel {
         }
     }
 
+    // Méthode pour dessiner le niveau actuel
     public void drawNiveau(Graphics g) {
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.PLAIN, 14));

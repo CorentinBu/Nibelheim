@@ -1,12 +1,13 @@
 package Model;
 
-import Controler.Character;
-
 import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
+
+import Controler.Character;
+
 import java.util.concurrent.CopyOnWriteArrayList;
 
 //Classe représentant un ennemie quelconque. Ses sous-classes sont les ennemies spécifiques

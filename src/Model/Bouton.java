@@ -17,11 +17,12 @@ public class Bouton extends JButton {
     int height; // hauteur du bouton
     Color couleur; // Couleur du bouton
     Color couleur_texte; // Couleur du texte
+    int tailleTexte; // Taille du texte
     Color couleur_survol; // Couleur du bouton quand on survole
     String image; // image du bouton (facultatif)
 
     // Constructeur de la classe Bouton
-    public Bouton(String name, int x, int y, int width, int height, Color couleur, Color couleur_texte, Color couleur_survol, String image) {
+    public Bouton(String name, int x, int y, int width, int height, Color couleur, Color couleur_texte, Color couleur_survol, String image, int tailleTexte) {
         this.name = name;
         this.x = x;
         this.y = y;
@@ -33,7 +34,7 @@ public class Bouton extends JButton {
         this.image = image;
 
         // Initialisation du bouton
-        setFont(new Font("Arial", Font.BOLD, 18));
+        setFont(new Font("Arial", Font.BOLD, tailleTexte));
         setBounds(x, y, width, height);
         setBackground(couleur);
         setForeground(couleur_texte);
