@@ -18,6 +18,9 @@ public class Projectile {
         hitboxProjectile = new Rectangle(position.x, position.y, 10,10);
     }
 
+    
+
+
     // Getteurs pour récupérer la position et la direction
     public Point getPosition() {
         return position;

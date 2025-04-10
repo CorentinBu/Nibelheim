@@ -14,12 +14,13 @@ import Model.Bonus;
 import Model.Bouton;
 import Model.Ennemies;
 import Model.Fantome;
+import Model.Goules;
 
 public class Affichage extends JPanel {
 
     // Dimensions de la vue, statiques
-    public static final int X = 1920;
-    public static final int Y = 1080;
+    public static final int X = 1300;
+    public static final int Y = 600;
 
     // Buttons du jeu
     // Bouton pour relancer la partie si on a perdu
@@ -300,6 +301,7 @@ public class Affichage extends JPanel {
     public void drawEnnemies(Graphics g) {
         // Appel de la méthode statique sans instance
         List<Ennemies> ennemies = Ennemies.getListEnnemies();
+        
         // Boucle affichant tous les ennemis
         for (Ennemies ennemi : ennemies) {
             // Vérification si l'ennemi est un Fantome
@@ -313,17 +315,25 @@ public class Affichage extends JPanel {
                 g.drawImage(araignee.img, (int) araignee.getPosition().getX(), (int) araignee.getPosition().getY(), null);
                 //g.drawRect((int) ennemi.getPosition().getX(), (int) ennemi.getPosition().getY(), ennemi.getWidth(ennemi), ennemi.getHeight(ennemi));
             }
+            if(ennemi instanceof Goules) {
+                Goules goule = (Goules) ennemi; // Casting en Fantome
+                g.drawImage(goule.img, (int) goule.getPosition().getX(), (int) goule.getPosition().getY(), null);
+                //g.drawRect((int) ennemi.getPosition().getX(), (int) ennemi.getPosition().getY(), ennemi.getWidth(ennemi), ennemi.getHeight(ennemi));
+                if (goule.projectile != null) {
+                    g.setColor(Color.BLUE);
+                    g.fillOval(goule.projectile.getPosition().x, goule.projectile.getPosition().y, 8, 8);
+                    g.setColor(Color.BLACK);
+                }
+            }
         }
     }
     
     //methode qui dessine les obstacles
     public void drawObstacle(Graphics g){
-        int i = 0;
         ArrayList<Point> obstacles = o.getObstacles();
         for(Point obstacle : obstacles){
         // Afficher les images de caisse
         g.drawImage(imgObstacle,(int)obstacle.getX(),(int)obstacle.getY(), null);
-        i+=1;
         }
     }
 

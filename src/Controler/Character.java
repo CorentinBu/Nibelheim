@@ -31,8 +31,8 @@ public class Character extends Thread {
     private double maxSpeed = 8;   // Vitesse maximale
 
     
-    private int vie = 5; // Points de vie du joueur
-    public static final int maxVie = 5; // Points de vie maximum du joueur
+    private int vie = 20; // Points de vie du joueur
+    public static final int maxVie = 20; // Points de vie maximum du joueur
     private Inputs inputs; // Gestion des entrées clavier
 
     private int nombreBonus = 0; // Nombre de bonus ramassés

@@ -23,8 +23,8 @@ public class Ennemies {
     public static List<Ennemies> ListEnnemies = new CopyOnWriteArrayList<>();
 
     // Taille de la fenêtre de jeu pour gerer la position de l'ennemi
-    private static final int WIDTH_fentre = 1920;
-    private static final int HEIGHT_fentre = 1080;
+    private static final int WIDTH_fenetre = 1300;
+    private static final int HEIGHT_fenetre = 600;
 
     // Generateur d'entier aléartoire
     private static final Random rand = new Random();
@@ -97,13 +97,13 @@ public class Ennemies {
 
     // Métode qui génère une position aleartoire pour l'ennemi
     public static Point genererPositionAleartoire() {
-        int x = new int[]{-50,100,250,500,750,1000,1500,WIDTH_fentre+50}[rand.nextInt(8)];
+        int x = new int[]{-50,100,250,500,750,1000,1500,WIDTH_fenetre+50}[rand.nextInt(8)];
         int y;
-        if (x == -50 || x == WIDTH_fentre+50) {
-            y = rand.nextInt(HEIGHT_fentre - (-50) + 1) + (-50);
+        if (x == -50 || x == WIDTH_fenetre+50) {
+            y = rand.nextInt(HEIGHT_fenetre - (-50) + 1) + (-50);
         }
         else {
-            y = new int[]{-100,HEIGHT_fentre+50}[rand.nextInt(2)];
+            y = new int[]{-100,HEIGHT_fenetre+50}[rand.nextInt(2)];
         }
         return new Point(x, y);
     }
@@ -119,6 +119,7 @@ public class Ennemies {
                 // Collision entre la soricère et les ennemies (contact entre les deux hitboxes)
                 if (c.hitboxC.intersects(ennemi.hitboxEnnemie)) {
                     c.setVie(c.getVie() - 1);
+                    System.out.println(c.getVie());
                     ennemi.kill();
                 }
                 //Collision entre les tirs et les ennemies
@@ -159,6 +160,11 @@ public class Ennemies {
         // if c'est une araignee, on le démarre
         else if (this instanceof Araignee) {
             ((Araignee) this).startMovement();
+            this.isMoving = true;
+        }
+        // if c'est une goule, on le démarre
+        else if(this instanceof Goules) {
+            ((Goules) this).startMovement();
             this.isMoving = true;
         }
     }

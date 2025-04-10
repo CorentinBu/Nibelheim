@@ -11,6 +11,7 @@ import Model.Araignee;
 import Model.Bonus;
 import Model.Ennemies;
 import Model.Fantome;
+import Model.Goules;
 import Model.Niveau;
 import Model.Obstacles;
 import View.Affichage;
@@ -24,8 +25,9 @@ public class LevelManager extends Thread {
     public static final int DELAY = 50; // Délai entre chaque vérification du niveau
 
     // Constantes pour les nombres de chaque type d'ennemi
-    public static final int pourcentageFantomes = 40; // pourcenage de fantômes dans le niveau
+    public static  int pourcentageFantomes = 40; // pourcenage de fantômes dans le niveau
     public static final int pourcentageAraignee = 60; // pourcentage d'araignées dans le niveau
+    public static int pourcentageGoules=10;// pourcentage de goules dans le niveau
 
     // Instance du classe utile
     private Character c; // Instance du personnage
@@ -85,10 +87,18 @@ public class LevelManager extends Thread {
         int nombreEnnemis = niveaux.get(currentLevelIndex).getNombreEnnemis();
         //System.out.println("Nombre d'ennemis : " + nombreEnnemis);
 
+        int nombreGoules = 5; // Initialisation du nombre de goules à 0
+        //si on est a un niveau supérieur ou égal à 1, on crée les goules
+       /* if(getNiveauActuel().getNiveau()>=1){
+            pourcentageFantomes=30;
+            nombreGoules = (int) (nombreEnnemis * pourcentageGoules / 100);
+        }*/
+
         // On calcule le nombre d'ennemis de chaque type
         int nombreFantomes = (int) (nombreEnnemis * pourcentageFantomes / 100);
         int nombreAraignees = (int) (nombreEnnemis * pourcentageAraignee / 100);
-
+        
+        
         // On crée les fantomes avec leurs nombres respectives
         for (int i = 0; i < nombreFantomes; i++) {
             Fantome fantome = new Fantome(c, rand.nextInt(6 - 3 + 1) + 3, 1, Ennemies.genererPositionAleartoire(), b);
@@ -96,6 +106,10 @@ public class LevelManager extends Thread {
         // On crée les araignées avec leurs nombres respectives
         for (int i = 0; i < nombreAraignees; i++) {
             Araignee araignee = new Araignee(c, rand.nextInt(6 - 3 + 1) + 3, 1, Ennemies.genererPositionAleartoire(), b);
+        }
+        // On crée les goules avec leurs nombres respectives
+        for (int i = 0; i < nombreGoules; i++) {
+            Goules goule = new Goules(c, rand.nextInt(6 - 3 + 1) + 3, 1, Ennemies.genererPositionAleartoire(), b);
         }
 
         o.genererObstacle(nombreObstacles); // Générer les obstacles
