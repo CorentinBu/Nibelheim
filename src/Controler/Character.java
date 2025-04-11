@@ -89,9 +89,9 @@ public class Character extends Thread {
 
 
     // Sprite du personnage
-    public static final Image characterSprite = new ImageIcon("src/Images/character.png")
-            .getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
-
+    public static final Image characterSprite = new ImageIcon(
+        Character.class.getResource("/Images/character.png")).getImage()
+        .getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
 
 
     public synchronized void pauseGame() {

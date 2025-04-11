@@ -19,8 +19,8 @@ public class Araignee extends Ennemies {
     Character c;
 
     // Image de l'ennemie
-    public static final Image sprite = new ImageIcon("src/Images/araignee.gif").getImage().getScaledInstance(width,
-            height, Image.SCALE_DEFAULT);
+    public static final Image sprite = new ImageIcon(Araignee.class.getResource("/Images/araignee.gif"))
+            .getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT);
 
     // Constructeur
     public Araignee(Character c, int speed, int bonusAmount, Point pos, Bonus b) {
