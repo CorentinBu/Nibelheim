@@ -1,14 +1,20 @@
 package Controler;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.swing.ImageIcon;
 
 import Model.Bonus;
 import Model.ComboBonus;
 import Model.Obstacles;
 
-import java.awt.*;
-import java.util.ArrayList;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
+import java.awt.*;
+import java.io.File;
+import java.util.ArrayList;
 
 //Classe du personnage principal du jeu. Celui contrôlé par le joueur.
 //Le joueur utilise les touches Z,Q,S,D pour se déplacer.
@@ -19,7 +25,7 @@ import java.util.ArrayList;
 public class Character extends Thread {
 
     // Instance de la classe bonus
-    private Bonus b ;
+    private Bonus b;
     // Instance de la classe obstacles
     private Obstacles o;
     // Instance de la classe combos
@@ -27,19 +33,21 @@ public class Character extends Thread {
     // Hitbox du personnage
     public Rectangle hitboxC;
 
+    // Clip audio pour le son du bonus
+    Clip audioBonus = null;
+
     // liste des combosbonus du joueur
     private ArrayList<ComboBonus> listComboBonus = new ArrayList<ComboBonus>();
 
     // Attributs pour la position du joueur
     private static double current_x = 820;
     private static double current_y = 540;
-    
-    private double vx = 0, vy = 0;  // Vitesse horizontale et verticale
-    private double acceleration = 2; // Accélération progressive
-    private double friction = 0.9;  // Déccélération (simule l’inertie)
-    private double maxSpeed = 8;   // Vitesse maximale
 
-    
+    private double vx = 0, vy = 0; // Vitesse horizontale et verticale
+    private double acceleration = 2; // Accélération progressive
+    private double friction = 0.9; // Déccélération (simule l’inertie)
+    private double maxSpeed = 8; // Vitesse maximale
+
     private int vie = 5; // Points de vie du joueur
     public static final int maxVie = 5; // Points de vie maximum du joueur
     private Inputs inputs; // Gestion des entrées clavier
@@ -63,6 +71,7 @@ public class Character extends Thread {
     public double getVx() {
         return vx;
     }
+
     public double getVy() {
         return vy;
     }
@@ -71,6 +80,7 @@ public class Character extends Thread {
     public double getCurrent_x() {
         return current_x;
     }
+
     public double getCurrent_y() {
         return current_y;
     }
@@ -80,13 +90,14 @@ public class Character extends Thread {
         this.o = o;
         this.b = bonus;
         this.inputs = i;
-        this.hitboxC = new Rectangle((int)current_x, (int)current_y, WIDTH, HEIGHT);
+        this.hitboxC = new Rectangle((int) current_x, (int) current_y, WIDTH, HEIGHT);
     }
 
     // Setters pour la position du joueur
     public void setCurrent_x(double current_x) {
         this.current_x = current_x;
     }
+
     public void setCurrent_y(double current_y) {
         this.current_y = current_y;
     }
@@ -95,6 +106,7 @@ public class Character extends Thread {
     public int getNombreBonus() {
         return nombreBonus;
     }
+
     public void setNombreBonus(int nombreBonus) {
         this.nombreBonus = nombreBonus;
     }
@@ -104,12 +116,9 @@ public class Character extends Thread {
         this.inputs = i;
     }
 
-
     // Sprite du personnage
     public static final Image characterSprite = new ImageIcon("src/Images/character.png")
             .getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
-
-
 
     public synchronized void pauseGame() {
         paused = true;
@@ -119,7 +128,7 @@ public class Character extends Thread {
         paused = false;
         notify(); // Réveille le thread s'il est en attente
     }
-        
+
     public void run() {
         while (vie >= 0) {
             synchronized (this) {
@@ -139,7 +148,7 @@ public class Character extends Thread {
             try {
                 Thread.sleep(15);
             } catch (InterruptedException e) {
-                //Thread.currentThread().interrupt();
+                // Thread.currentThread().interrupt();
             }
         }
     }
@@ -147,11 +156,18 @@ public class Character extends Thread {
     // Gestion du déplacement avec inertie
     private void updateMovement() {
         // Accélération selon les touches pressées
-        if (inputs.up) { vy -= acceleration; }
-        if (inputs.down) { vy += acceleration; }
-        if (inputs.left) { vx -= acceleration; }
-        if (inputs.right) { vx += acceleration; }
-        
+        if (inputs.up) {
+            vy -= acceleration;
+        }
+        if (inputs.down) {
+            vy += acceleration;
+        }
+        if (inputs.left) {
+            vx -= acceleration;
+        }
+        if (inputs.right) {
+            vx += acceleration;
+        }
 
         // Limite la vitesse maximale
         vx = Math.max(-maxSpeed, Math.min(maxSpeed, vx));
@@ -162,14 +178,16 @@ public class Character extends Thread {
         vy *= friction;
 
         // Appliquer le mouvement
-        // Vérifier si le mouvement horizontal du joueur l'amène en collision avec un obstacle
+        // Vérifier si le mouvement horizontal du joueur l'amène en collision avec un
+        // obstacle
         if (parcoursObstacle(current_x + vx, current_y) == false) {
             current_x += vx;
         } else {
             vx = 0; // Arrêt du mouvement horizontal en cas de collision
         }
-        // Vérifier si le mouvement vertical du joueur l'amène en collision avec un obstacle
-        if (parcoursObstacle(current_x, current_y + vy) ==false) {
+        // Vérifier si le mouvement vertical du joueur l'amène en collision avec un
+        // obstacle
+        if (parcoursObstacle(current_x, current_y + vy) == false) {
             current_y += vy;
         } else {
             vy = 0; // Arrêt du mouvement vertical en cas de collision
@@ -194,10 +212,21 @@ public class Character extends Thread {
         return this.nombreBalles;
     }
 
-    // Méthode pour vérifier si le joueur est proche d'un bonus et récupérer ce bonus
+    // Méthode pour vérifier si le joueur est proche d'un bonus et récupérer ce
+    // bonus
     public void checkBonusProche() {
         for (int i = 0; i < b.getPointBonus().size(); i++) {
             if (hitboxC.intersects(b.getPointBonus().get(i))) {
+
+                try {
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Audios/se_item00.wav"));
+                    audioBonus = AudioSystem.getClip();
+                    audioBonus.open(audioIn);
+                    audioBonus.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 nombreBonus++;
                 b.removeBonus(b.getPointBonus().get(i).getLocation());
                 break;
@@ -205,34 +234,34 @@ public class Character extends Thread {
         }
     }
 
-
-    //methode pour verifier si il y a collision entre le joueur et un obstacle
-    public boolean collisionObstacleJoueur( double next_x, double next_y, int ox, int oy) {
-        Rectangle r1 = new Rectangle((int) next_x, (int) next_y,WIDTH, HEIGHT);
+    // methode pour verifier si il y a collision entre le joueur et un obstacle
+    public boolean collisionObstacleJoueur(double next_x, double next_y, int ox, int oy) {
+        Rectangle r1 = new Rectangle((int) next_x, (int) next_y, WIDTH, HEIGHT);
         Rectangle r2 = new Rectangle(ox, oy, Obstacles.WIDTH_O, Obstacles.HEIGHT_O);
         return r1.intersects(r2);
     }
 
-    //on surcharge la méthode de détection pour son utilisation dans la classe Obstacle
-    public static boolean collisionObstacleJoueur( int ox, int oy) {
-        Rectangle r1 = new Rectangle((int) current_x, (int) current_y,WIDTH, HEIGHT);
+    // on surcharge la méthode de détection pour son utilisation dans la classe
+    // Obstacle
+    public static boolean collisionObstacleJoueur(int ox, int oy) {
+        Rectangle r1 = new Rectangle((int) current_x, (int) current_y, WIDTH, HEIGHT);
         Rectangle r2 = new Rectangle(ox, oy, Obstacles.WIDTH_O, Obstacles.HEIGHT_O);
         return r1.intersects(r2);
     }
 
-     //methode pour parcourir la liste des obstacles et verifier si il y a collision
-     public boolean parcoursObstacle(double next_x, double next_y) {
-         boolean collision = false;
-         for (Point obstacle : o.getObstacles()) {
-             if (collisionObstacleJoueur(next_x, next_y, obstacle.x, obstacle.y)) {
-                 // System.out.println("Collision avec un obstacle");
-                 collision=true;
-                 break;
-             }
-         }
-         return collision;
-         
-     }
+    // methode pour parcourir la liste des obstacles et verifier si il y a collision
+    public boolean parcoursObstacle(double next_x, double next_y) {
+        boolean collision = false;
+        for (Point obstacle : o.getObstacles()) {
+            if (collisionObstacleJoueur(next_x, next_y, obstacle.x, obstacle.y)) {
+                // System.out.println("Collision avec un obstacle");
+                collision = true;
+                break;
+            }
+        }
+        return collision;
+
+    }
 
     // Méthode pour réinitialiser le personnage (Quand on relance une partie)
     public void restartPlayer() {
@@ -252,14 +281,13 @@ public class Character extends Thread {
         if (this.nombreBonus < cb.prix) {
             System.out.println("Pas assez de bonus pour acheter ce combo.");
             return false; // Pas assez de bonus
-        }
-        else {
+        } else {
             System.out.println("Combo acheté !");
             listComboBonus.add(cb);
-            this.nombreBonus -= cb.prix; // Réduire le nombre de bonus du joueur 
+            this.nombreBonus -= cb.prix; // Réduire le nombre de bonus du joueur
             return true; // Combo ajouté avec succès
         }
-        
+
     }
 
     // Méthode pour activer le combos
@@ -294,6 +322,5 @@ public class Character extends Thread {
         this.friction = 0.9; // Réinitialiser la friction
         this.nombreBalles = 1; // Réinitialiser le nombre de balles tirées par shoot
     }
-    
 
 }
