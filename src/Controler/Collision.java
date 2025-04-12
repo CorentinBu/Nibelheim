@@ -1,5 +1,6 @@
 package Controler;
 
+import Model.Character;
 import Model.Ennemies;
 import Model.Tir;
 
@@ -31,7 +32,7 @@ public class Collision extends Thread {
             c.checkBonusProche();
 
             // Détecter les collisions des ennemis
-            e.allCollisions(c, t);
+            Ennemies.allCollisions(c, t);
 
             try {
                 Thread.sleep(DELAY);
@@ -40,5 +41,5 @@ public class Collision extends Thread {
             }
         }
     }
-    
+
 }
