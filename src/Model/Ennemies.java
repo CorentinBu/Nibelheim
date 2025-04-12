@@ -1,12 +1,16 @@
 package Model;
 
-import Controler.Character;
-
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.swing.ImageIcon;
+
+import javax.sound.sampled.Clip;
+
 import java.util.concurrent.CopyOnWriteArrayList;
 
 //Classe représentant un ennemie quelconque. Ses sous-classes sont les ennemies spécifiques
@@ -30,8 +34,14 @@ public class Ennemies {
     private static final Random rand = new Random();
 
     // Taille du sprite de l'ennemi
-    private  int width;
-    private  int height;
+    private int width;
+    private int height;
+
+    // Clip audio pour l'ennemi étant détruit
+    Clip audioKill = null;
+
+    // Pour quand le joueur est touché
+    static Clip audioIsHit = null;
 
     // getteurs pour la taille de l'ennemi
     public int getWidth(Ennemies e) {
@@ -46,12 +56,13 @@ public class Ennemies {
     public boolean getIsMoving() {
         return isMoving;
     }
-    
+
     // Image de l'ennemi
-    public Image img ;
+    public Image img;
 
     /* CONSTRUCTEUR */
-    public Ennemies(Character c, int health, int speed,int width, int height, int bonusAmount, Point position, Image sprite, Bonus b) {
+    public Ennemies(Character c, int health, int speed, int width, int height, int bonusAmount, Point position,
+            Image sprite, Bonus b) {
         this.speed = speed;
         this.health = health;
         this.bonusAmount = bonusAmount;
@@ -59,7 +70,7 @@ public class Ennemies {
         this.position = position;
         this.width = width;
         this.height = height;
-        this.hitboxEnnemie = new Rectangle(position.x, position.y,width, height);
+        this.hitboxEnnemie = new Rectangle(position.x, position.y, width, height);
         // System.out.println("On insère dans liste d'ennemies : " + speed + "vitesse");
         this.b = b;
         ListEnnemies.add(this);
@@ -97,20 +108,19 @@ public class Ennemies {
 
     // Métode qui génère une position aleartoire pour l'ennemi
     public static Point genererPositionAleartoire() {
-        int x = new int[]{-50,100,250,500,750,1000,1500,WIDTH_fentre+50}[rand.nextInt(8)];
+        int x = new int[] { -50, 100, 250, 500, 750, 1000, 1500, WIDTH_fentre + 50 }[rand.nextInt(8)];
         int y;
-        if (x == -50 || x == WIDTH_fentre+50) {
+        if (x == -50 || x == WIDTH_fentre + 50) {
             y = rand.nextInt(HEIGHT_fentre - (-50) + 1) + (-50);
-        }
-        else {
-            y = new int[]{-100,HEIGHT_fentre+50}[rand.nextInt(2)];
+        } else {
+            y = new int[] { -100, HEIGHT_fentre + 50 }[rand.nextInt(2)];
         }
         return new Point(x, y);
     }
 
     /* METHODES */
 
-    //Lorsque l'ennemie touche le joueur
+    // Lorsque l'ennemie touche le joueur
     public static void allCollisions(Character c, Tir t) {
         List<Projectile> tirs = t.getTirs();
         for (Ennemies ennemi : ListEnnemies) {
@@ -118,26 +128,36 @@ public class Ennemies {
             if (ennemi.isMoving) {
                 // Collision entre la soricère et les ennemies (contact entre les deux hitboxes)
                 if (c.hitboxC.intersects(ennemi.hitboxEnnemie)) {
+
+                    try {
+                        AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Audios/se_graze.wav"));
+                        audioIsHit = AudioSystem.getClip();
+                        audioIsHit.open(audioIn);
+                        audioIsHit.start();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     c.setVie(c.getVie() - 1);
                     ennemi.kill();
                 }
-                //Collision entre les tirs et les ennemies
-                for (Projectile proj : tirs){
-                    if (proj.hitboxProjectile.intersects(ennemi.hitboxEnnemie)){
-                        ennemi.isHit(1);     
+                // Collision entre les tirs et les ennemies
+                for (Projectile proj : tirs) {
+                    if (proj.hitboxProjectile.intersects(ennemi.hitboxEnnemie)) {
+                        ennemi.isHit(1);
                         tirs.remove(proj);
                     }
                 }
             }
-        }        
+        }
     }
 
     // Losque l'ennemi est touché, il perd de la vie
     public void isHit(int damage) {
         health -= damage;
-        //Lorsque l'ennemi n'a plus de vie, il meurt et lâche des bonus
+        // Lorsque l'ennemi n'a plus de vie, il meurt et lâche des bonus
         if (health == 0) {
-            for (int i = 0; i<bonusAmount; i++){
+            for (int i = 0; i < bonusAmount; i++) {
                 b.addBonus(position);
             }
             this.kill();
@@ -146,6 +166,15 @@ public class Ennemies {
 
     // L'ennemi meurt quand sa vie arrive à 0
     public void kill() {
+
+        try {
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Audios/se_damage01.wav"));
+            audioKill = AudioSystem.getClip();
+            audioKill.open(audioIn);
+            audioKill.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ListEnnemies.remove(this);
     }
 
@@ -161,21 +190,11 @@ public class Ennemies {
             ((Araignee) this).startMovement();
             this.isMoving = true;
         }
+        // if c'est une goule, on le démarre
+        else if (this instanceof Goules) {
+            ((Goules) this).startMovement();
+            this.isMoving = true;
+        }
     }
-
-    // Thread pour détecter les collisions
-    // public static void startCollision(Character c, Tir t) {
-    //     Thread collisionThread = new Thread(() -> {
-    //         while (true) {
-    //             allCollisions(c, t);
-    //             try {
-    //                 Thread.sleep(50); // Attendre 50 ms entre chaque déplacement
-    //             } catch (InterruptedException e) {
-    //                 e.printStackTrace();
-    //             }
-    //         }
-    //     });
-    //     collisionThread.start();
-    // }
 
 }
