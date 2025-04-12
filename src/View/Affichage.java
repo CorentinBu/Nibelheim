@@ -120,8 +120,7 @@ public class Affichage extends JPanel {
             i.resetKeys();
             c.restartPlayer();
             c.resetInput(i);
-            this.addKeyListener(i);
-            this.setFocusable(true);
+            configurerClavier();
             tir.resetTirs();
             b.resetBonus();
         });
@@ -139,14 +138,13 @@ public class Affichage extends JPanel {
         
         // Lancer une nouvelle partie
         startGame.addActionListener(e -> {
-            lm.startNewGame(); // Lancer une nouvelle partie
-            i.resetKeys(); // Réinitialiser les touches
-            c.restartPlayer(); // Réinitialiser le joueur
-            c.resetInput(i); // Réinitialiser les entrées
-            this.addKeyListener(i); // Ajouter le listener d'entrées
-            this.setFocusable(true); // Rendre le panel focusable
-            tir.resetTirs(); // Réinitialiser les tirs
-            b.resetBonus(); //  Réinitialiser les bonus
+            lm.startNewGame();
+            i.resetKeys();
+            c.restartPlayer();
+            c.resetInput(i);
+            configurerClavier();
+            tir.resetTirs();
+            b.resetBonus();
         });
         
         // Passage au niveau suivant
@@ -177,6 +175,14 @@ public class Affichage extends JPanel {
                 buyCombo3.setEnabled(false);
             }
         });
+    }
+
+    // Méthode pour configurer le clavier
+    private void configurerClavier() {
+        this.removeKeyListener(i); // Évite les doublons
+        this.addKeyListener(i);
+        this.setFocusable(true);
+        this.requestFocusInWindow(); // Force le focus clavier
     }
     
     // Méthode utilitaire pour masquer les boutons de jeu
@@ -316,16 +322,16 @@ public class Affichage extends JPanel {
                 g.drawImage(araignee.img, (int) araignee.getPosition().getX(), (int) araignee.getPosition().getY(), null);
                 //g.drawRect((int) ennemi.getPosition().getX(), (int) ennemi.getPosition().getY(), ennemi.getWidth(ennemi), ennemi.getHeight(ennemi));
             }
-            if(ennemi instanceof Goules) {
-                Goules goule = (Goules) ennemi; // Casting en Fantome
-                g.drawImage(goule.img, (int) goule.getPosition().getX(), (int) goule.getPosition().getY(), null);
-                //g.drawRect((int) ennemi.getPosition().getX(), (int) ennemi.getPosition().getY(), ennemi.getWidth(ennemi), ennemi.getHeight(ennemi));
-                if (goule.projectile != null) {
-                    g.setColor(Color.RED);
-                    g.fillOval(goule.projectile.getPosition().x, goule.projectile.getPosition().y, 8, 8);
-                    g.setColor(Color.BLACK);
-                }
-            }
+            // if(ennemi instanceof Goules) {
+            //     Goules goule = (Goules) ennemi; // Casting en Fantome
+            //     g.drawImage(goule.img, (int) goule.getPosition().getX(), (int) goule.getPosition().getY(), null);
+            //     //g.drawRect((int) ennemi.getPosition().getX(), (int) ennemi.getPosition().getY(), ennemi.getWidth(ennemi), ennemi.getHeight(ennemi));
+            //     if (goule.projectile != null) {
+            //         g.setColor(Color.RED);
+            //         g.fillOval(goule.projectile.getPosition().x, goule.projectile.getPosition().y, 8, 8);
+            //         g.setColor(Color.BLACK);
+            //     }
+            // }
         }
     }
     

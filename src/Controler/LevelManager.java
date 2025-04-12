@@ -15,7 +15,7 @@ import Model.Ennemies;
 import Model.Fantome;
 import Model.Niveau;
 import Model.Obstacles;
-import Model.Goules;
+// import Model.Goules;
 
 // Classe qui gère les différents niveaux du jeu
 public class LevelManager extends Thread {
@@ -25,9 +25,9 @@ public class LevelManager extends Thread {
     public static final int DELAY = 50; // Délai entre chaque vérification du niveau
 
     // Constantes pour les pourcentages de chaque type d'ennemi
-    public static final int pourcentageFantomes = 30; // pourcentage de fantômes dans le niveau
-    public static final int pourcentageAraignee = 10;  // pourcentage d'araignées dans le niveau
-    public static int pourcentageGoules=60;// pourcentage de goules dans le niveau
+    public static final int pourcentageFantomes = 40; // pourcentage de fantômes dans le niveau
+    public static final int pourcentageAraignee = 60;  // pourcentage d'araignées dans le niveau
+    // public static int pourcentageGoules = 10;// pourcentage de goules dans le niveau
 
 
     // Instances des classes utiles
@@ -143,11 +143,11 @@ public class LevelManager extends Thread {
         this.o = obs;
         niveaux = new ArrayList<>();
         // Ajout du ou des niveaux (les autres niveaux sont commentés, à décommenter selon le besoin)
-        niveaux.add(new Niveau(1, 8, 8, 1, "src/Images/bg1.png", "src/Audios/musique1.wav"));
-        niveaux.add(new Niveau(2, 12, 10, 2, "src/Images/bg2.png", "src/Audios/musique2.wav"));
-        // niveaux.add(new Niveau(3, 15, 12, 3, "src/Images/bg3.png", "src/Audios/musique3.wav"));
-        // niveaux.add(new Niveau(4, 25, 15, 3, "src/Images/bg3.png", "src/Audios/musique4.wav"));
-        // niveaux.add(new Niveau(5, 40, 20, 5, "src/Images/bg3.png", "src/Audios/musique5.wav"));
+        niveaux.add(new Niveau(1, 40, 8, 2, "src/Images/bg1.png", "src/Audios/musique1.wav"));
+        niveaux.add(new Niveau(2, 90, 10, 3, "src/Images/bg2.png", "src/Audios/musique2.wav"));
+        niveaux.add(new Niveau(3, 150, 12, 3, "src/Images/bg3.png", "src/Audios/musique3.wav"));
+        niveaux.add(new Niveau(4, 240, 15, 4, "src/Images/bg3.png", "src/Audios/musique4.wav"));
+        niveaux.add(new Niveau(5, 480, 20, 6, "src/Images/bg3.png", "src/Audios/musique5.wav"));
         initialiserEnnemis();
     }
     
@@ -162,7 +162,7 @@ public class LevelManager extends Thread {
         // Calcul du nombre d'ennemis de chaque type
         int nombreFantomes = (int) (nombreEnnemis * pourcentageFantomes / 100);
         int nombreAraignees = (int) (nombreEnnemis * pourcentageAraignee / 100);
-        int nombreGoules = (int) (nombreEnnemis * pourcentageGoules / 100);
+        // int nombreGoules = (int) (nombreEnnemis * pourcentageGoules / 100);
         
         // Création des fantômes
         for (int i = 0; i < nombreFantomes; i++) {
@@ -172,10 +172,10 @@ public class LevelManager extends Thread {
         for (int i = 0; i < nombreAraignees; i++) {
             new Araignee(c, 5, 1, Ennemies.genererPositionAleartoire(), b);
         }
-        // On crée les goules avec leurs nombres respectives
-        for (int i = 0; i < nombreGoules; i++) {
-            new Goules(c, rand.nextInt(6 - 3 + 1) + 3, 1, Ennemies.genererPositionAleartoire(), b);
-        }
+        // // On crée les goules avec leurs nombres respectives
+        // for (int i = 0; i < nombreGoules; i++) {
+        //     new Goules(c, rand.nextInt(6 - 3 + 1) + 3, 1, Ennemies.genererPositionAleartoire(), b);
+        // }
         // Génération des obstacles
         o.genererObstacle(nombreObstacles);
     }
@@ -203,39 +203,53 @@ public class LevelManager extends Thread {
     
     // Méthode pour démarrer les vagues d'ennemis
     public void lancerVaguesEnnemies() {
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+        }
         timer = new Timer();
         task = new TimerTask() {
             @Override
             public void run() {
                 Niveau niveau = niveaux.get(currentLevelIndex);
                 List<Ennemies> ennemisNonDeplaces = new ArrayList<>();
-                // Récupérer les ennemis qui ne bougent pas encore
-                for (Ennemies ennemi : e.getListEnnemies()) {
-                    if (!ennemi.getIsMoving()) {
-                        ennemisNonDeplaces.add(ennemi);
+    
+                synchronized (e.getListEnnemies()) {
+                    for (Ennemies ennemi : e.getListEnnemies()) {
+                        if (!ennemi.getIsMoving()) {
+                            ennemisNonDeplaces.add(ennemi);
+                        }
                     }
                 }
-                // Nombre d'ennemis à activer pour une vague
-                int n = niveau.getNombreEnnemis() / niveau.getNombreVague();
-                // Démarrer n ennemis si possible, sinon tous les ennemis restants
-                if (ennemisNonDeplaces.size() >= n) { // S'il y a assez d'ennemis pour plusieurs vagues
+                // Calculer le nombre d'ennemis à déplacer en fonction du niveau
+                int n = Math.max(1, niveau.getNombreEnnemis() / Math.max(1, niveau.getNombreVague()));
+                //  Vérifier si le nombre d'ennemis non déplacés est supérieur ou égal à n
+                if (ennemisNonDeplaces.size() >= n) {
+                    // Démarrer le mouvement de n ennemis aléatoires
                     for (int i = 0; i < n; i++) {
                         int randomIndex = rand.nextInt(ennemisNonDeplaces.size());
                         Ennemies ennemi = ennemisNonDeplaces.get(randomIndex);
                         ennemi.startMouvement();
                         ennemisNonDeplaces.remove(randomIndex);
                     }
-                } else {  // Sinon, démarrer tous les ennemis restants
+                    System.out.println("Vague activée : " + n + " ennemis démarrés.");
+                } 
+                // Sinon, si tous les ennemis sont déplacés, on arrête la tâche
+                else if (ennemisNonDeplaces.isEmpty()) {
+                    System.out.println("Tous les ennemis sont en mouvement.");
+                }
+                else {
                     for (Ennemies ennemi : ennemisNonDeplaces) {
-                        ennemi.startMouvement();
-                        timer.cancel(); // Annuler le timer après avoir démarré tous les ennemis
-                        timer.purge();  // Purger les tâches annulées
+                        ennemi.startMouvement(); // Démarrer le mouvement de l'ennemi
                     }
+                    System.out.println("Dernière vague activée.");
+                    timer.cancel(); // Annuler le timer
+                    timer.purge(); // Purger le timer
                 }
             }
         };
         // Planifier la tâche pour exécuter une vague toutes les 10 secondes
-        timer.schedule(task, 0, 2000);
+        timer.schedule(task, 0, 15000);
     }
     
     // Méthode pour réinitialiser le jeu (par exemple, en cas de défaite)

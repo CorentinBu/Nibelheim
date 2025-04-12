@@ -10,7 +10,7 @@ import Controler.LevelManager;
 public class Fantome extends Ennemies {
 
     // Points de vie de l'ennemie
-    private static final int HEALTH_MAX = 10;
+    private static final int HEALTH_MAX = 5;
 
     // Taille du sprite du fantôme
     public static final int width = 52;

@@ -121,12 +121,12 @@ public class Goules extends Ennemies {
             projectile.hitboxProjectile.x = projectile.getPosition().x;
             projectile.hitboxProjectile.y = projectile.getPosition().y;
         } else {
-            System.out.println("Projectile en mouvement !");
+            //System.out.println("Projectile en mouvement !");
             //onverfie si il y a collision entre le projectile et le joueur
             collisionProjectile();
             //on deplace le projectile
     
-            System.out.println("Position du projectile : " + projectile.getPosition().x + " " + projectile.getPosition().y);
+            //System.out.println("Position du projectile : " + projectile.getPosition().x + " " + projectile.getPosition().y);
             double moveX = directionX * 10;
             double moveY = directionY * 10;
 

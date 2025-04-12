@@ -10,7 +10,7 @@ import Controler.Character;
 public class Tir {
 
     // Attributs et constantes
-    public static final int speed = 30; // Vitesse de déplacement des balles
+    public static final int speed = 50; // Vitesse de déplacement des balles
 
     // Image du projectile
     public static final Image imageProjectile = Toolkit.getDefaultToolkit().getImage("src/Images/tir.gif")

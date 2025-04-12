@@ -240,8 +240,6 @@ public class Character extends Thread {
         current_x = 820;
         current_y = 540;
         vie = maxVie;
-        //vx = 0;
-        //vy = 0;
         nombreBonus = 0;
         inputs.resetKeys();
         resumeGame();
