@@ -12,21 +12,16 @@ import Model.Obstacles;
 import Model.Araignee;
 import Model.Bonus;
 import Model.Bouton;
+import Model.Dimension;
 import Model.Ennemies;
 import Model.Fantome;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class Affichage extends JPanel {
-    // Facteurs d'échelle pour le redimensionnement responsive
-    private float scaleX = 1.0f;
-    private float scaleY = 1.0f;
-    private int originalWidth = 1500; // Largeur d'origine (X)
-    private int originalHeight = 650; // Hauteur d'origine (Y)
-    
-    // Définition des constantes X et Y pour faciliter le code responsive
-    private int X = originalWidth;
-    private int Y = originalHeight;
+    // Attributs de la classe
+    private int originalWidth = Dimension.getReferenceWidth();
+    private int originalHeight = Dimension.getReferenceHeight();
 
     // Attribut pour lancer le jeu ou le mettre en pause
     public boolean game_running = false;
@@ -78,68 +73,97 @@ public class Affichage extends JPanel {
     }
 
     private void initButtons() {
-        relancerButton = new Bouton("Nouvelle Partie", X / 2 - 100, Y / 2 - 30, 200, 50, new Color(169, 169, 169),
-                Color.WHITE, new Color(70, 130, 180), null);
-        acceuil = new Bouton("Acceuil", X / 2 - 100, Y / 2 + 100, 200, 50, new Color(169, 169, 169), Color.WHITE,
-                new Color(70, 130, 180), null);
-        startGame = new Bouton("Commencer une partie", 30, Y - 180, 300, 55, new Color(169, 169, 169), Color.WHITE,
-                new Color(70, 130, 180), "src/Images/start_bouton.png");
-        nextStageBtn = new Bouton("Etage suivant", X / 2 + 230, Y / 2 + 285, 180, 40, new Color(169, 169, 169),
-                Color.WHITE, new Color(70, 130, 180), null);
-        quitter = new Bouton("Quitter", X - 150, 30, 100, 35, new Color(255, 0, 0), Color.WHITE, new Color(255, 0, 0),
-                null);
-        boutique = new Bouton("Boutique", X - 320, 30, 140, 35, new Color(169, 169, 169), Color.WHITE,
-                new Color(70, 130, 180), null);
+        int centerX = Dimension.getWidth() / 2;
+        int centerY = Dimension.getHeight() / 2;
+        
+        relancerButton = new Bouton("Nouvelle Partie", 
+            centerX - Dimension.scaleX(100), 
+            centerY - Dimension.scaleY(30), 
+            Dimension.scaleX(200), 
+            Dimension.scaleY(50), 
+            new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null);
+            
+        acceuil = new Bouton("Acceuil", 
+            centerX - Dimension.scaleX(100), 
+            centerY + Dimension.scaleY(100), 
+            Dimension.scaleX(200), 
+            Dimension.scaleY(50), 
+            new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null);
+            
+        startGame = new Bouton("Commencer une partie", 
+            Dimension.scaleX(30), 
+            Dimension.getHeight() - Dimension.scaleY(180), 
+            Dimension.scaleX(300), 
+            Dimension.scaleY(55), 
+            new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), "src/Images/start_bouton.png");
+            
+        nextStageBtn = new Bouton("Etage suivant", 
+            centerX + Dimension.scaleX(230), 
+            centerY + Dimension.scaleY(285), 
+            Dimension.scaleX(180), 
+            Dimension.scaleY(40), 
+            new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null);
+            
+        quitter = new Bouton("Quitter", 
+            Dimension.getWidth() - Dimension.scaleX(150), 
+            Dimension.scaleY(30), 
+            Dimension.scaleX(100), 
+            Dimension.scaleY(35), 
+            new Color(255, 0, 0), Color.WHITE, new Color(255, 0, 0), null);
+            
+        boutique = new Bouton("Boutique", 
+            Dimension.getWidth() - Dimension.scaleX(320), 
+            Dimension.scaleY(30), 
+            Dimension.scaleX(140), 
+            Dimension.scaleY(35), 
+            new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null);
     }
 
     private void adjustButtonSizes() {
-        int width = getWidth();
-        int height = getHeight();
-        
-        // Calculer les facteurs d'échelle actuels
-        scaleX = (float) width / originalWidth;
-        scaleY = (float) height / originalHeight;
-        
-        // Mettre à jour X et Y pour une utilisation plus facile dans le code
-        X = width;
-        Y = height;
+        int centerX = Dimension.getWidth() / 2;
+        int centerY = Dimension.getHeight() / 2;
         
         // Redimensionner tous les boutons
         relancerButton.setBounds(
-            (int)(width / 2 - 100 * scaleX), 
-            (int)(height / 2 - 30 * scaleY), 
-            (int)(200 * scaleX), 
-            (int)(50 * scaleY)
+            centerX - Dimension.scaleX(100), 
+            centerY - Dimension.scaleY(30), 
+            Dimension.scaleX(200), 
+            Dimension.scaleY(50)
         );
+        
         acceuil.setBounds(
-            (int)(width / 2 - 100 * scaleX), 
-            (int)(height / 2 + 100 * scaleY), 
-            (int)(200 * scaleX), 
-            (int)(50 * scaleY)
+            centerX - Dimension.scaleX(100), 
+            centerY + Dimension.scaleY(100), 
+            Dimension.scaleX(200), 
+            Dimension.scaleY(50)
         );
+        
         startGame.setBounds(
-            (int)(30 * scaleX), 
-            (int)(height - 180 * scaleY), 
-            (int)(300 * scaleX), 
-            (int)(55 * scaleY)
+            Dimension.scaleX(30), 
+            Dimension.getHeight() - Dimension.scaleY(180), 
+            Dimension.scaleX(300), 
+            Dimension.scaleY(55)
         );
+        
         nextStageBtn.setBounds(
-            (int)(width / 2 + 230 * scaleX), 
-            (int)(height / 2 + 285 * scaleY), 
-            (int)(180 * scaleX), 
-            (int)(40 * scaleY)
+            centerX + Dimension.scaleX(230), 
+            centerY + Dimension.scaleY(285), 
+            Dimension.scaleX(180), 
+            Dimension.scaleY(40)
         );
+        
         quitter.setBounds(
-            (int)(width - 150 * scaleX), 
-            (int)(30 * scaleY), 
-            (int)(100 * scaleX), 
-            (int)(35 * scaleY)
+            Dimension.getWidth() - Dimension.scaleX(150), 
+            Dimension.scaleY(30), 
+            Dimension.scaleX(100), 
+            Dimension.scaleY(35)
         );
+        
         boutique.setBounds(
-            (int)(width - 320 * scaleX), 
-            (int)(30 * scaleY), 
-            (int)(140 * scaleX), 
-            (int)(35 * scaleY)
+            Dimension.getWidth() - Dimension.scaleX(320), 
+            Dimension.scaleY(30), 
+            Dimension.scaleX(140), 
+            Dimension.scaleY(35)
         );
         
         // Ajuster les polices
@@ -150,21 +174,17 @@ public class Affichage extends JPanel {
     }
     
     private void loadScaledImages() {
-        // Charger l'image pour les obstacles (caisse.png)
-        cachedObstacleImage = new ImageIcon("src/Images/caisse.png").getImage()
-                .getScaledInstance((int)(o.WIDTH_O * scaleX), (int)(o.HEIGHT_O * scaleY), Image.SCALE_SMOOTH);
+        // Utilisez getResource() au lieu des chemins absolus
+        cachedObstacleImage = new ImageIcon(getClass().getResource("/Images/caisse.png")).getImage()
+            .getScaledInstance(Dimension.scaleX(o.WIDTH_O), Dimension.scaleY(o.HEIGHT_O), Image.SCALE_SMOOTH);
         
-        // Charger l'image du coin
-        cachedCoinImage = new ImageIcon("src/Images/coin.png").getImage()
-                .getScaledInstance((int)(b.WIDTH_B * scaleX), (int)(b.HEIGHT_B * scaleY), Image.SCALE_SMOOTH);
+        cachedCoinImage = new ImageIcon(getClass().getResource("/Images/coin.png")).getImage()
+            .getScaledInstance(Dimension.scaleX(b.WIDTH_B), Dimension.scaleY(b.HEIGHT_B), Image.SCALE_SMOOTH);
     }
     
     private void adjustFontSizes() {
         // Ajuster les tailles de police pour les boutons
-        float buttonFontSize = Math.min(14 * scaleX, 14 * scaleY);
-        buttonFontSize = Math.max(buttonFontSize, 10); // Taille minimale pour la lisibilité
-        
-        Font buttonFont = new Font("Arial", Font.BOLD, (int)buttonFontSize);
+        Font buttonFont = new Font("Arial", Font.BOLD, Dimension.scaleFontSize(14));
         relancerButton.setFont(buttonFont);
         acceuil.setFont(buttonFont);
         startGame.setFont(buttonFont);
@@ -176,13 +196,16 @@ public class Affichage extends JPanel {
     // Constructeur de la classe Affichage
     public Affichage(Character character, Tir t, Bonus bonus, Inputs inputs, Obstacles obs, LevelManager levelManager) {
         setLayout(null); // Désactiver le LayoutManager
-        setPreferredSize(new Dimension(originalWidth, originalHeight));
+        setPreferredSize(new java.awt.Dimension(originalWidth, originalHeight));
         this.c = character;
         this.o = obs;
         this.tir = t;
         this.b = bonus;
         this.i = inputs;
         this.lm = levelManager;
+        
+        // Initialiser les dimensions
+        Model.Dimension.updateDimensions(originalWidth, originalHeight);
 
         initButtons();
         loadScaledImages();
@@ -191,15 +214,14 @@ public class Affichage extends JPanel {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
+                Model.Dimension.updateDimensions(getWidth(), getHeight());
                 adjustButtonSizes();
                 repaint();
             }
         });
         
-        // -------------------------* Gestion des boutons *--------------------------------------------------------------
-
-        // Actions des boutons
-
+        // Actions des boutons 
+        
         // Redémarrer la partie
         relancerButton.addActionListener(e -> {
             // Mettre à jour les états du jeu
@@ -277,13 +299,14 @@ public class Affichage extends JPanel {
         add(quitter);
     }
 
-    // ----------------- On redefinie la méthode paint pour ajouter les elements graphiques ------------------------------
-
     // Redessiner la vue pour ajouter nos différents éléments
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+        
+        // Mettre à jour les dimensions avant de dessiner
+        Model.Dimension.updateDimensions(getWidth(), getHeight());
         
         // Appliquer l'antialiasing pour un meilleur rendu
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -307,12 +330,12 @@ public class Affichage extends JPanel {
         } else {
             if (!game_lose) { // Si le jeu n'est pas perdu, on affiche les éléments graphiques
                 // Dessiner le personnage : la sorcière
-                int charWidth = (int)(Character.WIDTH * scaleX);
-                int charHeight = (int)(Character.HEIGHT * scaleY);
+                int charWidth = Dimension.scaleX(Character.WIDTH);
+                int charHeight = Dimension.scaleY(Character.HEIGHT);
                 
                 // Redimensionner le sprite du personnage
                 Image scaledCharSprite = Character.characterSprite.getScaledInstance(charWidth, charHeight, Image.SCALE_SMOOTH);
-                g.drawImage(scaledCharSprite, (int)(c.getCurrent_x() * scaleX), (int)(c.getCurrent_y() * scaleY), null);
+                g.drawImage(scaledCharSprite, Dimension.scaleX((int) c.getCurrent_x()), Dimension.scaleY((int) c.getCurrent_y()), null);
 
                 // Dessiner les tirs
                 drawTirs(g);
@@ -354,30 +377,30 @@ public class Affichage extends JPanel {
         }
     }
 
-    // ----------------- Les méthodes pour dessiner les éléments de la vue -------------------------------------
-
     // Méthode pour dessiner et afficher la boutique
     public void drawBoutique(Graphics g) {
         if (lm.getShowStore() == true) {
             // Un grand carré au centre de la fenetre représente la boutique
-            int boutique_width = (int)(900 * scaleX);
-            int boutique_height = (int)(700 * scaleY);
+            int boutique_width = Dimension.scaleX(900);
+            int boutique_height = Dimension.scaleY(700);
+            int centerX = Dimension.getWidth() / 2;
+            int centerY = Dimension.getHeight() / 2;
             
             g.setColor(new Color(220, 220, 220, 200)); // Couleur de fond de la boutique
-            g.fillRect(X / 2 - boutique_width / 2, Y / 2 - boutique_height / 2, boutique_width, boutique_height); // Fond de la boutique
+            g.fillRect(centerX - boutique_width / 2, centerY - boutique_height / 2, boutique_width, boutique_height); 
             g.setColor(Color.BLACK); // Couleur du contour
-            g.drawRect(X / 2 - boutique_width / 2, Y / 2 - boutique_height / 2, boutique_width, boutique_height); // Contour de la boutique
+            g.drawRect(centerX - boutique_width / 2, centerY - boutique_height / 2, boutique_width, boutique_height); 
 
             // Contenu de la boutique ici avec police adaptative
-            int titleFontSize = (int)(20 * Math.min(scaleX, scaleY));
-            g.setFont(new Font("Arial", Font.BOLD, titleFontSize)); // Police de la boutique
+            int titleFontSize = Dimension.scaleFontSize(20);
+            g.setFont(new Font("Arial", Font.BOLD, titleFontSize)); 
             g.setColor(Color.BLACK); // Couleur du texte
             
             FontMetrics metrics = g.getFontMetrics();
             String title = "Victoire !!! ...... Boutique ici";
             int titleWidth = metrics.stringWidth(title);
             
-            g.drawString(title, X / 2 - titleWidth / 2, Y / 2 - boutique_height / 2 + (int)(50 * scaleY)); // Titre de la boutique
+            g.drawString(title, centerX - titleWidth / 2, centerY - boutique_height / 2 + Dimension.scaleY(50)); 
 
             nextStageBtn.setVisible(true); // Afficher le bouton pour passer au niveau suivant
         } else {
@@ -388,12 +411,12 @@ public class Affichage extends JPanel {
     // Méthode pour dessiner les bonus avec l'image coin.png
     public void drawBonus(Graphics g) {
         for (int i = 0; i < b.getPointBonus().size(); i++) {
-            int x = (int)(b.getPointBonus().get(i).x * scaleX);
-            int y = (int)(b.getPointBonus().get(i).y * scaleY);
-            int width = (int)(b.WIDTH_B * scaleX);
-            int height = (int)(b.HEIGHT_B * scaleY);
+            Point bonus = new Point((int) b.getPointBonus().get(i).getX(), (int) b.getPointBonus().get(i).getY());
+            Point scaledPoint = Dimension.scalePoint(bonus);
+            int width = Dimension.scaleX(b.WIDTH_B);
+            int height = Dimension.scaleY(b.HEIGHT_B);
             
-            g.drawImage(cachedCoinImage, x, y, width, height, null);
+            g.drawImage(cachedCoinImage, scaledPoint.x, scaledPoint.y, width, height, null);
         }
     }
 
@@ -420,14 +443,15 @@ public class Affichage extends JPanel {
         renderThread.start();
     }
 
-    // Méthode pour récupérer la liste des tirs et les afficher à l'écran en tenant compte de la classe Tir
+    // Méthode pour récupérer la liste des tirs et les afficher à l'écran
     public void drawTirs(Graphics g) {
         for (int i = 0; i < tir.getTirs().size(); i++) {
             g.setColor(Color.RED);
-            int x = (int)(tir.getTirs().get(i).getPosition().x * scaleX);
-            int y = (int)(tir.getTirs().get(i).getPosition().y * scaleY);
-            int size = (int)(8 * Math.min(scaleX, scaleY)); // taille des tirs
-            g.fillOval(x, y, size, size);
+            Point tirPos = tir.getTirs().get(i).getPosition();
+            Point scaledPos = Dimension.scalePoint(tirPos);
+            int size = Dimension.scaleFontSize(8); // taille des tirs
+            
+            g.fillOval(scaledPos.x, scaledPos.y, size, size);
         }
     }
 
@@ -437,10 +461,10 @@ public class Affichage extends JPanel {
         List<Ennemies> ennemies = Ennemies.getListEnnemies();
         // Boucle affichant tous les ennemis
         for (Ennemies ennemi : ennemies) {
-            int x = (int)(ennemi.getPosition().getX() * scaleX);
-            int y = (int)(ennemi.getPosition().getY() * scaleY);
-            int width = (int)(ennemi.getWidth(ennemi) * scaleX);
-            int height = (int)(ennemi.getHeight(ennemi) * scaleY);
+            int x = Dimension.scaleX((int)ennemi.getPosition().getX());
+            int y = Dimension.scaleY((int)ennemi.getPosition().getY());
+            int width = Dimension.scaleX(ennemi.getWidth(ennemi));
+            int height = Dimension.scaleY(ennemi.getHeight(ennemi));
             
             // Vérification si l'ennemi est un Fantome
             if (ennemi instanceof Fantome) {
@@ -463,29 +487,28 @@ public class Affichage extends JPanel {
         int i = 0;
         ArrayList<Point> obstacles = o.getObstacles();
         for (Point obstacle : obstacles) {
-            int x = (int)(obstacle.x * scaleX);
-            int y = (int)(obstacle.y * scaleY);
-            int width = (int)(o.WIDTH_O * scaleX);
-            int height = (int)(o.HEIGHT_O * scaleY);
+            Point scaledPoint = Dimension.scalePoint(obstacle);
+            int width = Dimension.scaleX(o.WIDTH_O);
+            int height = Dimension.scaleY(o.HEIGHT_O);
             
             // Afficher les images de caisse
-            g.drawImage(cachedObstacleImage, x, y, width, height, null);
+            g.drawImage(cachedObstacleImage, scaledPoint.x, scaledPoint.y, width, height, null);
             i += 1;
         }
     }
 
     public void drawNiveau(Graphics g) {
         // Police adaptative pour le texte "Etage actuel"
-        int fontSize = (int)(14 * Math.min(scaleX, scaleY));
+        int fontSize = Dimension.scaleFontSize(14);
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.PLAIN, fontSize));
-        g.drawString("Etage actuel : ", X - (int)(450 * scaleX), (int)(43 * scaleY));
+        g.drawString("Etage actuel : ", Dimension.getWidth() - Dimension.scaleX(450), Dimension.scaleY(43));
         
         // Dessiner les 5 petits carrés avec des numéros
         for (int i = 0; i < 5; i++) {
-            int x = X - (int)(355 * scaleX) + (int)((i * 35) * scaleX);
-            int y = (int)(30 * scaleY);
-            int boxSize = (int)(20 * Math.min(scaleX, scaleY));
+            int x = Dimension.getWidth() - Dimension.scaleX(355) + Dimension.scaleX(i * 35);
+            int y = Dimension.scaleY(30);
+            int boxSize = Dimension.scaleFontSize(20);
             
             g.drawRect(x, y, boxSize, boxSize);
             // Remplir les carrés correspondant au niveau actuel
@@ -495,7 +518,7 @@ public class Affichage extends JPanel {
                 g.setColor(Color.BLACK);
             }
             // Dessiner le numéro au centre du carré
-            int numFontSize = (int)(12 * Math.min(scaleX, scaleY));
+            int numFontSize = Dimension.scaleFontSize(12);
             g.setFont(new Font("Arial", Font.PLAIN, numFontSize));
             
             FontMetrics metrics = g.getFontMetrics();
@@ -518,7 +541,7 @@ public class Affichage extends JPanel {
         quitter.setVisible(true);
         
         // Afficher un message de bienvenue avec un contour rouge stylé
-        int titleFontSize = (int)(60 * Math.min(scaleX, scaleY));
+        int titleFontSize = Dimension.scaleFontSize(60);
         Font titleFont = new Font("Comic Sans MS", Font.BOLD, titleFontSize);
         g.setFont(titleFont);
         
@@ -526,45 +549,34 @@ public class Affichage extends JPanel {
         FontMetrics metrics = g.getFontMetrics(titleFont);
         String title = "Bienvenue sur Nibelhein";
         int titleWidth = metrics.stringWidth(title);
+        int centerX = Dimension.getWidth() / 2;
+        int centerY = Dimension.getHeight() / 2;
         
         // Dessiner le contour rouge
         g.setColor(Color.RED);
-        g.drawString(title, X / 2 - titleWidth / 2 - 2, Y / 2 - 2);
+        g.drawString(title, centerX - titleWidth / 2 - 2, centerY - 2);
         
         // Dessiner le texte vert
         g.setColor(Color.GREEN);
-        g.drawString(title, X / 2 - titleWidth / 2, Y / 2);
+        g.drawString(title, centerX - titleWidth / 2, centerY);
     }
 
     // Méthode pour dessiner la barre de vie et les bonus collectés
     public void drawBarreVie(Graphics g) {
         // Positions et dimensions adaptatives
-        int x = (int)(xBarreVie * scaleX);
-        int y = (int)(yBarreVie * scaleY);
-        int height = (int)(heightBarreVie * scaleY);
-        int arc = (int)(arcBarreVie * Math.min(scaleX, scaleY));
-        int barWidth = (int)(40 * scaleX); // Largeur par point de vie
-        
-        // Dessiner une barre de vie rouge dans un contour noir et des bordures arrondies
-        g.setColor(Color.GRAY);
-        g.fillRoundRect(x, y, c.maxVie * barWidth, height, arc, arc);
-        g.setColor(Color.RED);
-        g.fillRoundRect(x, y, c.getVie() * barWidth, height, arc, arc);
-        g.setColor(Color.BLACK);
-        g.drawRoundRect(x, y, c.maxVie * barWidth, height, arc, arc);
-        
+        // Suite de la méthode drawBarreVie(Graphics g)
         // Afficher le nombre de bonus récupérés en haut à droite
-        int coinX = X - (int)(135 * scaleX);
-        int coinY = (int)(25 * scaleY);
-        int coinWidth = (int)(b.WIDTH_B * scaleX);
-        int coinHeight = (int)(b.HEIGHT_B * scaleY);
+        int coinX = Dimension.getWidth() - Dimension.scaleX(135);
+        int coinY = Dimension.scaleY(25);
+        int coinWidth = Dimension.scaleX(b.WIDTH_B);
+        int coinHeight = Dimension.scaleY(b.HEIGHT_B);
         
         g.drawImage(cachedCoinImage, coinX, coinY, coinWidth, coinHeight, null);
         
         g.setColor(Color.BLACK);
-        int fontSize = (int)(14 * Math.min(scaleX, scaleY));
+        int fontSize = Dimension.scaleFontSize(14);
         g.setFont(new Font("Arial", Font.PLAIN, fontSize));
-        g.drawString("Pièces : " + c.getNombreBonus(), X - (int)(98 * scaleX), (int)(43 * scaleY));
+        g.drawString("Pièces : " + c.getNombreBonus(), Dimension.getWidth() - Dimension.scaleX(98), Dimension.scaleY(43));
     }
 
     // Méthode pour afficher le gamelose et la page de pause selon le cas
@@ -574,22 +586,24 @@ public class Affichage extends JPanel {
             acceuil.setVisible(true);
             
             // Calculer les dimensions du pop-up de fin de jeu
-            int popupWidth = (int)(500 * scaleX);
-            int popupHeight = (int)(500 * scaleY);
-            int popupX = X / 2 - popupWidth / 2;
-            int popupY = Y / 2 - popupHeight / 2;
+            int popupWidth = Dimension.scaleX(500);
+            int popupHeight = Dimension.scaleY(500);
+            int centerX = Dimension.getWidth() / 2;
+            int centerY = Dimension.getHeight() / 2;
+            int popupX = centerX - popupWidth / 2;
+            int popupY = centerY - popupHeight / 2;
             
             // Bordure noire
             g.setColor(Color.BLACK);
-            g.fillRect(popupX - (int)(2 * scaleX), popupY - (int)(2 * scaleY), 
-                     popupWidth + (int)(4 * scaleX), popupHeight + (int)(4 * scaleY));
+            g.fillRect(popupX - Dimension.scaleX(2), popupY - Dimension.scaleY(2), 
+                     popupWidth + Dimension.scaleX(4), popupHeight + Dimension.scaleY(4));
             
             // Fond blanc
             g.setColor(Color.WHITE);
             g.fillRect(popupX, popupY, popupWidth, popupHeight);
             
             // Titre "Game Over"
-            int titleFontSize = (int)(35 * Math.min(scaleX, scaleY));
+            int titleFontSize = Dimension.scaleFontSize(35);
             g.setColor(Color.RED);
             g.setFont(new Font("Arial", Font.BOLD, titleFontSize));
             
@@ -597,11 +611,11 @@ public class Affichage extends JPanel {
             String gameOverText = "Game Over";
             int gameOverWidth = titleMetrics.stringWidth(gameOverText);
             
-            g.drawString(gameOverText, X / 2 - gameOverWidth / 2, 
-                       popupY + (int)(70 * scaleY));
+            g.drawString(gameOverText, centerX - gameOverWidth / 2, 
+                       popupY + Dimension.scaleY(70));
             
             // Texte d'information
-            int infoFontSize = (int)(20 * Math.min(scaleX, scaleY));
+            int infoFontSize = Dimension.scaleFontSize(20);
             g.setColor(Color.BLACK);
             g.setFont(new Font("Arial", Font.BOLD, infoFontSize));
             
@@ -609,20 +623,30 @@ public class Affichage extends JPanel {
             String infoText = "Nombre de pièces collectées : " + c.getNombreBonus();
             int infoWidth = infoMetrics.stringWidth(infoText);
             
-            g.drawString(infoText, X / 2 - infoWidth / 2, 
-                       popupY + (int)(130 * scaleY));
+            g.drawString(infoText, centerX - infoWidth / 2, 
+                       popupY + Dimension.scaleY(130));
         }
         else {
             relancerButton.setVisible(false);
             acceuil.setVisible(false);
             nextStageBtn.setVisible(false);
         }
+        
+        // Informations de débogage (à commenter ou supprimer pour la version finale)
+        System.out.println("État du jeu: game_running=" + game_running + ", game_lose=" + game_lose);
+        System.out.println("Nombre d'ennemis: " + Ennemies.getListEnnemies().size());
+        System.out.println("Image de la sorcière: " + (Character.characterSprite == null ? "null" : "chargée"));
     }
 
     // Méthode à appeler lors du redimensionnement de la fenêtre
     public void updateSize(int width, int height) {
-        setSize(width, height);
+        // Mettre à jour les dimensions globales
+        Model.Dimension.updateDimensions(width, height);
+        
+        // Ajuster les boutons et autres éléments d'interface
         adjustButtonSizes();
+        
+        // Redessiner l'interface
         repaint();
     }
     
