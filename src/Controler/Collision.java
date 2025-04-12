@@ -1,5 +1,6 @@
 package Controler;
 
+import Model.Character;
 import Model.Ennemies;
 import Model.Tir;
 
@@ -40,5 +41,5 @@ public class Collision extends Thread {
             }
         }
     }
-    
+
 }

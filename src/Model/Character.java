@@ -1,15 +1,11 @@
-package Controler;
+package Model;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.swing.ImageIcon;
 
-import Model.Bonus;
-import Model.ComboBonus;
-import Model.Obstacles;
+import Controler.Inputs;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 import java.awt.*;
@@ -48,7 +44,7 @@ public class Character extends Thread {
     private double friction = 0.9; // Déccélération (simule l’inertie)
     private double maxSpeed = 8; // Vitesse maximale
 
-    private int vie = 5; // Points de vie du joueur
+    public int vie = 5; // Points de vie du joueur
     public static final int maxVie = 5; // Points de vie maximum du joueur
     private Inputs inputs; // Gestion des entrées clavier
 
@@ -268,7 +264,7 @@ public class Character extends Thread {
         pauseGame();
         current_x = 820;
         current_y = 540;
-        vie = maxVie;
+        setVie(Character.maxVie);
         nombreBonus = 0;
         inputs.resetKeys();
         resumeGame();

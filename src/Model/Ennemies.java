@@ -11,8 +11,6 @@ import javax.swing.ImageIcon;
 
 import javax.sound.sampled.Clip;
 
-import Controler.Character;
-
 import java.util.concurrent.CopyOnWriteArrayList;
 
 //Classe représentant un ennemie quelconque. Ses sous-classes sont les ennemies spécifiques

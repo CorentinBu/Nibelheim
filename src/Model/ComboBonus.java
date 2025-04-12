@@ -14,6 +14,7 @@ public class ComboBonus {
     // Constructeur de la classe
     public ComboBonus(int type) {
         this.type = type; // Initialisation du type
+
         // Initialisation du prix en fonction du type
         switch (type) {
             case 1:
@@ -34,6 +35,7 @@ public class ComboBonus {
     public int getPrix() {
         return prix; // Retourne le prix
     }
+
     public int getType() {
         return type; // Retourne le type
     }

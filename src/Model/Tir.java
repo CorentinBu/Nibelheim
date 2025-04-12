@@ -11,8 +11,6 @@ import javax.sound.sampled.Clip;
 import java.util.*;
 import java.util.List;
 
-import Controler.Character;
-
 public class Tir {
 
     // Attributs et constantes
@@ -65,10 +63,12 @@ public class Tir {
 
         // Ajouter le projectile à la liste des projectiles
         for (int i = 0; i < c.getNombreBalles(); i++) {
-            Point startPoint = new Point((int) (c.getCurrent_x() + 50), (int) (c.getCurrent_y() + 50)); // Point de
-                                                                                                        // départ du tir
-                                                                                                        // (position du
-                                                                                                        // joueur)
+            Point startPoint = new Point((int) (c.getCurrent_x() + i * 50), (int) (c.getCurrent_y() + 50)); // Point de
+                                                                                                            // départ du
+                                                                                                            // tir
+                                                                                                            // (position
+                                                                                                            // du
+                                                                                                            // joueur)
             Point direction = new Point(mousePosition.x - startPoint.x, mousePosition.y - startPoint.y); // Direction du
                                                                                                          // tir
             // Créer un nouveau projectile avec la position et la direction

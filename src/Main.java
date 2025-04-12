@@ -3,8 +3,8 @@ import java.awt.Point;
 import javax.swing.*;
 import View.*;
 import Controler.*;
-import Controler.Character;
 import Model.*;
+import Model.Character;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -21,7 +21,7 @@ public class Main {
         Ennemies e = new Ennemies();
         Character c = new Character(b, inputs, o);
         Tir t = new Tir(c, o);
-        LevelManager lm = new LevelManager(c, e,b,o);
+        LevelManager lm = new LevelManager(c, e, b, o);
         Affichage a = new Affichage(c, t, b, inputs, o, lm);
         ReactionClic m = new ReactionClic(t);
         Avancer_tir avancer_tir = new Avancer_tir(t);
