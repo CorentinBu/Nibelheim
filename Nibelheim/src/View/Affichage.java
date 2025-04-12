@@ -185,7 +185,7 @@ public class Affichage extends JPanel {
     
     private void adjustFontSizes() {
         // Ajuster les tailles de police pour les boutons
-        Font buttonFont = new Font("Arial", Font.BOLD, Dimension.scaleFontSize(14));
+        Font buttonFont = new Font("Arial", Font.BOLD, Dimension.scaleFontSize(19));
         relancerButton.setFont(buttonFont);
         acceuil.setFont(buttonFont);
         startGame.setFont(buttonFont);
