@@ -2,14 +2,20 @@ package Model;
 
 import java.awt.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
+import java.util.List;
 
 import Controler.Character;
 
 public class Tir {
 
     // Attributs et constantes
-    public static final int speed = 50; // Vitesse de déplacement des balles
+    public static final int speed = 30; // Vitesse de déplacement des balles
 
+    // Image du projectile
+    public static final Image imageProjectile = Toolkit.getDefaultToolkit().getImage("src/Images/tir.gif")
+        .getScaledInstance(Projectile.WIDTH_PROJECTILE, Projectile.HEIGHT_PROJECTILE, Image.SCALE_DEFAULT);
+ 
     // Liste de balles tirées
     private CopyOnWriteArrayList<Projectile> tirs = new CopyOnWriteArrayList<Projectile>();
     ///private ArrayList<Point> directions; // Nouvel attribut pour stocker la direction de chaque tir
@@ -37,12 +43,14 @@ public class Tir {
 
     // Méthode pour ajouter un tir (tirer une nouvelle balle)
     public void addTir() {
-        Point startPoint = new Point((int) (c.getCurrent_x() + 50), (int) (c.getCurrent_y() + 50)); // Point de départ du tir (position du joueur)
-        Point direction = new Point(mousePosition.x - startPoint.x, mousePosition.y - startPoint.y); // Direction du tir
-        // Créer un nouveau projectile avec la position et la direction
-        Projectile projectile = new Projectile(startPoint, direction);
         // Ajouter le projectile à la liste des projectiles
-        tirs.add(projectile); 
+        for (int i = 0; i < c.getNombreBalles(); i++) {
+            Point startPoint = new Point((int) (c.getCurrent_x() + 50), (int) (c.getCurrent_y() + 50)); // Point de départ du tir (position du joueur)
+            Point direction = new Point(mousePosition.x - startPoint.x, mousePosition.y - startPoint.y); // Direction du tir
+            // Créer un nouveau projectile avec la position et la direction
+            Projectile projectile = new Projectile(startPoint, direction);
+            tirs.add(projectile); // Ajouter le projectile
+        }
     }
 
     // Méthode pour supprimer les tirs qui sont sortis de la fenêtre
@@ -88,14 +96,19 @@ public class Tir {
     
         // Méthode pour vérifier si un tir touche un obstacle et le supprimer
         public void removeTirObstacle() {
-            for (int i = 0; i < tirs.size(); i++) {
+            // Collect projectiles to be removed
+            List<Projectile> projectilesToRemove = new ArrayList<>();
+            for (Projectile tir : tirs) {
                 for (Point obstacle : o.getObstacles()) {
-                    if (collisionTirObstacle(tirs.get(i), obstacle)) {
-                        tirs.remove(i);
+                    if (collisionTirObstacle(tir, obstacle)) {
+                        projectilesToRemove.add(tir);
                         break;
                     }
                 }
             }
+
+            // Remove projectiles outside the iteration
+            tirs.removeAll(projectilesToRemove);
         }
 
     // Méthode pour démarrer le thread de mise à jour de la position de la souris

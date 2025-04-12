@@ -5,6 +5,7 @@ import java.awt.Point;
 import javax.swing.ImageIcon;
 
 import Controler.Character;
+import Controler.LevelManager;
 
 public class Fantome extends Ennemies {
 

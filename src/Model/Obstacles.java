@@ -1,8 +1,10 @@
 package Model;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
+import Controler.Character;
 
 
 public class Obstacles {
@@ -24,38 +26,27 @@ public class Obstacles {
     // generer une liste d'obstacle
     public void genererObstacle(int nbObstacle) {
         obstacles.clear(); // Vider la liste d'obstacles avant de générer de nouveaux obstacles
-        int x;
-        int y;
-        for (int i = 0; i < nbObstacle; i++) {
-            //generer un obstacle
-            x = rand.nextInt(1920);
-            y = rand.nextInt(1080);
-           
-            //verifier que les obstacles ne sont pas a la position du joueur
-            if(x>800 && x<900 && y>500 && y<600){
-                x = rand.nextInt(1500);
-                y = rand.nextInt(1000);
-            } 
-            Point p = new Point(x, y);
-            //ajouter l'obstacle a la liste si la distance entre les obstacles est suffisante
-            if (verifierDistanceObstacle(p)){
-                obstacles.add(p);
+    
+        while (obstacles.size() < nbObstacle) {
+            // Générer une position aléatoire pour l'obstacle
+            int x = rand.nextInt(1920 - WIDTH_O); 
+            int y = rand.nextInt(1080 - HEIGHT_O);
+            Point obs = new Point(x, y); // Créer un point pour l'obstacle 
+            // Vérifier que l'obstacle respecte les conditions
+            if (verifierDistanceObstacle(obs) && !Character.collisionObstacleJoueur(x,y)) {
+                obstacles.add(obs); // Ajouter l'obstacle à la liste
+            }
 
-            }
-            //sinon on decremente i pour generer un autre obstacle
-            else{
-                i--;
-            }
-            
         }
     }
+
     //retourner la liste d'obstacle
     public ArrayList<Point> getObstacles() {
         return this.obstacles;
     }
+
     //methode qui verifie que les obstacles ne sont pas trop proches
     public boolean verifierDistanceObstacle(Point p) {
-
         for (Point o : obstacles) {
             // Distance entre les obstacles
             double distance = Math.sqrt(Math.pow(o.x - p.x, 2) + Math.pow(o.y - p.y, 2));

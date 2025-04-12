@@ -6,11 +6,36 @@ public class ComboBonus {
     public int prix; // Prix du combo
     public int type; // Type de combo
 
+    // Constantes pour les prix des combos
+    public static final int PRIX_COMBO_1 = 10; // Prix du combo 1
+    public static final int PRIX_COMBO_2 = 20; // Prix du combo 2
+    public static final int PRIX_COMBO_3 = 30; // Prix du combo 3
+
     // Constructeur de la classe
-    public ComboBonus(int prix, int type) {
-        this.prix = prix; // Initialisation du prix
+    public ComboBonus(int type) {
         this.type = type; // Initialisation du type
+        // Initialisation du prix en fonction du type
+        switch (type) {
+            case 1:
+                this.prix = PRIX_COMBO_1; // Prix pour le type 1
+                break;
+            case 2:
+                this.prix = PRIX_COMBO_2; // Prix pour le type 2
+                break;
+            case 3:
+                this.prix = PRIX_COMBO_3; // Prix pour le type 3
+                break;
+            default:
+                this.prix = 0; // Prix par défaut si le type n'est pas valide
+        }
     }
-    
+
+    // Getteurs des attributs
+    public int getPrix() {
+        return prix; // Retourne le prix
+    }
+    public int getType() {
+        return type; // Retourne le type
+    }
 
 }

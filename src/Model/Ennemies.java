@@ -162,21 +162,11 @@ public class Ennemies {
             ((Araignee) this).startMovement();
             this.isMoving = true;
         }
+        // if c'est une goule, on le démarre
+        else if(this instanceof Goules) {
+            ((Goules) this).startMovement();
+            this.isMoving = true;
+        }
     }
-
-    // Thread pour détecter les collisions
-    // public static void startCollision(Character c, Tir t) {
-    //     Thread collisionThread = new Thread(() -> {
-    //         while (true) {
-    //             allCollisions(c, t);
-    //             try {
-    //                 Thread.sleep(50); // Attendre 50 ms entre chaque déplacement
-    //             } catch (InterruptedException e) {
-    //                 e.printStackTrace();
-    //             }
-    //         }
-    //     });
-    //     collisionThread.start();
-    // }
 
 }
