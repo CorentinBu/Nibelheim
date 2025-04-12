@@ -35,7 +35,7 @@ public class Affichage extends JPanel {
             new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null, 18);
     private Bouton acceuil = new Bouton("Accueil", X / 2 - 100, Y / 2 + 50, 200, 50,
             new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null, 18);
-    private Bouton startGame = new Bouton("Commencer une partie", 30, Y - 180, 300, 55,
+    private Bouton startGame = new Bouton("Commencer une partie", X / 2 - 200, Y - 500, 300, 55,
             new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), "src/Images/start_bouton.png", 18);
     private Bouton nextStageBtn = new Bouton("Etage suivant", X / 2 + 145, Y / 2 + 285, 180, 40,
             new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null, 18);
@@ -385,9 +385,9 @@ public class Affichage extends JPanel {
         startGame.setVisible(true);
         quitter.setVisible(true);
         g.setFont(new Font("Comic Sans MS", Font.BOLD, 60));
-        g.setColor(Color.RED);
+        g.setColor(Color.WHITE);
         g.drawString("Bienvenue sur Nibelhein", X / 2 - 402, Y / 2 - 2);
-        g.setColor(Color.GREEN);
+        g.setColor(Color.BLACK);
         g.drawString("Bienvenue sur Nibelhein", X / 2 - 400, Y / 2);
     }
 
