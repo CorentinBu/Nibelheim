@@ -14,7 +14,7 @@ import javax.sound.sampled.Clip;
 import Model.Araignee;
 import Model.Bonus;
 import Model.Character;
-import Model.Ennemies;
+import Model.Ennemis;
 import Model.Fantome;
 import Model.Niveau;
 import Model.Obstacles;
@@ -28,14 +28,13 @@ public class LevelManager extends Thread {
     public static final int DELAY = 50; // Délai entre chaque vérification du niveau
 
     // Constantes pour les pourcentages de chaque type d'ennemi
-    public static final int pourcentageFantomes = 40; // pourcentage de fantômes dans le niveau
-    public static final int pourcentageAraignee = 60; // pourcentage d'araignées dans le niveau
-    // public static int pourcentageGoules = 10;// pourcentage de goules dans le
-    // niveau
+    public static final int POURCENTAGEFANTOMES = 40; // pourcentage de fantômes dans le niveau
+    public static final int POURCENTAGEARAIGNEE = 60; // pourcentage d'araignées dans le niveau
+    // public static int pourcentageGoules = 10;// pourcentage de goules dans le niveau
 
     // Instances des classes utiles
     private Character c; // Instance du personnage
-    private Ennemies e; // Instance de la gestion des ennemis
+    private Ennemis e; // Instance de la gestion des ennemis
     private Bonus b; // Instance de la classe bonus
     private Obstacles o; // Instance de la classe obstacle
 
@@ -145,7 +144,7 @@ public class LevelManager extends Thread {
     }
 
     // Constructeur de la classe LevelManager
-    public LevelManager(Character character, Ennemies enemy, Bonus bonus, Obstacles obs) {
+    public LevelManager(Character character, Ennemis enemy, Bonus bonus, Obstacles obs) {
         this.c = character;
         this.e = enemy;
         this.b = bonus;
@@ -164,23 +163,23 @@ public class LevelManager extends Thread {
     // Méthode qui initialise les ennemis en fonction du niveau actuel
     public void initialiserEnnemis() {
         // Vider la liste des ennemis avant de les réinitialiser
-        Ennemies.getListEnnemies().clear();
+        Ennemis.getListEnnemies().clear();
         // Nombre d'obstacles du niveau actuel
         int nombreObstacles = niveaux.get(currentLevelIndex).getNombreObstacles();
         // Nombre total d'ennemis du niveau actuel
         int nombreEnnemis = niveaux.get(currentLevelIndex).getNombreEnnemis();
         // Calcul du nombre d'ennemis de chaque type
-        int nombreFantomes = (int) (nombreEnnemis * pourcentageFantomes / 100);
-        int nombreAraignees = (int) (nombreEnnemis * pourcentageAraignee / 100);
+        int nombreFantomes = (int) (nombreEnnemis * POURCENTAGEFANTOMES / 100);
+        int nombreAraignees = (int) (nombreEnnemis * POURCENTAGEARAIGNEE / 100);
         // int nombreGoules = (int) (nombreEnnemis * pourcentageGoules / 100);
 
         // Création des fantômes
         for (int i = 0; i < nombreFantomes; i++) {
-            new Fantome(c, 7, 1, Ennemies.genererPositionAleartoire(), b);
+            new Fantome(c, 7, 1, Ennemis.genererPositionAleatoire(), b);
         }
         // Création des araignées
         for (int i = 0; i < nombreAraignees; i++) {
-            new Araignee(c, 5, 1, Ennemies.genererPositionAleartoire(), b);
+            new Araignee(c, 5, 1, Ennemis.genererPositionAleatoire(), b);
         }
         // // On crée les goules avec leurs nombres respectives
         // for (int i = 0; i < nombreGoules; i++) {
@@ -223,10 +222,10 @@ public class LevelManager extends Thread {
             @Override
             public void run() {
                 Niveau niveau = niveaux.get(currentLevelIndex);
-                List<Ennemies> ennemisNonDeplaces = new ArrayList<>();
+                List<Ennemis> ennemisNonDeplaces = new ArrayList<>();
 
                 synchronized (e.getListEnnemies()) {
-                    for (Ennemies ennemi : e.getListEnnemies()) {
+                    for (Ennemis ennemi : e.getListEnnemies()) {
                         if (!ennemi.getIsMoving()) {
                             ennemisNonDeplaces.add(ennemi);
                         }
@@ -239,7 +238,7 @@ public class LevelManager extends Thread {
                     // Démarrer le mouvement de n ennemis aléatoires
                     for (int i = 0; i < n; i++) {
                         int randomIndex = rand.nextInt(ennemisNonDeplaces.size());
-                        Ennemies ennemi = ennemisNonDeplaces.get(randomIndex);
+                        Ennemis ennemi = ennemisNonDeplaces.get(randomIndex);
                         ennemi.startMouvement();
                         ennemisNonDeplaces.remove(randomIndex);
                     }
@@ -249,7 +248,7 @@ public class LevelManager extends Thread {
                 else if (ennemisNonDeplaces.isEmpty()) {
                     System.out.println("Tous les ennemis sont en mouvement.");
                 } else {
-                    for (Ennemies ennemi : ennemisNonDeplaces) {
+                    for (Ennemis ennemi : ennemisNonDeplaces) {
                         ennemi.startMouvement(); // Démarrer le mouvement de l'ennemi
                     }
                     System.out.println("Dernière vague activée.");
@@ -264,7 +263,7 @@ public class LevelManager extends Thread {
 
     // Méthode pour réinitialiser le jeu (par exemple, en cas de défaite)
     public void reinitialiserJeu() {
-        Ennemies.ListEnnemies = new CopyOnWriteArrayList<>();
+        Ennemis.ListEnnemies = new CopyOnWriteArrayList<>();
         currentLevelIndex = 0; // Retourner au premier niveau
         stopSon(); // Arrêter la musique
         System.out.println("Jeu réinitialisé.");

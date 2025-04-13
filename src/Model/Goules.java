@@ -7,13 +7,13 @@ import java.awt.Point;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
-public class Goules extends Ennemies {
+public class Goules extends Ennemis {
     // Points de vie de l'ennemie
     private static final int HEALTH_MAX = 3;
 
     // Taille du sprite du goule
-    public static final int width = 52;
-    public static final int height = 64;
+    public static final int WIDTH = 52;
+    public static final int HEIGHT = 64;
 
     // Taille de la fenêtre de jeu pour gerer la position de l'ennemi
     private static final int WIDTH_fenetre = 1920;
@@ -29,12 +29,11 @@ public class Goules extends Ennemies {
     public Projectile projectile = null;
 
     // Image de l'ennemie
-    public static final Image sprite = new ImageIcon("src/Images/goule.gif").getImage().getScaledInstance(width,
-            height, Image.SCALE_DEFAULT);
+    public static final Image sprite = new ImageIcon("src/Images/goule.gif").getImage().getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
 
     // constructeur
     public Goules(Character c, int speed, int bonusAmount, Point pos, Bonus b) {
-        super(c, HEALTH_MAX, speed, width, height, bonusAmount, pos, sprite, b);
+        super(c, HEALTH_MAX, speed, WIDTH, HEIGHT, bonusAmount, pos, sprite, b);
         this.c = c;
     }
 

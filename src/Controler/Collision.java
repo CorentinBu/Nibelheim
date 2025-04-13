@@ -1,7 +1,7 @@
 package Controler;
 
 import Model.Character;
-import Model.Ennemies;
+import Model.Ennemis;
 import Model.Tir;
 
 // Gérer toutes les collisions
@@ -13,10 +13,10 @@ public class Collision extends Thread {
     // Instances de classe utiles
     private Character c;
     private Tir t;
-    private Ennemies e;
+    private Ennemis e;
 
     // Constructeur pour initialiser les instances de classe
-    public Collision(Character c, Tir t, Ennemies e) {
+    public Collision(Character c, Tir t, Ennemis e) {
         this.c = c;
         this.t = t;
         this.e = e;
@@ -32,7 +32,7 @@ public class Collision extends Thread {
             c.checkBonusProche();
 
             // Détecter les collisions des ennemis
-            Ennemies.allCollisions(c, t);
+            Ennemis.allCollisions(c, t);
 
             try {
                 Thread.sleep(DELAY);

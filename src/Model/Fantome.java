@@ -6,25 +6,24 @@ import javax.swing.ImageIcon;
 
 import Controler.LevelManager;
 
-public class Fantome extends Ennemies {
+public class Fantome extends Ennemis {
 
     // Points de vie de l'ennemie
     private static final int HEALTH_MAX = 5;
 
     // Taille du sprite du fantôme
-    public static final int width = 52;
-    public static final int height = 65;
+    public static final int WIDTH = 52;
+    public static final int HEIGHT = 65;
 
     // Classe Character
     Character c;
 
     // Image de l'ennemie
-    public static final Image sprite = new ImageIcon("src/Images/ghost.png").getImage().getScaledInstance(width,
-            height, Image.SCALE_DEFAULT);
+    public static final Image sprite = new ImageIcon("src/Images/ghost.png").getImage().getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
 
     // Constructeur
     public Fantome(Character c, int speed, int bonusAmount, Point pos, Bonus b) {
-        super(c, HEALTH_MAX, speed, width, height, bonusAmount, pos, sprite, b);
+        super(c, HEALTH_MAX, speed, WIDTH, HEIGHT, bonusAmount, pos, sprite, b);
         this.c = c;
     }
 

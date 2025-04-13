@@ -14,7 +14,7 @@ import javax.sound.sampled.Clip;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 //Classe représentant un ennemie quelconque. Ses sous-classes sont les ennemies spécifiques
-public class Ennemies {
+public class Ennemis {
     /* VARIABLES */
     int health, speed, bonusAmount;
     boolean randomSpawn;
@@ -24,7 +24,7 @@ public class Ennemies {
     private boolean isMoving = false;
 
     // Variables static afin de savoir quels sont les ennemis présents à l'écran
-    public static List<Ennemies> ListEnnemies = new CopyOnWriteArrayList<>();
+    public static List<Ennemis> ListEnnemies = new CopyOnWriteArrayList<>();
 
     // Taille de la fenêtre de jeu pour gerer la position de l'ennemi
     private static final int WIDTH_fentre = 1920;
@@ -43,25 +43,11 @@ public class Ennemies {
     // Pour quand le joueur est touché
     static Clip audioIsHit = null;
 
-    // getteurs pour la taille de l'ennemi
-    public int getWidth(Ennemies e) {
-        return e.width;
-    }
-
-    public int getHeight(Ennemies e) {
-        return e.height;
-    }
-
-    // Getteur pôur isMoving
-    public boolean getIsMoving() {
-        return isMoving;
-    }
-
     // Image de l'ennemi
     public Image img;
 
     /* CONSTRUCTEUR */
-    public Ennemies(Character c, int health, int speed, int width, int height, int bonusAmount, Point position,
+    public Ennemis(Character c, int health, int speed, int width, int height, int bonusAmount, Point position,
             Image sprite, Bonus b) {
         this.speed = speed;
         this.health = health;
@@ -77,10 +63,11 @@ public class Ennemies {
     }
 
     // Constructeur par défaut
-    public Ennemies() {
+    public Ennemis() {
     }
 
     /* GETTERS & SETTERS */
+    //getter et setter pour la vitesse des ennemis
     public int getSpeed() {
         return speed;
     }
@@ -89,10 +76,10 @@ public class Ennemies {
         this.speed = v;
     }
 
-    public static List<Ennemies> getListEnnemies() {
+    public static List<Ennemis> getListEnnemies() {
         return ListEnnemies;
     }
-
+    // getters et setters pour la position des ennemis 
     public Point getPosition() {
         return position;
     }
@@ -101,13 +88,27 @@ public class Ennemies {
         this.position = p;
     }
 
+    // getteurs pour la taille de l'ennemi
+    public int getWidth(Ennemis e) {
+        return e.width;
+    }
+
+    public int getHeight(Ennemis e) {
+        return e.height;
+    }
+
+    // Getteur pôur isMoving
+    public boolean getIsMoving() {
+        return isMoving;
+    }
+
     // Méthode pour ajouter un ennemi
-    public void addEnnemie(Ennemies e) {
+    public void addEnnemie(Ennemis e) {
         ListEnnemies.add(e);
     }
 
     // Métode qui génère une position aleartoire pour l'ennemi
-    public static Point genererPositionAleartoire() {
+    public static Point genererPositionAleatoire() {
         int x = new int[] { -50, 100, 250, 500, 750, 1000, 1500, WIDTH_fentre + 50 }[rand.nextInt(8)];
         int y;
         if (x == -50 || x == WIDTH_fentre + 50) {
@@ -123,7 +124,7 @@ public class Ennemies {
     // Lorsque l'ennemie touche le joueur
     public static void allCollisions(Character c, Tir t) {
         List<Projectile> tirs = t.getTirs();
-        for (Ennemies ennemi : ListEnnemies) {
+        for (Ennemis ennemi : ListEnnemies) {
             // Si l'ennemi est déja en mouvement
             if (ennemi.isMoving) {
                 // Collision entre la soricère et les ennemies (contact entre les deux hitboxes)
@@ -166,7 +167,6 @@ public class Ennemies {
 
     // L'ennemi meurt quand sa vie arrive à 0
     public void kill() {
-
         try {
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Audios/se_damage01.wav"));
             audioKill = AudioSystem.getClip();

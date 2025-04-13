@@ -14,7 +14,7 @@ import Model.Bonus;
 import Model.Bouton;
 import Model.Character;
 import Model.ComboBonus;
-import Model.Ennemies;
+import Model.Ennemis;
 import Model.Fantome;
 import Model.Goules;
 
@@ -315,9 +315,9 @@ public class Affichage extends JPanel {
     // Méthode pour dessiner les ennemis
     public void drawEnnemies(Graphics g) {
         // Appel de la méthode statique sans instance
-        List<Ennemies> ennemies = Ennemies.getListEnnemies();
+        List<Ennemis> ennemies = Ennemis.getListEnnemies();
         // Boucle affichant tous les ennemis
-        for (Ennemies ennemi : ennemies) {
+        for (Ennemis ennemi : ennemies) {
             // Vérification si l'ennemi est un Fantome
             if (ennemi instanceof Fantome) {
                 Fantome fantome = (Fantome) ennemi; // Casting en Fantome
@@ -394,11 +394,11 @@ public class Affichage extends JPanel {
     // Méthode pour dessiner la barre de vie et afficher les pièces
     public void drawBarreVie(Graphics g) {
         g.setColor(Color.GRAY);
-        g.fillRoundRect(xBarreVie, yBarreVie, c.maxVie * 40, heightBarreVie, arcBarreVie, arcBarreVie);
+        g.fillRoundRect(xBarreVie, yBarreVie, c.MAXVIE * 40, heightBarreVie, arcBarreVie, arcBarreVie);
         g.setColor(Color.RED);
         g.fillRoundRect(xBarreVie, yBarreVie, c.getVie() * 40, heightBarreVie, arcBarreVie, arcBarreVie);
         g.setColor(Color.BLACK);
-        g.drawRoundRect(xBarreVie, yBarreVie, c.maxVie * 40, heightBarreVie, arcBarreVie, arcBarreVie);
+        g.drawRoundRect(xBarreVie, yBarreVie, c.MAXVIE * 40, heightBarreVie, arcBarreVie, arcBarreVie);
         g.drawImage(coinImage, X - 135, 25, null);
         g.setColor(new Color(225, 0, 0));
         g.setFont(new Font("Arial", Font.PLAIN, 14));

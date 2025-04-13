@@ -18,7 +18,7 @@ public class Main {
         Inputs inputs = new Inputs();
         Bonus b = new Bonus();
         Obstacles o = new Obstacles();
-        Ennemies e = new Ennemies();
+        Ennemis e = new Ennemis();
         Character c = new Character(b, inputs, o);
         Tir t = new Tir(c, o);
         LevelManager lm = new LevelManager(c, e, b, o);

@@ -14,7 +14,7 @@ import java.util.List;
 public class Tir {
 
     // Attributs et constantes
-    public static final int speed = 50; // Vitesse de déplacement des balles
+    public static final int SPEED = 50; // Vitesse de déplacement des balles
 
     // Clip audio pour le son du tir
     Clip audioTir = null;
@@ -63,14 +63,11 @@ public class Tir {
 
         // Ajouter le projectile à la liste des projectiles
         for (int i = 0; i < c.getNombreBalles(); i++) {
-            Point startPoint = new Point((int) (c.getCurrent_x() + i * 50), (int) (c.getCurrent_y() + 50)); // Point de
-                                                                                                            // départ du
-                                                                                                            // tir
-                                                                                                            // (position
-                                                                                                            // du
-                                                                                                            // joueur)
-            Point direction = new Point(mousePosition.x - startPoint.x, mousePosition.y - startPoint.y); // Direction du
-                                                                                                         // tir
+            //Point de départ du tir (position du joueur)
+            Point startPoint = new Point((int) (c.getCurrent_x() + i * 50), (int) (c.getCurrent_y() + 50)); 
+            //Direction du tir                                                                                                               
+            Point direction = new Point(mousePosition.x - startPoint.x, mousePosition.y - startPoint.y);
+                                                                                                        
             // Créer un nouveau projectile avec la position et la direction
             Projectile projectile = new Projectile(startPoint, direction);
             tirs.add(projectile); // Ajouter le projectile
@@ -97,8 +94,8 @@ public class Tir {
             double dirX = direction.x / length;
             double dirY = direction.y / length;
             // Appliquer une vitesse constante au tir
-            int newX = (int) (tir.getPosition().x + dirX * speed);
-            int newY = (int) (tir.getPosition().y + dirY * speed);
+            int newX = (int) (tir.getPosition().x + dirX * SPEED);
+            int newY = (int) (tir.getPosition().y + dirY * SPEED);
             // Déplacer le tir dans la direction normalisée
             tir.setPosition(new Point(newX, newY));
             // Mettre à jour la hitbox du tir

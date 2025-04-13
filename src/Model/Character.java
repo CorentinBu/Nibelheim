@@ -45,7 +45,7 @@ public class Character extends Thread {
     private double maxSpeed = 8; // Vitesse maximale
 
     public int vie = 5; // Points de vie du joueur
-    public static final int maxVie = 5; // Points de vie maximum du joueur
+    public static final int MAXVIE = 5; // Points de vie maximum du joueur
     private Inputs inputs; // Gestion des entrées clavier
 
     private int nombreBonus = 0; // Nombre de bonus ramassés
@@ -61,6 +61,14 @@ public class Character extends Thread {
     // Getteurs pour les combos
     public ArrayList<ComboBonus> getListComboBonus() {
         return listComboBonus;
+    }
+
+    // Constructeur pour la classe Character
+    public Character(Bonus bonus, Inputs i, Obstacles o) {
+        this.o = o;
+        this.b = bonus;
+        this.inputs = i;
+        this.hitboxC = new Rectangle((int) current_x, (int) current_y, WIDTH, HEIGHT);
     }
 
     // Creer des getters pour vx et vy
@@ -80,15 +88,7 @@ public class Character extends Thread {
     public double getCurrent_y() {
         return current_y;
     }
-
-    // Constructeur pour la classe Character
-    public Character(Bonus bonus, Inputs i, Obstacles o) {
-        this.o = o;
-        this.b = bonus;
-        this.inputs = i;
-        this.hitboxC = new Rectangle((int) current_x, (int) current_y, WIDTH, HEIGHT);
-    }
-
+    
     // Setters pour la position du joueur
     public void setCurrent_x(double current_x) {
         this.current_x = current_x;
@@ -97,6 +97,21 @@ public class Character extends Thread {
     public void setCurrent_y(double current_y) {
         this.current_y = current_y;
     }
+
+    // Getter et setter pour les points de vie
+    public int getVie() {
+        return vie;
+    }
+
+    public void setVie(int vie) {
+        this.vie = vie;
+    }
+
+    // Getteur pour le nombre de balles à tirér par coup
+    public int getNombreBalles() {
+        return this.nombreBalles;
+    }
+
 
     // Getteur et setteur pour le nombre de bonus
     public int getNombreBonus() {
@@ -194,20 +209,6 @@ public class Character extends Thread {
         current_y = Math.max(0, Math.min(1080, current_y));
     }
 
-    // Getter et setter pour les points de vie
-    public int getVie() {
-        return vie;
-    }
-
-    public void setVie(int vie) {
-        this.vie = vie;
-    }
-
-    // Getteur pour le nombre de balles à tirér par coup
-    public int getNombreBalles() {
-        return this.nombreBalles;
-    }
-
     // Méthode pour vérifier si le joueur est proche d'un bonus et récupérer ce
     // bonus
     public void checkBonusProche() {
@@ -264,7 +265,7 @@ public class Character extends Thread {
         pauseGame();
         current_x = 820;
         current_y = 540;
-        setVie(Character.maxVie);
+        setVie(Character.MAXVIE);
         nombreBonus = 0;
         inputs.resetKeys();
         resumeGame();

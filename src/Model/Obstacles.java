@@ -20,6 +20,11 @@ public class Obstacles {
     public Obstacles() {
         // genererObstacle();
     }
+    
+    // retourner la liste d'obstacle
+    public ArrayList<Point> getObstacles() {
+        return this.obstacles;
+    }
 
     // generer une liste d'obstacle
     public void genererObstacle(int nbObstacle) {
@@ -36,11 +41,6 @@ public class Obstacles {
             }
 
         }
-    }
-
-    // retourner la liste d'obstacle
-    public ArrayList<Point> getObstacles() {
-        return this.obstacles;
     }
 
     // methode qui verifie que les obstacles ne sont pas trop proches
