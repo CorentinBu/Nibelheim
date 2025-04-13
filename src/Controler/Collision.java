@@ -29,10 +29,18 @@ public class Collision extends Thread {
             // Gérer les collisions entre les tirs et les araignées
 
             // Détecter si le joueur touche un bonus
-            c.checkBonusProche();
+            if (c != null) {
+                c.checkBonusProche();
+            } else {
+                System.out.println("Le Character est null.");
+            }
 
             // Détecter les collisions des ennemis
-            Ennemis.allCollisions(c, t);
+            if (t != null && e != null) {
+                Ennemis.allCollisions(c, t);
+            } else {
+                System.out.println("Les objets Tir ou Ennemis sont null.");
+            }
 
             try {
                 Thread.sleep(DELAY);

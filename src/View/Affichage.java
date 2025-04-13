@@ -41,11 +41,11 @@ public class Affichage extends JPanel {
             new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null, 18);
     private Bouton quitter = new Bouton("Quitter", X - 150, 30, 100, 35,
             new Color(255, 0, 0), Color.WHITE, new Color(255, 0, 0), null, 18);
-    private Bouton buyCombo1 = new Bouton("Buy 10p", X / 2 - 225, Y / 2 - 95, 90, 22,
+    private Bouton buyCombo1 = new Bouton("Buy 15p", X / 2 - 225, Y / 2 - 95, 90, 22,
             new Color(96, 96, 96), Color.WHITE, new Color(70, 130, 180), null, 14);
-    private Bouton buyCombo2 = new Bouton("Buy 20p", X / 2 - 50, Y / 2 - 95, 90, 22,
+    private Bouton buyCombo2 = new Bouton("Buy 30p", X / 2 - 50, Y / 2 - 95, 90, 22,
             new Color(96, 96, 96), Color.WHITE, new Color(70, 130, 180), null, 14);
-    private Bouton buyCombo3 = new Bouton("Buy 30p", X / 2 + 125, Y / 2 - 95, 90, 22,
+    private Bouton buyCombo3 = new Bouton("Buy 50p", X / 2 + 125, Y / 2 - 95, 90, 22,
             new Color(96, 96, 96), Color.WHITE, new Color(70, 130, 180), null, 14);
 
     // Instances de classes utiles
@@ -91,9 +91,9 @@ public class Affichage extends JPanel {
     private void initImages() {
         // S'assurer que les dimensions nécessaires sont accessibles
         imgObstacle = new ImageIcon("src/Images/caisse.png").getImage()
-                .getScaledInstance(o.WIDTH_O, o.HEIGHT_O, Image.SCALE_DEFAULT);
+                .getScaledInstance(Obstacles.WIDTH_O, Obstacles.HEIGHT_O, Image.SCALE_DEFAULT);
         coinImage = new ImageIcon("src/Images/coin.png").getImage()
-                .getScaledInstance(b.WIDTH_B, b.HEIGHT_B, Image.SCALE_DEFAULT);
+                .getScaledInstance(Bonus.WIDTH_B, Bonus.HEIGHT_B, Image.SCALE_DEFAULT);
         imgCombo1 = new ImageIcon("src/Images/shoot.png").getImage()
                 .getScaledInstance(85, 85, Image.SCALE_DEFAULT);
         imgCombo2 = new ImageIcon("src/Images/speed.png").getImage()
@@ -118,13 +118,13 @@ public class Affichage extends JPanel {
     private void initListeners() {
         // Redémarrer la partie
         relancerButton.addActionListener(e -> {
-            lm.relancerGame();
             i.resetKeys();
             c.restartPlayer();
             c.resetInput(i);
             configurerClavier();
             tir.resetTirs();
             b.resetBonus();
+            lm.relancerGame(); // relancer le jeu
         });
 
         // Retour à l'accueil
@@ -252,10 +252,7 @@ public class Affichage extends JPanel {
             // Contenu de la boutique ici
             g.setFont(new Font("Arial", Font.BOLD, 25)); // Police de la boutique
             g.setColor(Color.BLACK); // Couleur du texte
-            g.drawString("Victoire ! Etage " + lm.getNiveauActuel().getNiveau() + " terminé", X / 2 - 120, Y / 2 - 300); // Titre
-                                                                                                                         // de
-                                                                                                                         // la
-                                                                                                                         // boutique
+            g.drawString("Victoire ! Etage " + lm.getNiveauActuel().getNiveau() + " terminé", X / 2 - 120, Y / 2 - 300); // Titre de la boutique
             // Dessiner les icones des combos
             g.drawImage(imgCombo1, X / 2 - 225, Y / 2 - 210, null); // Image du bonus 1
             g.drawImage(imgCombo2, X / 2 - 50, Y / 2 - 210, null); // Image du bonus 2
@@ -315,39 +312,31 @@ public class Affichage extends JPanel {
     // Méthode pour dessiner les ennemis
     public void drawEnnemies(Graphics g) {
         // Appel de la méthode statique sans instance
-        List<Ennemis> ennemies = Ennemis.getListEnnemies();
+        List<Ennemis> ennemis = Ennemis.getListEnnemies();
         // Boucle affichant tous les ennemis
-        for (Ennemis ennemi : ennemies) {
+        for (Ennemis ennemi : ennemis) {
             // Vérification si l'ennemi est un Fantome
             if (ennemi instanceof Fantome) {
                 Fantome fantome = (Fantome) ennemi; // Casting en Fantome
                 g.drawImage(fantome.img, (int) fantome.getPosition().getX(), (int) fantome.getPosition().getY(), null);
-                // g.drawRect((int) ennemi.getPosition().getX(), (int)
-                // ennemi.getPosition().getY(), ennemi.getWidth(ennemi),
-                // ennemi.getHeight(ennemi));
             }
+            // Vérifier si l'ennemi est une araignée
             if (ennemi instanceof Araignee) {
-                Araignee araignee = (Araignee) ennemi; // Casting en Fantome
-                g.drawImage(araignee.img, (int) araignee.getPosition().getX(), (int) araignee.getPosition().getY(),
-                        null);
-                // g.drawRect((int) ennemi.getPosition().getX(), (int)
-                // ennemi.getPosition().getY(), ennemi.getWidth(ennemi),
-                // ennemi.getHeight(ennemi));
+                Araignee araignee = (Araignee) ennemi; // Casting en Araignee
+                g.drawImage(araignee.img, (int) araignee.getPosition().getX(), (int) araignee.getPosition().getY(), null);
             }
-            // if(ennemi instanceof Goules) {
-            // Goules goule = (Goules) ennemi; // Casting en Fantome
-            // g.drawImage(goule.img, (int) goule.getPosition().getX(), (int)
-            // goule.getPosition().getY(), null);
-            // //g.drawRect((int) ennemi.getPosition().getX(), (int)
-            // ennemi.getPosition().getY(), ennemi.getWidth(ennemi),
-            // ennemi.getHeight(ennemi));
-            // if (goule.projectile != null) {
-            // g.setColor(Color.RED);
-            // g.fillOval(goule.projectile.getPosition().x,
-            // goule.projectile.getPosition().y, 8, 8);
-            // g.setColor(Color.BLACK);
-            // }
-            // }
+            // Vérifier si l'ennemi est un goule
+            if(ennemi instanceof Goules) {
+                Goules goule = (Goules) ennemi; // Casting en Goule
+                g.drawImage(goule.img, (int) goule.getPosition().getX(), (int)
+                goule.getPosition().getY(), null);
+                if (goule.projectile != null) {
+                    g.setColor(Color.RED);
+                    g.fillOval(goule.projectile.getPosition().x,
+                    goule.projectile.getPosition().y, 8, 8);
+                    g.setColor(Color.BLACK);
+                }
+            }
         }
     }
 

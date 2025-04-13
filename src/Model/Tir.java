@@ -51,13 +51,14 @@ public class Tir {
 
     // Méthode pour ajouter un tir (tirer une nouvelle balle)
     public void addTir() {
-
+        // Charger et jouer le son du tir
         try {
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Audios/se_graze.wav"));
             audioTir = AudioSystem.getClip();
             audioTir.open(audioIn);
             audioTir.start();
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             e.printStackTrace();
         }
 

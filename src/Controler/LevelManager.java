@@ -18,7 +18,7 @@ import Model.Ennemis;
 import Model.Fantome;
 import Model.Niveau;
 import Model.Obstacles;
-// import Model.Goules;
+import Model.Goules;
 
 // Classe qui gère les différents niveaux du jeu
 public class LevelManager extends Thread {
@@ -28,9 +28,9 @@ public class LevelManager extends Thread {
     public static final int DELAY = 50; // Délai entre chaque vérification du niveau
 
     // Constantes pour les pourcentages de chaque type d'ennemi
-    public static final int POURCENTAGEFANTOMES = 40; // pourcentage de fantômes dans le niveau
+    public static final int POURCENTAGEFANTOMES = 30; // pourcentage de fantômes dans le niveau
     public static final int POURCENTAGEARAIGNEE = 60; // pourcentage d'araignées dans le niveau
-    // public static int pourcentageGoules = 10;// pourcentage de goules dans le niveau
+    public static int pourcentageGoules = 10; // pourcentage de goules dans le niveau
 
     // Instances des classes utiles
     private Character c; // Instance du personnage
@@ -171,7 +171,7 @@ public class LevelManager extends Thread {
         // Calcul du nombre d'ennemis de chaque type
         int nombreFantomes = (int) (nombreEnnemis * POURCENTAGEFANTOMES / 100);
         int nombreAraignees = (int) (nombreEnnemis * POURCENTAGEARAIGNEE / 100);
-        // int nombreGoules = (int) (nombreEnnemis * pourcentageGoules / 100);
+        int nombreGoules = (int) (nombreEnnemis * pourcentageGoules / 100);
 
         // Création des fantômes
         for (int i = 0; i < nombreFantomes; i++) {
@@ -181,11 +181,10 @@ public class LevelManager extends Thread {
         for (int i = 0; i < nombreAraignees; i++) {
             new Araignee(c, 5, 1, Ennemis.genererPositionAleatoire(), b);
         }
-        // // On crée les goules avec leurs nombres respectives
-        // for (int i = 0; i < nombreGoules; i++) {
-        // new Goules(c, rand.nextInt(6 - 3 + 1) + 3, 1,
-        // Ennemies.genererPositionAleartoire(), b);
-        // }
+        // On crée les goules
+        for (int i = 0; i < nombreGoules; i++) {
+            new Goules(c, rand.nextInt(6 - 3 + 1) + 3, 1, Ennemis.genererPositionAleatoire(), b);
+        }
         // Génération des obstacles
         o.genererObstacle(nombreObstacles);
     }
@@ -242,11 +241,11 @@ public class LevelManager extends Thread {
                         ennemi.startMouvement();
                         ennemisNonDeplaces.remove(randomIndex);
                     }
-                    System.out.println("Vague activée : " + n + " ennemis démarrés.");
+                    // System.out.println("Vague activée : " + n + " ennemis démarrés.");
                 }
                 // Sinon, si tous les ennemis sont déplacés, on arrête la tâche
                 else if (ennemisNonDeplaces.isEmpty()) {
-                    System.out.println("Tous les ennemis sont en mouvement.");
+                    // System.out.println("Dernière vague !");
                 } else {
                     for (Ennemis ennemi : ennemisNonDeplaces) {
                         ennemi.startMouvement(); // Démarrer le mouvement de l'ennemi
@@ -258,12 +257,18 @@ public class LevelManager extends Thread {
             }
         };
         // Planifier la tâche pour exécuter une vague toutes les 10 secondes
-        timer.schedule(task, 0, 15000);
+        timer.schedule(task, 0, 10000);
     }
 
     // Méthode pour réinitialiser le jeu (par exemple, en cas de défaite)
     public void reinitialiserJeu() {
-        Ennemis.ListEnnemies = new CopyOnWriteArrayList<>();
+        // On arrete le mouvement des goules pour limiter les exceptions
+        for (Ennemis ennemi : Ennemis.getListEnnemies()) {
+            if (ennemi instanceof Goules) {
+                ((Goules) ennemi).stopMovement();
+            }
+        }
+        Ennemis.ListEnnemies = new CopyOnWriteArrayList<>(); // Réinitialiser la liste des ennemis
         currentLevelIndex = 0; // Retourner au premier niveau
         stopSon(); // Arrêter la musique
         System.out.println("Jeu réinitialisé.");

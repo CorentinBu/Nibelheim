@@ -7,9 +7,9 @@ public class ComboBonus {
     public int type; // Type de combo
 
     // Constantes pour les prix des combos
-    public static final int PRIX_COMBO_1 = 10; // Prix du combo 1
-    public static final int PRIX_COMBO_2 = 20; // Prix du combo 2
-    public static final int PRIX_COMBO_3 = 30; // Prix du combo 3
+    public static final int PRIX_COMBO_1 = 15; // Prix du combo 1
+    public static final int PRIX_COMBO_2 = 30; // Prix du combo 2
+    public static final int PRIX_COMBO_3 = 50; // Prix du combo 3
 
     // Constructeur de la classe
     public ComboBonus(int type) {

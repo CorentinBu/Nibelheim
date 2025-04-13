@@ -7,7 +7,6 @@ import java.util.Random;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.swing.ImageIcon;
 
 import javax.sound.sampled.Clip;
 
@@ -126,12 +125,12 @@ public class Ennemis {
         List<Projectile> tirs = t.getTirs();
         for (Ennemis ennemi : ListEnnemies) {
             // Si l'ennemi est déja en mouvement
-            if (ennemi.isMoving) {
+            if (ennemi != null && ennemi.isMoving) {
                 // Collision entre la soricère et les ennemies (contact entre les deux hitboxes)
                 if (c.hitboxC.intersects(ennemi.hitboxEnnemie)) {
 
                     try {
-                        AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Audios/se_graze.wav"));
+                        AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Audios/se_item00.wav"));
                         audioIsHit = AudioSystem.getClip();
                         audioIsHit.open(audioIn);
                         audioIsHit.start();

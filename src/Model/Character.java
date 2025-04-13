@@ -209,24 +209,29 @@ public class Character extends Thread {
         current_y = Math.max(0, Math.min(1080, current_y));
     }
 
-    // Méthode pour vérifier si le joueur est proche d'un bonus et récupérer ce
-    // bonus
+    // Méthode pour vérifier si le joueur est proche d'un bonus et récupérer ce bonus
     public void checkBonusProche() {
+        // Vérifier si la liste des bonus est vide
+        if (b.getPointBonus().isEmpty() || b.getPointBonus() == null) {
+            return; // Aucun bonus à vérifier
+        }
+        // Parcourir les bonus
         for (int i = 0; i < b.getPointBonus().size(); i++) {
             if (hitboxC.intersects(b.getPointBonus().get(i))) {
-
                 try {
-                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Audios/se_item00.wav"));
+                    // Jouer le son du bonus
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("src/Audios/piece_collectee.wav"));
                     audioBonus = AudioSystem.getClip();
                     audioBonus.open(audioIn);
                     audioBonus.start();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+                // Incrémenter le nombre de bonus et supprimer le bonus ramassé
                 nombreBonus++;
-                b.removeBonus(b.getPointBonus().get(i).getLocation());
-                break;
+                Point bonusLocation = b.getPointBonus().get(i).getLocation();
+                b.removeBonus(bonusLocation);
+                break; // Sortir de la boucle après avoir ramassé un bonus
             }
         }
     }
