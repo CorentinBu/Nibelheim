@@ -27,7 +27,7 @@ public class Character extends Thread {
     // Instance de la classe combos
     private ComboBonus cb;
     // Hitbox du personnage
-    public Rectangle hitboxC;
+    public static Rectangle hitboxC;
 
     // Clip audio pour le son du bonus
     Clip audioBonus = null;
@@ -35,28 +35,41 @@ public class Character extends Thread {
     // liste des combosbonus du joueur
     private ArrayList<ComboBonus> listComboBonus = new ArrayList<ComboBonus>();
 
+    // Dimensions d
+
+    
+    // Dimensions de base du personnage
+    public static final int WIDTH_perso = 54;
+    public static final int HEIGHT_perso = 54;
+
+    // Dimensions du personnage
+    public static int WIDTH = WIDTH_perso;
+    public static int HEIGHT = HEIGHT_perso;
+
+    // Dimensions de la fenêtre de jeu
+    private static int WIDTH_fenetre = 1150;
+    private static int HEIGHT_fenetre = 650;
+
+    // Setter pour la taille de la fenêtre
+    public static void setDimensionsFenetre(int width, int height) {
+        WIDTH_fenetre = width;
+        HEIGHT_fenetre = height;
+    }
+
     // Attributs pour la position du joueur
-    private static double current_x = 820;
-    private static double current_y = 540;
+    private static double current_x = WIDTH_fenetre / 2 - WIDTH / 2;
+    private static double current_y = HEIGHT_fenetre / 2 - HEIGHT / 2;
 
     private double vx = 0, vy = 0; // Vitesse horizontale et verticale
     private double acceleration = 2; // Accélération progressive
     private double friction = 0.9; // Déccélération (simule l’inertie)
     private double maxSpeed = 8; // Vitesse maximale
-
     public int vie = 5; // Points de vie du joueur
     public static final int MAXVIE = 5; // Points de vie maximum du joueur
     private Inputs inputs; // Gestion des entrées clavier
-
     private int nombreBonus = 0; // Nombre de bonus ramassés
     private boolean paused = false; // Booléen pour mettre en pause le jeu
-
-    // Nombre de balles tirées (2 si il a un combos, 1 sinon)
     private int nombreBalles = 1; // Nombre de balles tirées par le joueur
-
-    // Dimensions du personnage
-    public static final int WIDTH = 90;
-    public static final int HEIGHT = 90;
 
     // Getteurs pour les combos
     public ArrayList<ComboBonus> getListComboBonus() {
@@ -70,6 +83,7 @@ public class Character extends Thread {
         this.inputs = i;
         this.hitboxC = new Rectangle((int) current_x, (int) current_y, WIDTH, HEIGHT);
     }
+
 
     // Creer des getters pour vx et vy
     public double getVx() {
@@ -128,8 +142,8 @@ public class Character extends Thread {
     }
 
     // Sprite du personnage
-    public static final Image characterSprite = new ImageIcon("src/Images/character.png")
-            .getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
+    public static Image characterSprite = new ImageIcon("src/Images/character.png")
+        .getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
 
     public synchronized void pauseGame() {
         paused = true;
@@ -163,6 +177,16 @@ public class Character extends Thread {
             }
         }
     }
+
+        
+    // Setteurs pour les dimensions du joueur
+    public void setDimensionsJoueur(int width, int height) {
+        this.WIDTH = width;
+        this.HEIGHT = height;
+        this.characterSprite = characterSprite.getScaledInstance(width, height, Image.SCALE_DEFAULT);
+        this.hitboxC = new Rectangle((int) current_x, (int) current_y, width, height);
+    }
+
 
     // Gestion du déplacement avec inertie
     private void updateMovement() {

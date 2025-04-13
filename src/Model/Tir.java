@@ -33,6 +33,16 @@ public class Tir {
     private Character c; // Le joueur
     private Obstacles o; // Les obstacles
 
+    // Dimensions de la fenêtre de jeu
+    private static int WIDTH_fenetre = 1150;
+    private static int HEIGHT_fenetre = 650;
+
+    // Setter pour la taille de la fenêtre
+    public static void setDimensionsFenetre(int width, int height) {
+        WIDTH_fenetre = width;
+        HEIGHT_fenetre = height;
+    }
+
     // Constructeur pour initialiser la liste de tirs
     public Tir(Character c, Obstacles obs) {
         this.o = obs;
@@ -103,7 +113,7 @@ public class Tir {
             tir.hitboxProjectile.x = newX;
             tir.hitboxProjectile.y = newY;
             // Vérifier si le tir est sorti de la fenêtre et le supprimer
-            if (newX < 0 || newX > 1920 || newY < 0 || newY > 1080) {
+            if (newX < 0 || newX > WIDTH_fenetre || HEIGHT_fenetre < 0 || newY > 1080) {
                 removeTir(i);
             }
         }

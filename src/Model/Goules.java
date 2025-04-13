@@ -12,8 +12,8 @@ public class Goules extends Ennemis {
     public static final int SPEED_PROJECTILE = 12;
 
     // Taille du sprite du goule
-    public static final int WIDTH = 52;
-    public static final int HEIGHT = 64;
+    public static final int WIDTH = 31;
+    public static final int HEIGHT = 39;
     // Indique si on doit demarrer le mouvement ou pas
     private volatile boolean isRunning = true;
 
@@ -36,7 +36,7 @@ public class Goules extends Ennemis {
     private double projectileDirY = 0;
 
     // Image de l'ennemie
-    public static final Image sprite = new ImageIcon("src/Images/goule.gif").getImage().getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
+    public static final Image sprite = new ImageIcon("src/Images/goule.gif").getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
 
     // constructeur
     public Goules(Character c, int speed, int bonusAmount, Point pos, Bonus b) {

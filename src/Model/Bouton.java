@@ -7,7 +7,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-// classe represenant la logique de chaque bouton
+// classe represenant la logique de chaque bouton de l'interface graphique
+// Elle permet de créer un bouton avec une image, une couleur, une taille, une position et un texte
 public class Bouton extends JButton {
     // Attributs nécessaires pour le bouton :
     String name ; // Nom du bouton
@@ -32,6 +33,7 @@ public class Bouton extends JButton {
         this.couleur_texte = couleur_texte;
         this.couleur_survol = couleur_survol;
         this.image = image;
+
 
         // Initialisation du bouton
         setFont(new Font("Arial", Font.BOLD, tailleTexte));
@@ -63,4 +65,5 @@ public class Bouton extends JButton {
             }
         });
     }
+
 }

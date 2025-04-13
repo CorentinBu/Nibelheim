@@ -25,9 +25,16 @@ public class Ennemis {
     // Variables static afin de savoir quels sont les ennemis présents à l'écran
     public static List<Ennemis> ListEnnemies = new CopyOnWriteArrayList<>();
 
-    // Taille de la fenêtre de jeu pour gerer la position de l'ennemi
-    private static final int WIDTH_fentre = 1920;
-    private static final int HEIGHT_fentre = 1080;
+    // Dimensions de la fenêtre de jeu
+    private static int WIDTH_fenetre = 1150;
+    private static int HEIGHT_fenetre = 650;
+
+    // Setter pour la taille de la fenêtre
+    public static void setDimensionsFenetre(int width, int height) {
+        WIDTH_fenetre = width;
+        HEIGHT_fenetre = height;
+        System.out.println("Taille de la fenêtre : " + width + "x" + height);
+    }
 
     // Generateur d'entier aléartoire
     private static final Random rand = new Random();
@@ -35,6 +42,14 @@ public class Ennemis {
     // Taille du sprite de l'ennemi
     private int width;
     private int height;
+
+    // Setters pour la taille de l'ennemi
+    public void setDimensionsEnnemis(int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.hitboxEnnemie = new Rectangle(position.x, position.y, width, height);
+        this.img = img.getScaledInstance(width, height, Image.SCALE_DEFAULT);
+    }
 
     // Clip audio pour l'ennemi étant détruit
     Clip audioKill = null;
@@ -82,7 +97,6 @@ public class Ennemis {
     public Point getPosition() {
         return position;
     }
-
     public void setPosition(Point p) {
         this.position = p;
     }
@@ -91,7 +105,6 @@ public class Ennemis {
     public int getWidth(Ennemis e) {
         return e.width;
     }
-
     public int getHeight(Ennemis e) {
         return e.height;
     }
@@ -108,12 +121,12 @@ public class Ennemis {
 
     // Métode qui génère une position aleartoire pour l'ennemi
     public static Point genererPositionAleatoire() {
-        int x = new int[] { -50, 100, 250, 500, 750, 1000, 1500, WIDTH_fentre + 50 }[rand.nextInt(8)];
+        int x = new int[] { -50, 100, 250, 500, 750, 1000, 1500, WIDTH_fenetre + 50 }[rand.nextInt(8)];
         int y;
-        if (x == -50 || x == WIDTH_fentre + 50) {
-            y = rand.nextInt(HEIGHT_fentre - (-50) + 1) + (-50);
+        if (x == -50 || x == WIDTH_fenetre + 50) {
+            y = rand.nextInt(HEIGHT_fenetre - (-50) + 1) + (-50);
         } else {
-            y = new int[] { -100, HEIGHT_fentre + 50 }[rand.nextInt(2)];
+            y = new int[] { -100, HEIGHT_fenetre + 50 }[rand.nextInt(2)];
         }
         return new Point(x, y);
     }

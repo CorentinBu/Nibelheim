@@ -10,14 +10,14 @@ public class Araignee extends Ennemis {
     private static final int HEALTH_MAX = 2;
 
     // Taille du sprite du fantôme
-    public static final int WIDTH = 64;
-    public static final int HEIGHT = 40;
+    public static final int WIDTH = 38;
+    public static final int HEIGHT = 24;
 
     // Classe Character
     Character c;
 
     // Image de l'ennemie
-    public static final Image sprite = new ImageIcon("src/Images/araignee.gif").getImage().getScaledInstance(WIDTH,HEIGHT, Image.SCALE_DEFAULT);
+    public static final Image sprite = new ImageIcon("src/Images/araignee.gif").getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
 
     // Constructeur
     public Araignee(Character c, int speed, int bonusAmount, Point pos, Bonus b) {

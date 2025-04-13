@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import Controler.Inputs;
 import Controler.LevelManager;
 import Model.Tir;
@@ -14,15 +13,18 @@ import Model.Bonus;
 import Model.Bouton;
 import Model.Character;
 import Model.ComboBonus;
+import Model.Dimensions;
 import Model.Ennemis;
 import Model.Fantome;
 import Model.Goules;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class Affichage extends JPanel {
 
-    // Dimensions de la vue
-    public static final int X = 1920;
-    public static final int Y = 1080;
+    // Attributs de la classe
+    private static int originalWidth = Dimensions.getReferenceWidth();
+    private static int originalHeight = Dimensions.getReferenceHeight();
 
     // Position et dimension de la barre de vie
     public static final int xBarreVie = 30;
@@ -30,23 +32,46 @@ public class Affichage extends JPanel {
     public static final int heightBarreVie = 20;
     public static final int arcBarreVie = 10;
 
+    // Positions et dimensions de base des boutons
+    private static final Point POS_RELANCER = new Point(originalWidth / 2 - 100, originalHeight / 2 - 30);
+    private static final Dimension SIZE_RELANCER = new Dimension(200, 50);
+    private static final Point POS_ACCEUIL = new Point(originalWidth / 2 - 100, originalHeight / 2 + 50);
+    private static final Dimension SIZE_ACCEUIL = new Dimension(200, 50);
+    private static final Point POS_START = new Point(originalWidth / 2 - 200, originalHeight / 2 + 50);
+    private static final Dimension SIZE_START = new Dimension(300, 55);
+    private static final Point POS_NEXT_STAGE = new Point(originalWidth / 2 + 145, originalHeight / 2 + 285);
+    private static final Dimension SIZE_NEXT_STAGE = new Dimension(180, 40);
+    private static final Point POS_QUITTER = new Point(originalWidth - 150, 30);
+    private static final Dimension SIZE_QUITTER = new Dimension(100, 35);
+    private static final Point POS_COMBO1 = new Point(originalWidth / 2 - 225, originalHeight / 2 - 95);
+    private static final Dimension SIZE_COMBO1 = new Dimension(90, 22);
+    private static final Point POS_COMBO2 = new Point(originalWidth / 2 - 50, originalHeight / 2 - 95);
+    private static final Dimension SIZE_COMBO2 = new Dimension(90, 22);
+    private static final Point POS_COMBO3 = new Point(originalWidth / 2 + 125, originalHeight / 2 - 95);
+    private static final Dimension SIZE_COMBO3 = new Dimension(90, 22);
+
+    // Taille de base de certains textes de boutons
+    private static final int TEXT_SIZE1 = 18;
+    private static final int TEXT_SIZE2 = 14;
+
+
     // Créations des boutons du jeu
-    private Bouton relancerButton = new Bouton("Nouvelle Partie", X / 2 - 100, Y / 2 - 30, 200, 50,
-            new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null, 18);
-    private Bouton acceuil = new Bouton("Accueil", X / 2 - 100, Y / 2 + 50, 200, 50,
-            new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null, 18);
-    private Bouton startGame = new Bouton("Commencer une partie", X / 2 - 200, Y - 500, 300, 55,
-            new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), "src/Images/start_bouton.png", 18);
-    private Bouton nextStageBtn = new Bouton("Etage suivant", X / 2 + 145, Y / 2 + 285, 180, 40,
-            new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null, 18);
-    private Bouton quitter = new Bouton("Quitter", X - 150, 30, 100, 35,
-            new Color(255, 0, 0), Color.WHITE, new Color(255, 0, 0), null, 18);
-    private Bouton buyCombo1 = new Bouton("Buy 15p", X / 2 - 225, Y / 2 - 95, 90, 22,
-            new Color(96, 96, 96), Color.WHITE, new Color(70, 130, 180), null, 14);
-    private Bouton buyCombo2 = new Bouton("Buy 30p", X / 2 - 50, Y / 2 - 95, 90, 22,
-            new Color(96, 96, 96), Color.WHITE, new Color(70, 130, 180), null, 14);
-    private Bouton buyCombo3 = new Bouton("Buy 50p", X / 2 + 125, Y / 2 - 95, 90, 22,
-            new Color(96, 96, 96), Color.WHITE, new Color(70, 130, 180), null, 14);
+    private Bouton relancerButton = new Bouton("Nouvelle Partie", POS_RELANCER.x, POS_RELANCER.y, SIZE_RELANCER.width, SIZE_RELANCER.height,
+        new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null, TEXT_SIZE1);
+    private Bouton acceuil = new Bouton("Accueil", POS_ACCEUIL.x, POS_ACCEUIL.y, SIZE_ACCEUIL.width, SIZE_ACCEUIL.height,
+        new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null, TEXT_SIZE1);
+    private Bouton startGame = new Bouton("Commencer une partie", POS_START.x, POS_START.y, SIZE_START.width, SIZE_START.height,
+        new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), "src/Images/start_bouton.png", TEXT_SIZE1);
+    private Bouton nextStageBtn = new Bouton("Etage suivant", POS_NEXT_STAGE.x, POS_NEXT_STAGE.y, SIZE_NEXT_STAGE.width, SIZE_NEXT_STAGE.height,
+        new Color(169, 169, 169), Color.WHITE, new Color(70, 130, 180), null, TEXT_SIZE1);
+    private Bouton quitter = new Bouton("Quitter", POS_QUITTER.x, POS_QUITTER.y, SIZE_QUITTER.width, SIZE_QUITTER.height,
+        new Color(255, 0, 0), Color.WHITE, new Color(255, 0, 0), null, TEXT_SIZE1);
+    private Bouton buyCombo1 = new Bouton("Buy 15p", POS_COMBO1.x, POS_COMBO1.y, SIZE_COMBO1.width, SIZE_COMBO1.height,
+        new Color(96, 96, 96), Color.WHITE, new Color(70, 130, 180), null, TEXT_SIZE2);
+    private Bouton buyCombo2 = new Bouton("Buy 30p", POS_COMBO2.x, POS_COMBO2.y, SIZE_COMBO2.width, SIZE_COMBO2.height,
+        new Color(96, 96, 96), Color.WHITE, new Color(70, 130, 180), null, TEXT_SIZE2);
+    private Bouton buyCombo3 = new Bouton("Buy 50p", POS_COMBO3.x, POS_COMBO3.y, SIZE_COMBO3.width, SIZE_COMBO3.height,
+        new Color(96, 96, 96), Color.WHITE, new Color(70, 130, 180), null, TEXT_SIZE2);
 
     // Instances de classes utiles
     private Bonus b;
@@ -63,11 +88,12 @@ public class Affichage extends JPanel {
     private Image imgCombo1;
     private Image imgCombo2;
     private Image imgCombo3;
+    
 
     public Affichage(Character character, Tir t, Bonus bonus, Inputs inputs, Obstacles obs, LevelManager levelManager) {
         // Configuration du panneau
         setLayout(null);
-        setPreferredSize(new Dimension(X, Y));
+        setPreferredSize(new java.awt.Dimension(originalWidth, originalHeight));
 
         this.c = character;
         this.tir = t;
@@ -75,6 +101,79 @@ public class Affichage extends JPanel {
         this.i = inputs;
         this.o = obs;
         this.lm = levelManager;
+
+        // Initialiser les dimensions
+        Model.Dimensions.updateDimensions(originalWidth, originalHeight);
+
+        // Ajouter un écouteur pour détecter les changements de taille
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                Model.Dimensions.updateDimensions(getWidth(), getHeight());
+                System.out.println("Dimensions mises à jour : " + getWidth() + "x" + getHeight());
+                System.out.println("Ratio : " + Dimensions.getScaleX() + "x" + Dimensions.getScaleY());
+                float newScaleX = Dimensions.getScaleX();
+                float newScaleY = Dimensions.getScaleY();
+                // Mettre à jour les dimensions de la fenetre
+                originalWidth = getWidth();
+                originalHeight = getHeight();
+
+                // Redimensionner les boutons
+                relancerButton.setBounds(Dimensions.scaleX(POS_RELANCER.x), Dimensions.scaleY(POS_RELANCER.y),
+                        Dimensions.scaleX(SIZE_RELANCER.width), Dimensions.scaleY(SIZE_RELANCER.height));
+                relancerButton.setFont(new Font("Arial", Font.BOLD, (int) (TEXT_SIZE1 * newScaleX)));
+                acceuil.setBounds(Dimensions.scaleX(POS_ACCEUIL.x), Dimensions.scaleY(POS_ACCEUIL.y),
+                        Dimensions.scaleX(SIZE_ACCEUIL.width), Dimensions.scaleY(SIZE_ACCEUIL.height));
+                acceuil.setFont(new Font("Arial", Font.BOLD, (int) (TEXT_SIZE1 * newScaleX)));
+                startGame.setBounds(Dimensions.scaleX(POS_START.x), Dimensions.scaleY(POS_START.y),
+                        Dimensions.scaleX(SIZE_START.width), Dimensions.scaleY(SIZE_START.height));
+                startGame.setFont(new Font("Arial", Font.BOLD, (int) (TEXT_SIZE1 * newScaleX)));
+                nextStageBtn.setBounds(Dimensions.scaleX(POS_NEXT_STAGE.x), Dimensions.scaleY(POS_NEXT_STAGE.y),
+                        Dimensions.scaleX(SIZE_NEXT_STAGE.width), Dimensions.scaleY(SIZE_NEXT_STAGE.height));
+                nextStageBtn.setFont(new Font("Arial", Font.BOLD, (int) (TEXT_SIZE1 * newScaleX)));
+                quitter.setBounds(Dimensions.scaleX(POS_QUITTER.x), Dimensions.scaleY(POS_QUITTER.y),
+                        Dimensions.scaleX(SIZE_QUITTER.width), Dimensions.scaleY(SIZE_QUITTER.height));
+                quitter.setFont(new Font("Arial", Font.BOLD, (int) (TEXT_SIZE1 * newScaleX)));
+                buyCombo1.setBounds(Dimensions.scaleX(POS_COMBO1.x), Dimensions.scaleY(POS_COMBO1.y),
+                        Dimensions.scaleX(SIZE_COMBO1.width), Dimensions.scaleY(SIZE_COMBO1.height));
+                buyCombo1.setFont(new Font("Arial", Font.BOLD, (int) (TEXT_SIZE2 * newScaleX)));
+                buyCombo2.setBounds(Dimensions.scaleX(POS_COMBO2.x), Dimensions.scaleY(POS_COMBO2.y),
+                        Dimensions.scaleX(SIZE_COMBO2.width), Dimensions.scaleY(SIZE_COMBO2.height));
+                buyCombo2.setFont(new Font("Arial", Font.BOLD, (int) (TEXT_SIZE2 * newScaleX)));
+                buyCombo3.setBounds(Dimensions.scaleX(POS_COMBO3.x), Dimensions.scaleY(POS_COMBO3.y),
+                        Dimensions.scaleX(SIZE_COMBO3.width), Dimensions.scaleY(SIZE_COMBO3.height));
+                buyCombo3.setFont(new Font("Arial", Font.BOLD, (int) (TEXT_SIZE2 * newScaleX)));
+
+                
+                // Mettre à jour la taille de la fenêtre dans les classes associées
+                Obstacles.setDimensionsFenetre(getWidth(), getHeight());
+                Tir.setDimensionsFenetre(getWidth(), getHeight());
+                Character.setDimensionsFenetre(getWidth(), getHeight());
+                Ennemis.setDimensionsFenetre(getWidth(), getHeight());
+
+                // Mettre à jours la taille du personnage
+                c.setDimensionsJoueur(Dimensions.scaleX(c.WIDTH_perso), Dimensions.scaleX(c.WIDTH_perso));
+
+                // Mettre à jour la taille de l'ennemi 
+                for (Ennemis ennemi : Ennemis.getListEnnemies()) {
+                    // Si c'est un fantome 
+                    if (ennemi instanceof Fantome) {
+                        Fantome f = (Fantome) ennemi;
+                        f.setDimensionsEnnemis(Dimensions.scaleX(Fantome.WIDTH), Dimensions.scaleY(Fantome.HEIGHT));
+                    }
+                    // Si c'est une araignee
+                    if (ennemi instanceof Araignee) {
+                        Araignee a = (Araignee) ennemi;
+                        a.setDimensionsEnnemis(Dimensions.scaleX(Araignee.WIDTH), Dimensions.scaleY(Araignee.HEIGHT));
+                    }
+                    // Si c'est une goule
+                    if (ennemi instanceof Goules) {
+                        Goules g = (Goules) ennemi;
+                        g.setDimensionsEnnemis(Dimensions.scaleX(Goules.WIDTH), Dimensions.scaleY(Goules.HEIGHT));
+                    }
+                }
+            }
+        });
 
         // Initialisation des images après avoir initialisé les instances
         initImages();
@@ -125,6 +224,9 @@ public class Affichage extends JPanel {
             tir.resetTirs();
             b.resetBonus();
             lm.relancerGame(); // relancer le jeu
+            // simuler un componet resized pour mettre à jour les dimensions
+            this.dispatchEvent(new ComponentEvent(this, ComponentEvent.COMPONENT_RESIZED));
+            
         });
 
         // Retour à l'accueil
@@ -147,6 +249,8 @@ public class Affichage extends JPanel {
             configurerClavier();
             tir.resetTirs();
             b.resetBonus();
+            // simuler un componet resized pour mettre à jour les dimensions
+            this.dispatchEvent(new ComponentEvent(this, ComponentEvent.COMPONENT_RESIZED));
         });
 
         // Passage au niveau suivant
@@ -210,7 +314,7 @@ public class Affichage extends JPanel {
         // Dessiner le fond d'écran du niveau
         String lien_bg = lm.getNiveauActuel().getImage_arriere_plan();
         Image bg = new ImageIcon(lien_bg).getImage();
-        g.drawImage(bg, 0, 0, X, Y, null);
+        g.drawImage(bg, 0, 0, originalWidth, originalHeight, null);
 
         // Afficher la page d'accueil si le jeu n'a pas démarré
         if (!lm.getGameStart()) {
@@ -246,39 +350,39 @@ public class Affichage extends JPanel {
         if (lm.getShowStore()) {
             // Un grand carré de au centre de la fenetre représente la boutique
             g.setColor(new Color(220, 220, 220, 200)); // Couleur de fond de la boutique
-            g.fillRect(X / 2 - 350, Y / 2 - 350, 700, 700); // Fond de la boutique
+            g.fillRect(originalWidth/ 2 - 350,originalHeight/ 2 - 350, 700, 700); // Fond de la boutique
             g.setColor(Color.BLACK); // Couleur du contour
-            g.drawRect(X / 2 - 350, Y / 2 - 350, 700, 700); // Contour de la boutique
+            g.drawRect(originalWidth/ 2 - 350,originalHeight/ 2 - 350, 700, 700); // Contour de la boutique
             // Contenu de la boutique ici
             g.setFont(new Font("Arial", Font.BOLD, 25)); // Police de la boutique
             g.setColor(Color.BLACK); // Couleur du texte
-            g.drawString("Victoire ! Etage " + lm.getNiveauActuel().getNiveau() + " terminé", X / 2 - 120, Y / 2 - 300); // Titre de la boutique
+            g.drawString("Victoire ! Etage " + lm.getNiveauActuel().getNiveau() + " terminé", originalWidth/ 2 - 120,originalHeight/ 2 - 300); // Titre de la boutique
             // Dessiner les icones des combos
-            g.drawImage(imgCombo1, X / 2 - 225, Y / 2 - 210, null); // Image du bonus 1
-            g.drawImage(imgCombo2, X / 2 - 50, Y / 2 - 210, null); // Image du bonus 2
-            g.drawImage(imgCombo3, X / 2 + 125, Y / 2 - 210, null); // Image du bonus 3
+            g.drawImage(imgCombo1, originalWidth/ 2 - 225,originalHeight/ 2 - 210, null); // Image du bonus 1
+            g.drawImage(imgCombo2, originalWidth/ 2 - 50,originalHeight/ 2 - 210, null); // Image du bonus 2
+            g.drawImage(imgCombo3, originalWidth/ 2 + 125,originalHeight/ 2 - 210, null); // Image du bonus 3
             // Afficher le nombre de pièces en bas à gauche
             g.setColor(Color.BLACK); // Couleur du texte
             g.setFont(new Font("Arial", Font.PLAIN, 15)); // Police de texte
-            g.drawString("Double tir", X / 2 - 220, Y / 2 - 105); // Texte du bonus 1
-            g.drawString("Vitesse x2", X / 2 - 45, Y / 2 - 105); // Texte du bonus 2
-            g.drawString("Vie pleine", X / 2 + 130, Y / 2 - 105); // Texte du bonus 3
+            g.drawString("Double tir", originalWidth/ 2 - 220,originalHeight/ 2 - 105); // Texte du bonus 1
+            g.drawString("Vitesse x2", originalWidth/ 2 - 45,originalHeight/ 2 - 105); // Texte du bonus 2
+            g.drawString("Vie pleine", originalWidth/ 2 + 130,originalHeight/ 2 - 105); // Texte du bonus 3
             // Afficher le nombre de bonus collectés en bas à gauche
             g.setColor(Color.BLACK); // Couleur du texte
             g.setFont(new Font("Arial", Font.PLAIN, 15)); // Police de texte
-            g.drawString("Mes pièces : " + c.getNombreBonus(), X / 2 - 320, Y / 2 + 320); // Texte du bonus 3
+            g.drawString("Mes pièces : " + c.getNombreBonus(), originalWidth/ 2 - 320,originalHeight/ 2 + 320); // Texte du bonus 3
             // Un cadre au centre avec les astuces
             g.setColor(new Color(230, 230, 230, 200)); // Couleur de fond de la zone d'astuces
-            g.fillRect(X / 2 - 250, Y / 2 + 8, 500, 150); // Fond de la zone d'astuces
+            g.fillRect(originalWidth/ 2 - 250,originalHeight/ 2 + 8, 500, 150); // Fond de la zone d'astuces
             g.setColor(Color.BLACK); // Bordure de la zone d'astuces
             g.setFont(new Font("Arial", Font.BOLD, 16));
-            g.drawString("Astuces", X / 2 - 250, Y / 2);
-            g.drawRect(X / 2 - 250, Y / 2 + 8, 500, 150);
+            g.drawString("Astuces", originalWidth/ 2 - 250,originalHeight/ 2);
+            g.drawRect(originalWidth/ 2 - 250,originalHeight/ 2 + 8, 500, 150);
             // Ecrire les astuces
             g.setFont(new Font("Arial", Font.PLAIN, 15));
-            g.drawString("•  Double tir vous permet de tirer 2 projectiles en un clic.", X / 2 - 240, Y / 2 + 35);
-            g.drawString("•  Vitesse x2 vous permet d'aller 2 fois plus vite.", X / 2 - 240, Y / 2 + 65);
-            g.drawString("•  Vie pleine réinitialise vos points de vie à 100%.", X / 2 - 240, Y / 2 + 95);
+            g.drawString("•  Double tir vous permet de tirer 2 projectiles en un clic.", originalWidth/ 2 - 240,originalHeight/ 2 + 35);
+            g.drawString("•  Vitesse x2 vous permet d'aller 2 fois plus vite.", originalWidth/ 2 - 240,originalHeight/ 2 + 65);
+            g.drawString("•  Vie pleine réinitialise vos points de vie à 100%.", originalWidth/ 2 - 240,originalHeight/ 2 + 95);
 
             // Afficher les boutons de la boutique
             nextStageBtn.setVisible(true);
@@ -303,8 +407,8 @@ public class Affichage extends JPanel {
     // Méthode pour dessiner les tirs
     public void drawTirs(Graphics g) {
         for (int i = 0; i < tir.getTirs().size(); i++) {
-            int x = tir.getTirs().get(i).getPosition().x;
-            int y = tir.getTirs().get(i).getPosition().y;
+            int x= tir.getTirs().get(i).getPosition().x;
+            int y= tir.getTirs().get(i).getPosition().y;
             g.drawImage(Tir.imageProjectile, x, y, null);
         }
     }
@@ -353,9 +457,9 @@ public class Affichage extends JPanel {
         Color couleur = (lm.getNiveauActuel().getNiveau() < 3) ? Color.BLACK : Color.WHITE;
         g.setColor(couleur);
         g.setFont(new Font("Arial", Font.PLAIN, 14));
-        g.drawString("Etage actuel : ", X - 450, 43);
+        g.drawString("Etage actuel : ", originalWidth- 450, 43);
         for (int i = 0; i < 5; i++) {
-            int x = X - 355 + (i * 35);
+            int x= originalWidth- 355 + (i * 35);
             g.drawRect(x, 30, 20, 20);
             if (i < lm.getNiveauActuel().getNiveau()) {
                 g.setColor(new Color(70, 130, 180));
@@ -363,21 +467,21 @@ public class Affichage extends JPanel {
                 g.setColor(couleur);
             }
             g.setFont(new Font("Arial", Font.PLAIN, 12));
-            g.drawString(String.valueOf(i + 1), x + 6, 45);
+            g.drawString(String.valueOf(i + 1), originalWidth+ 6, 45);
         }
     }
 
     // Méthode pour dessiner la page d'accueil
     public void drawAcceuil(Graphics g) {
         Image bg = new ImageIcon("src/Images/acceuil.jpg").getImage();
-        g.drawImage(bg, 0, 0, X, Y, null);
+        g.drawImage(bg, 0, 0, originalWidth, originalHeight, null);
         startGame.setVisible(true);
         quitter.setVisible(true);
         g.setFont(new Font("Comic Sans MS", Font.BOLD, 60));
         g.setColor(Color.WHITE);
-        g.drawString("Bienvenue sur Nibelhein", X / 2 - 402, Y / 2 - 2);
+        g.drawString("Bienvenue sur Nibelhein", originalWidth/ 2 - 402,originalHeight/ 2 - 2);
         g.setColor(Color.BLACK);
-        g.drawString("Bienvenue sur Nibelhein", X / 2 - 400, Y / 2);
+        g.drawString("Bienvenue sur Nibelhein", originalWidth/ 2 - 400,originalHeight/ 2);
     }
 
     // Méthode pour dessiner la barre de vie et afficher les pièces
@@ -388,10 +492,10 @@ public class Affichage extends JPanel {
         g.fillRoundRect(xBarreVie, yBarreVie, c.getVie() * 40, heightBarreVie, arcBarreVie, arcBarreVie);
         g.setColor(Color.BLACK);
         g.drawRoundRect(xBarreVie, yBarreVie, c.MAXVIE * 40, heightBarreVie, arcBarreVie, arcBarreVie);
-        g.drawImage(coinImage, X - 135, 25, null);
+        g.drawImage(coinImage, originalWidth- 135, 25, null);
         g.setColor(new Color(225, 0, 0));
         g.setFont(new Font("Arial", Font.PLAIN, 14));
-        g.drawString("Pièces : " + c.getNombreBonus(), X - 100, 43);
+        g.drawString("Pièces : " + c.getNombreBonus(), originalWidth- 100, 43);
     }
 
     // Méthode pour dessiner l'écran de victoire ou de game over
@@ -400,28 +504,28 @@ public class Affichage extends JPanel {
             relancerButton.setVisible(true);
             acceuil.setVisible(true);
             g.setColor(Color.BLACK);
-            g.fillRect(X / 2 - 252, Y / 2 - 252, 504, 504);
+            g.fillRect(originalWidth/ 2 - 252,originalHeight/ 2 - 252, 504, 504);
             g.setColor(Color.WHITE);
-            g.fillRect(X / 2 - 250, Y / 2 - 250, 500, 500);
+            g.fillRect(originalWidth/ 2 - 250,originalHeight/ 2 - 250, 500, 500);
             g.setColor(Color.GREEN);
             g.setFont(new Font("Arial", Font.BOLD, 35));
-            g.drawString("Victoire !!!", X / 2 - 90, Y / 2 - 180);
+            g.drawString("Victoire !!!", originalWidth/ 2 - 90,originalHeight/ 2 - 180);
             g.setColor(Color.BLACK);
             g.setFont(new Font("Arial", Font.BOLD, 20));
-            g.drawString("Vous êtes simplement imbattables !", X / 2 - 175, Y / 2 - 120);
+            g.drawString("Vous êtes simplement imbattables !", originalWidth/ 2 - 175,originalHeight/ 2 - 120);
         } else if (lm.getGameLose()) {
             relancerButton.setVisible(true);
             acceuil.setVisible(true);
             g.setColor(Color.BLACK);
-            g.fillRect(X / 2 - 252, Y / 2 - 252, 504, 504);
+            g.fillRect(originalWidth/ 2 - 252,originalHeight/ 2 - 252, 504, 504);
             g.setColor(Color.WHITE);
-            g.fillRect(X / 2 - 250, Y / 2 - 250, 500, 500);
+            g.fillRect(originalWidth/ 2 - 250,originalHeight/ 2 - 250, 500, 500);
             g.setColor(Color.RED);
             g.setFont(new Font("Arial", Font.BOLD, 35));
-            g.drawString("Game Over", X / 2 - 90, Y / 2 - 180);
+            g.drawString("Game Over", originalWidth/ 2 - 90,originalHeight/ 2 - 180);
             g.setColor(Color.BLACK);
             g.setFont(new Font("Arial", Font.BOLD, 20));
-            g.drawString("Nombre de pièces collectées : " + c.getNombreBonus(), X / 2 - 150, Y / 2 - 120);
+            g.drawString("Nombre de pièces collectées : " + c.getNombreBonus(), originalWidth/ 2 - 150,originalHeight/ 2 - 120);
         } else {
             relancerButton.setVisible(false);
             acceuil.setVisible(false);

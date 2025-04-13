@@ -9,6 +9,11 @@ public class Obstacles {
     // dimension de l'obstacle
     public static final int HEIGHT_O = 50;
     public static final int WIDTH_O = 50;
+
+    // dimension de la fenetre de jeu
+    private static int WIDTH_fenetre = 1150;
+    private static int HEIGHT_fenetre = 650;
+    
     // liste d'obstacle
     public ArrayList<Point> obstacles = new ArrayList<Point>();
     // generer un nombre aleatoire
@@ -19,6 +24,12 @@ public class Obstacles {
     // constructeur de la classe Obstacles
     public Obstacles() {
         // genererObstacle();
+    }
+
+    // Setteur pour la taille de la fenetre
+    public static void setDimensionsFenetre(int width, int height) {
+        WIDTH_fenetre = width;
+        HEIGHT_fenetre = height;
     }
     
     // retourner la liste d'obstacle
@@ -32,8 +43,8 @@ public class Obstacles {
 
         while (obstacles.size() < nbObstacle) {
             // Générer une position aléatoire pour l'obstacle
-            int x = rand.nextInt(1920 - WIDTH_O);
-            int y = rand.nextInt(1080 - HEIGHT_O);
+            int x = rand.nextInt(WIDTH_fenetre - WIDTH_O);
+            int y = rand.nextInt(WIDTH_fenetre - HEIGHT_O);
             Point obs = new Point(x, y); // Créer un point pour l'obstacle
             // Vérifier que l'obstacle respecte les conditions
             if (verifierDistanceObstacle(obs) && !Character.collisionObstacleJoueur(x, y)) {
