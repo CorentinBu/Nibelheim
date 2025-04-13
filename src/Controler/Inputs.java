@@ -20,7 +20,7 @@ public class Inputs extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_Z) {
             up = true;
-            // System.out.println("Go up ...");
+            System.out.println("Go up ...");
         }
         if (e.getKeyCode() == KeyEvent.VK_S) {
             down = true;

@@ -114,10 +114,6 @@ public class LevelManager extends Thread {
         lancerVaguesEnnemies(); // Lancer les vagues d'ennemis
         jouerSon(niveaux.get(currentLevelIndex).getMusique()); // Jouer la musique du niveau
         System.out.println("Nouvelle partie commencée --------------- !");
-        System.out.println("Game Start: " + game_start);
-        System.out.println("Game Lose: " + game_lose);
-        System.out.println("Game Running: " + game_running);
-        System.out.println("Game Won: " + game_won);
     }
 
     // Méthode pour relancer une partie
@@ -129,8 +125,6 @@ public class LevelManager extends Thread {
         jouerSon(niveaux.get(currentLevelIndex).getMusique()); // Jouer la musique du niveau
         game_running = true;
         System.out.println("-- Nouvelle partie relancée ! ----------");
-        System.out.println("Game Lose: " + game_lose);
-        System.out.println("Game Running: " + game_running);
     }
 
     // Méthode pour retourner à l'accueil
@@ -152,11 +146,11 @@ public class LevelManager extends Thread {
         niveaux = new ArrayList<>();
         // Ajout du ou des niveaux (les autres niveaux sont commentés, à décommenter
         // selon le besoin)
-        niveaux.add(new Niveau(1, 40, 8, 2, "src/Images/bg1.png", "src/Audios/musique1.wav"));
-        niveaux.add(new Niveau(2, 90, 10, 3, "src/Images/bg2.png", "src/Audios/musique2.wav"));
-        niveaux.add(new Niveau(3, 150, 12, 3, "src/Images/bg3.png", "src/Audios/musique3.wav"));
-        niveaux.add(new Niveau(4, 240, 15, 4, "src/Images/bg3.png", "src/Audios/musique4.wav"));
-        niveaux.add(new Niveau(5, 480, 20, 6, "src/Images/bg3.png", "src/Audios/musique5.wav"));
+        niveaux.add(new Niveau(1, 20, 8, 2, "src/Images/bg1.png", "src/Audios/musique1.wav"));
+        niveaux.add(new Niveau(2, 60, 10, 3, "src/Images/bg2.png", "src/Audios/musique2.wav"));
+        niveaux.add(new Niveau(3, 90, 12, 3, "src/Images/bg3.png", "src/Audios/musique3.wav"));
+        niveaux.add(new Niveau(4, 160, 15, 4, "src/Images/bg3.png", "src/Audios/musique4.wav"));
+        niveaux.add(new Niveau(5, 280, 20, 5, "src/Images/bg3.png", "src/Audios/musique5.wav"));
         initialiserEnnemis();
     }
 
@@ -271,7 +265,7 @@ public class LevelManager extends Thread {
         Ennemis.ListEnnemies = new CopyOnWriteArrayList<>(); // Réinitialiser la liste des ennemis
         currentLevelIndex = 0; // Retourner au premier niveau
         stopSon(); // Arrêter la musique
-        System.out.println("Jeu réinitialisé.");
+        System.out.println("Jeu réinitialisé  ----------.");
     }
 
     // Méthode pour vérifier si le niveau est terminé

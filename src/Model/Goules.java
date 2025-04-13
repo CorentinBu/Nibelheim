@@ -57,8 +57,11 @@ public class Goules extends Ennemis {
             return;
         }
 
-        // on recupere la position du joueur
-        Point playerPosition = new Point((int) c.getCurrent_x(), (int) c.getCurrent_y());
+        // on recupere la position du joueur (son centre)
+        Point playerPosition = new Point(
+            (int) c.getCurrent_x() + Character.WIDTH / 2, 
+            (int) c.getCurrent_y() + Character.HEIGHT / 2
+        );
         // on recupere la position de la goule
         Point goulePosition = getPosition();
         // on met a jour la hitbox de l'ennemie
@@ -141,14 +144,23 @@ public class Goules extends Ennemis {
 
     // Méthode pour gerer la collision entre le projectile et le joueur
     public void collisionProjectile() {
-        // on verifie si le projectile n'est pas null
         if (projectile != null) {
-            // on verifie si le projectile est en collision avec le joueur
             if (projectile.hitboxProjectile.intersects(c.hitboxC)) {
-                // on retire de la vie au joueur
                 c.setVie(c.getVie() - 1);
-                // on retire le projectile
-                projectile = null;
+                projectile = null; // Supprimer le projectile
+                // Relancer le tir immédiatement après la collision
+                Point goulePosition = getPosition();
+                Point playerPosition = new Point((int) c.getCurrent_x(), (int) c.getCurrent_y());
+                // Recalculer la direction vers le joueur
+                int dx = playerPosition.x - goulePosition.x;
+                int dy = playerPosition.y - goulePosition.y;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+                // Normaliser la direction
+                if (distance > 0) {
+                    double directionX = dx / distance;
+                    double directionY = dy / distance;
+                    TirGoule(goulePosition, directionX, directionY); // Tirer s'il est assez proche
+                }
             }
         }
     }
